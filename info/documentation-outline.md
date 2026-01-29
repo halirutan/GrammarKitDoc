@@ -1,8 +1,9 @@
 # GrammarKit Documentation Outline
 
 ## Documentation Progress
-**Completed sections:** 4 out of 28
+**Completed sections:** 5 out of 28
 - [x] 1.1 Introduction to GrammarKit
+- [x] 1.2 Installation and Setup
 - [x] 2.1 BNF Grammar Syntax  
 - [x] 2.2 Attributes System
 - [x] 2.3 Live Preview
@@ -36,7 +37,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
   - Java development knowledge
   - Understanding of parsing concepts (optional but helpful)
 
-### [ ] 1.2 Installation and Setup
+### [x] 1.2 Installation and Setup
 **File:** `docs/getting-started/installation.md`
 - **Installing the GrammarKit plugin**
   - Via IDE plugin marketplace

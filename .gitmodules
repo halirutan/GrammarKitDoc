@@ -1,0 +1,3 @@
+[submodule "Grammar-Kit"]
+	path = Grammar-Kit
+	url = https://github.com/JetBrains/Grammar-Kit.git

@@ -1,0 +1,106 @@
+# Technical Writing Style Guide
+
+## Text and Characters
+
+- Never use em-dashes, unless absolutely necessary.
+- Never use styled quotes. Always use "straight" double quotes and 'single' quotes.
+
+## Voice
+
+Write like a calm teammate: clear, direct, and respectful. Optimize for readers who are capable, busy, and here to complete a task.
+
+Avoid:
+- Humor, jokes, sarcasm, and "you're in the right place" style greetings.
+- Pep talks and motivational lines ("Don't worry…", "Remember: every expert…", "Let's get started!").
+- Smug or performative empathy. If something is hard, make it easier through structure and examples, not encouragement.
+- Exclamation points in normal prose. Use them only when a warning truly needs it.
+
+## Page shape and headings
+
+Use headings to support navigation, not to label every paragraph.
+
+- Prefer 2 to 4 major sections (H2) on a typical page.
+- Use H3 only when it helps scanning within a long section (for example, to separate distinct tasks or concepts).
+- Keep related paragraphs together under one heading. Readers can handle multi-paragraph blocks.
+- Avoid "Next steps" as a standalone section on short pages. If needed, end with a single "Next" sentence that links to the most likely follow-up.
+
+Recommended heading depth:
+- H1: page title
+- H2: major sections
+- H3: optional, used sparingly
+- H4: rare
+
+## Writing style
+
+Use plain language and concrete verbs.
+
+- Active voice and present tense.
+- Second person for guidance ("you") and imperative mood for steps ("Run", "Configure", "Generate").
+- Cut filler and self-referential framing ("Welcome to…", "at its heart…", "don't worry…").
+- Let examples and verification steps do the reassurance.
+
+Paragraph rules:
+- One primary point per paragraph, but allow a paragraph to carry a second, tightly related point when it improves flow.
+- Limit paragraphs to 5 sentences or less.
+
+## Lists and emphasis
+
+Lists are tools, not the default layout.
+
+Use a list when:
+- The reader must follow a sequence (numbered list).
+- You have 3+ parallel items that are easier to scan than prose (bulleted list).
+- You are comparing options or enumerating supported cases.
+
+Avoid:
+- Turning every sentence into a bullet.
+- Deep nesting.
+- "Label: explanation" bullets with bold labels. If you need pairs, use a short table or a compact paragraph.
+
+Keep lists scannable:
+- 2 to 7 items per list.
+- Keep items grammatically parallel.
+- Prefer short items. If an item needs multiple paragraphs, consider splitting the section instead.
+
+Emphasis:
+- Use bold for UI labels and critical warnings only.
+- Avoid bolding sentence starts as a visual crutch.
+
+## Standard page templates
+
+### Introduction or overview page (preferred for short docs)
+
+1. Overview
+   Describe what the tool is and what it helps the reader do. One short paragraph.
+2. When to use it
+   Describe common use cases and non-goals. Use a short list only if it improves scanning.
+3. Requirements
+   List prerequisites and environment requirements. Separate "required" from "optional" in prose, not hype.
+
+### Task page
+
+1. Goal
+   One paragraph describing the outcome.
+2. Prerequisites
+   Only what is needed for this task.
+3. Steps
+   Numbered procedure with copy-paste-ready commands or code.
+4. Verify
+   What success looks like and how to confirm it.
+5. Troubleshooting
+   A few common failures with fixes.
+
+### Reference page
+
+- Complete, precise, and distraction-free.
+- No tutorials, no encouragement, minimal narrative.
+
+## Review checklist
+
+Before publishing:
+- The first paragraph states what the page enables.
+- Headings are few, descriptive, and not used per paragraph.
+- Prose has no jokes, pep talks, or filler.
+- Lists are used only where they beat prose, and are short and parallel.
+- Code and commands are runnable and include a verification step.
+- Links point to the next most likely action, not a generic "next steps" section.

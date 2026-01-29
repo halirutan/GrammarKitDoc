@@ -1,0 +1,100 @@
+site_name: GrammarKit Documentation
+site_description: Comprehensive guide for creating language parsers and PSI implementations using GrammarKit
+site_author: GrammarKit Documentation Team
+site_url: https://grammarkit.github.io/documentation/
+
+repo_name: JetBrains/Grammar-Kit
+repo_url: https://github.com/JetBrains/Grammar-Kit
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+
+plugins:
+  - search
+  - minify:
+      minify_html: true
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.details
+  - pymdownx.snippets
+  - pymdownx.inlinehilite
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Introduction to GrammarKit: getting-started/introduction.md
+      - Installation and Setup: getting-started/installation.md
+      - Quick Start Tutorial: getting-started/quick-start.md
+  - Core Concepts:
+      - BNF Grammar Syntax: core-concepts/bnf-syntax.md
+      - Attributes System: core-concepts/attributes.md
+      - Live Preview: core-concepts/live-preview.md
+  - Parser Development:
+      - Designing Grammar Rules: parser-development/grammar-design.md
+      - Expression Parsing: parser-development/expression-parsing.md
+      - Error Recovery: parser-development/error-recovery.md
+  - Code Generation:
+      - Parser Generation: code-generation/parser-generation.md
+      - Lexer Integration: code-generation/lexer-integration.md
+      - PSI Customization: code-generation/psi-customization.md
+  - IDE Integration:
+      - Parser Definition: ide-integration/parser-definition.md
+      - Language Features: ide-integration/language-features.md
+      - Testing: ide-integration/testing.md
+  - Build Integration:
+      - Gradle Plugin Setup: build-integration/gradle-setup.md
+      - Gradle vs IDE Generation: build-integration/gradle-vs-ide.md
+  - Advanced Topics:
+      - External Rules: advanced-topics/external-rules.md
+      - Grammar Composition: advanced-topics/grammar-composition.md
+      - Performance Optimization: advanced-topics/performance.md
+  - Troubleshooting:
+      - Common Issues: troubleshooting/common-issues.md
+      - Debugging Techniques: troubleshooting/debugging.md
+      - Migration Guide: troubleshooting/migration.md
+  - Reference:
+      - Attribute Reference: reference/attributes.md
+      - Grammar Syntax Reference: reference/grammar-syntax.md
+      - Keyboard Shortcuts: reference/shortcuts.md
+      - Glossary: reference/glossary.md
+  - Appendices:
+      - Example Grammars: appendices/examples.md
+      - Resources: appendices/resources.md
+      - FAQ: appendices/faq.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/JetBrains/Grammar-Kit
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/jetbrains
+
+copyright: Copyright &copy; 2026 JetBrains s.r.o.

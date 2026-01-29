@@ -79,6 +79,17 @@ For the selected documentation page:
     - Test code examples for correctness
     - Ensure keyboard shortcuts are accurate
 
+7. **Update Documentation Progress**
+    - After successfully completing a documentation page
+    - Edit @info/documentation-outline.md to mark the section as complete
+    - Change [ ] to [x] for the completed section
+    - This prevents the section from being regenerated next time
+    
+    Example:
+    ```
+    ### [ ] 2.2 Attributes System  →  ### [x] 2.2 Attributes System
+    ```
+
 ## Quality Standards
 - First paragraph must state what the page enables
 - Include complete, runnable code examples

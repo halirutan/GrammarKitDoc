@@ -1,12 +1,13 @@
 # GrammarKit Documentation Outline
 
 ## Documentation Progress
-**Completed sections:** 3 out of 28
+**Completed sections:** 4 out of 28
 - [x] 1.1 Introduction to GrammarKit
 - [x] 2.1 BNF Grammar Syntax  
+- [x] 2.2 Attributes System
 - [x] 2.3 Live Preview
 
-**In Progress:** 25 sections (contain TODO items)
+**In Progress:** 24 sections (contain TODO items)
 
 ## Overview
 A comprehensive guide for creating language parsers and PSI (Program Structure Interface) implementations using GrammarKit, the IntelliJ IDEA plugin for BNF grammar development.
@@ -105,7 +106,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 - Token definition patterns
 - Common rule patterns
 
-### [ ] 2.2 Attributes System
+### [x] 2.2 Attributes System
 **File:** `docs/core-concepts/attributes.md`
 - **Global attributes**
   - Parser configuration (parserClass, parserPackage)

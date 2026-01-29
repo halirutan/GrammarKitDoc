@@ -42,10 +42,13 @@ Use plain language and concrete verbs.
 Paragraph rules:
 - One primary point per paragraph, but allow a paragraph to carry a second, tightly related point when it improves flow.
 - Limit paragraphs to 5 sentences or less.
+- Avoid single-sentence paragraphs unless they serve a specific purpose (e.g., introducing a list, emphasizing a critical warning, or transitioning between sections).
+- Group related concepts into cohesive paragraphs, even if they could stand alone as individual sentences.
 
 ## Lists and emphasis
 
 Lists are tools, not the default layout.
+If you have to use a list, ensure there is an empty line before and after it!
 
 Use a list when:
 - The reader must follow a sequence (numbered list).

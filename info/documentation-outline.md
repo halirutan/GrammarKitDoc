@@ -156,7 +156,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 
 ## 3. Parser Development
 
-### [ ] 3.1 Designing Grammar Rules
+### [x] 3.1 Designing Grammar Rules
 **File:** `docs/parser-development/grammar-design.md`
 - **Grammar organization**
   - Top-down design approach

@@ -21,6 +21,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 ## 1. Getting Started
 
 ### [x] 1.1 Introduction to GrammarKit
+**File:** `docs/getting-started/introduction.md`
 - **What is GrammarKit?**
   - Overview of BNF grammar support and parser generation
   - Key features and capabilities
@@ -35,6 +36,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
   - Understanding of parsing concepts (optional but helpful)
 
 ### [ ] 1.2 Installation and Setup
+**File:** `docs/getting-started/installation.md`
 - **Installing the GrammarKit plugin**
   - Via IDE plugin marketplace
   - Version requirements (Java 17+ for recent versions)
@@ -57,6 +59,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 - Project structure diagram
 
 ### [ ] 1.3 Quick Start Tutorial
+**File:** `docs/getting-started/quick-start.md`
 - **Your first grammar**
   - Simple expression grammar example
   - Understanding rules and tokens
@@ -80,6 +83,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 ## 2. Core Concepts
 
 ### [x] 2.1 BNF Grammar Syntax
+**File:** `docs/core-concepts/bnf-syntax.md`
 - **Grammar structure**
   - Header attributes
   - Token definitions
@@ -102,6 +106,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 - Common rule patterns
 
 ### [ ] 2.2 Attributes System
+**File:** `docs/core-concepts/attributes.md`
 - **Global attributes**
   - Parser configuration (parserClass, parserPackage)
   - PSI configuration (psiPackage, psiClassPrefix)
@@ -122,6 +127,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 - Attribute inheritance demonstration
 
 ### [x] 2.3 Live Preview
+**File:** `docs/core-concepts/live-preview.md`
 - **Using Live Preview effectively**
   - Opening preview (Ctrl+Alt+P)
   - Understanding the preview lexer
@@ -149,6 +155,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 ## 3. Parser Development
 
 ### [ ] 3.1 Designing Grammar Rules
+**File:** `docs/parser-development/grammar-design.md`
 - **Grammar organization**
   - Top-down design approach
   - Identifying language constructs
@@ -171,6 +178,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 - Before/after refactoring examples
 
 ### [ ] 3.2 Expression Parsing
+**File:** `docs/parser-development/expression-parsing.md`
 - **Precedence and associativity**
   - Traditional precedence layers
   - Using priority rules
@@ -192,6 +200,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 - PSI tree comparison (deep vs. flat)
 
 ### [ ] 3.3 Error Recovery
+**File:** `docs/parser-development/error-recovery.md`
 - **Pin attribute**
   - How pinning works
   - Choosing pin points
@@ -217,6 +226,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 ## 4. Code Generation
 
 ### [ ] 4.1 Parser Generation
+**File:** `docs/code-generation/parser-generation.md`
 - **Generator configuration**
   - Understanding generate attributes
   - Output directory setup
@@ -239,6 +249,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 - Customization examples
 
 ### [ ] 4.2 Lexer Integration
+**File:** `docs/code-generation/lexer-integration.md`
 - **Creating JFlex lexers**
   - JFlex file structure
   - Token type mapping
@@ -261,6 +272,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 - Token type mapping
 
 ### [ ] 4.3 PSI Customization
+**File:** `docs/code-generation/psi-customization.md`
 - **PSI hierarchy design**
   - Using extends attribute
   - Interface implementation
@@ -287,6 +299,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 ## 5. IDE Integration
 
 ### [ ] 5.1 Parser Definition
+**File:** `docs/ide-integration/parser-definition.md`
 - **Implementing ParserDefinition**
   - Required methods
   - Token type sets
@@ -308,6 +321,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 - Integration checklist
 
 ### [ ] 5.2 Language Features
+**File:** `docs/ide-integration/language-features.md`
 - **Basic features**
   - Syntax highlighting
   - Brace matching
@@ -330,6 +344,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 - Refactoring support code
 
 ### [ ] 5.3 Testing
+**File:** `docs/ide-integration/testing.md`
 - **Parsing tests**
   - Test framework setup
   - Expected PSI structure
@@ -356,6 +371,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 ## 6. Build Integration
 
 ### [ ] 6.1 Gradle Plugin Setup
+**File:** `docs/build-integration/gradle-setup.md`
 - **Plugin configuration**
   - Adding the plugin
   - Version compatibility
@@ -378,6 +394,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 - CI configuration
 
 ### [ ] 6.2 Gradle vs IDE Generation
+**File:** `docs/build-integration/gradle-vs-ide.md`
 - **Feature comparison**
   - Two-pass generation (IDE only)
   - Method mixins support
@@ -403,6 +420,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 ## 7. Advanced Topics
 
 ### [ ] 7.1 External Rules
+**File:** `docs/advanced-topics/external-rules.md`
 - **When to use external rules**
   - Complex parsing logic
   - Performance optimization
@@ -424,6 +442,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 - Integration patterns
 
 ### [ ] 7.2 Grammar Composition
+**File:** `docs/advanced-topics/grammar-composition.md`
 - **Modular grammar design**
   - Splitting large grammars
   - Shared token definitions
@@ -446,6 +465,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 - Multi-language setup
 
 ### [ ] 7.3 Performance Optimization
+**File:** `docs/advanced-topics/performance.md`
 - **Parser performance**
   - First-check optimization
   - Token prediction
@@ -472,6 +492,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 ## 8. Troubleshooting
 
 ### [ ] 8.1 Common Issues
+**File:** `docs/troubleshooting/common-issues.md`
 - **Generation problems**
   - Missing generated files
   - Compilation errors
@@ -494,6 +515,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 - Common fixes
 
 ### [ ] 8.2 Debugging Techniques
+**File:** `docs/troubleshooting/debugging.md`
 - **Grammar debugging**
   - Using Live Preview
   - Rule tracing
@@ -516,6 +538,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 - Analysis techniques
 
 ### [ ] 8.3 Migration Guide
+**File:** `docs/troubleshooting/migration.md`
 - **Version upgrades**
   - Grammar-Kit versions
   - IntelliJ Platform versions
@@ -542,6 +565,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 ## 9. Reference
 
 ### [ ] 9.1 Attribute Reference
+**File:** `docs/reference/attributes.md`
 - **Complete attribute list**
   - Global attributes
   - Rule attributes  
@@ -562,6 +586,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 - Related attributes
 
 ### [ ] 9.2 Grammar Syntax Reference
+**File:** `docs/reference/grammar-syntax.md`
 - **EBNF notation**
   - Complete syntax diagram
   - Operator precedence
@@ -574,6 +599,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
   - Utilities
 
 ### [ ] 9.3 Keyboard Shortcuts
+**File:** `docs/reference/shortcuts.md`
 - **Editor shortcuts**
   - Navigation
   - Generation
@@ -585,6 +611,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
   - Customization
 
 ### [ ] 9.4 Glossary
+**File:** `docs/reference/glossary.md`
 - **Terms and concepts**
   - Parser terminology
   - Grammar-Kit specific terms
@@ -596,6 +623,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 ## Appendices
 
 ### [ ] A. Example Grammars
+**File:** `docs/appendices/examples.md`
 - **Complete examples**
   - JSON parser
   - Expression calculator  
@@ -608,6 +636,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
   - Documentation
 
 ### [ ] B. Resources
+**File:** `docs/appendices/resources.md`
 - **Official resources**
   - GitHub repository
   - Issue tracker
@@ -625,6 +654,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
   - Community resources
 
 ### [ ] C. FAQ
+**File:** `docs/appendices/faq.md`
 - **Getting started questions**
 - **Common problems**
 - **Best practices**

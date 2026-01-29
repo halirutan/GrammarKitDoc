@@ -4,6 +4,7 @@ You are tasked with creating comprehensive documentation for the Grammar-Kit pro
 1. **Read @info/documentation-outline.md** to see the documentation structure with checkbox indicators:
    - [x] = Completed sections (no TODO items)
    - [ ] = Incomplete sections (contains TODO items)
+   - Each section includes a **File:** reference showing the exact path to the corresponding documentation file
 
 2. **Select the next uncompleted section** following this priority order:
    1. Core Concepts (foundational knowledge)
@@ -17,7 +18,19 @@ You are tasked with creating comprehensive documentation for the Grammar-Kit pro
    9. Reference (comprehensive listings)
    10. Appendices (supplementary material)
 
-3. **Identify the corresponding .md file** in @docs/ directory that matches the selected section
+3. **Use the file reference** from the outline:
+   - Look for the **File:** line under the selected section heading
+   - This provides the exact path to the documentation file (e.g., `docs/core-concepts/attributes.md`)
+   - Use this path to read and update the correct file
+
+   Example from the outline:
+   ```
+   ### [ ] 2.2 Attributes System
+   **File:** `docs/core-concepts/attributes.md`
+   - **Global attributes**
+   ...
+   ```
+   This tells you to work on the file at `docs/core-concepts/attributes.md`
 
 ## Documentation Creation Workflow
 For the selected documentation page:
@@ -81,4 +94,4 @@ For the selected documentation page:
 - Apply the human-style.md guidelines consistently
 - Create documentation that helps users succeed
 
-Begin by reading @info/documentation-outline.md to identify the next uncompleted section (marked with [ ]), then proceed with documenting that section.
+Begin by reading @info/documentation-outline.md to identify the next uncompleted section (marked with [ ]), note its file path reference, then proceed with documenting that section using the specified file path.

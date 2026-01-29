@@ -42,29 +42,38 @@ For the selected documentation page:
         - Visual aids required
         - Target audience and use cases
 
-2. **Research Content**
-    - Use the explore agent to search @Grammar-Kit/ source code for:
-        - Implementation details
-        - Code examples
-        - Feature behavior
-        - Keyboard shortcuts and UI interactions
-    - Check @info/ folder for:
+2. **Gather Meta Information**
+    - **FIRST check @info/file-meta.md** to identify relevant files:
+        - Find sections related to your documentation topic
+        - Note specific files mentioned (e.g., attribute files, test examples)
+        - Create a focused list of files to inspect
+    - Review other files in @info/ folder:
         - user-task-map.md for user workflows
-        - file-meta.md for relevant files
         - Any extracted information about the topic
 
-3. **Create Documentation Plan**
+3. **Research Content**
+    - Use the explore agent to search @Grammar-Kit/ with focused queries based on file-meta.md:
+        - Target specific files identified in the meta information
+        - Look for the exact examples and implementations noted
+        - Example: If documenting attributes, focus on files listed in "Attribute Description Files" section
+        - Example: For expression parsing, check ExprParser.bnf as noted in file-meta.md
+    - Benefits of using file-meta.md first:
+        - Avoids broad searches that may miss important files
+        - Quickly identifies test data and examples
+        - Shows where specific features are documented or implemented
+
+4. **Create Documentation Plan**
     - List all topics to cover based on the outline
-    - Identify what information needs to be gathered
+    - Map topics to specific files identified in file-meta.md
     - Plan the structure and flow
 
-4. **Draft Content**
+5. **Draft Content**
     - Use the drafter agent to write the initial content
     - Include all required topics from the outline
     - Add practical examples users can copy
     - Include cross-references to related sections
 
-5. **Edit and Polish**
+6. **Edit and Polish**
     - Use the copyeditor agent with @.opencode/skills/human-style.md
     - Key style requirements:
         - Avoid single-sentence paragraphs
@@ -74,12 +83,12 @@ For the selected documentation page:
         - Limit to 2-4 H2 sections per page
         - Use H3 sparingly
 
-6. **Verify Technical Accuracy**
+7. **Verify Technical Accuracy**
     - For any claims about behavior, verify against source code
     - Test code examples for correctness
     - Ensure keyboard shortcuts are accurate
 
-7. **Update Documentation Progress**
+8. **Update Documentation Progress**
     - After successfully completing a documentation page
     - Edit @info/documentation-outline.md to mark the section as complete
     - Change [ ] to [x] for the completed section

@@ -1,3 +1,8 @@
+---
+name: human-style
+description: Style guide for ensuring a human writing style
+---
+
 # Technical Writing Style Guide
 
 ## Text and Characters

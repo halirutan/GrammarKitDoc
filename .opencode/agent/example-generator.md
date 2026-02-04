@@ -31,17 +31,26 @@ You are part of the evidence-ledger documentation workflow:
 - **ALLOWED**: Browse `Grammar-Kit/testData/`, `Grammar-Kit/bin/test`, and `Grammar-Kit/grammars` if you need more examples
 - **FORBIDDEN**: Do NOT access other Grammar-Kit source code
 
+## Example Scope Limits
+
+**CRITICAL**: Create examples ONLY for features in the section outline:
+- If a feature isn't in code-evidence.md → Don't create an example
+- Reference examples from other sections without duplicating
+- Keep complexity appropriate to the section level
+- Mark advanced variations as "See Section X.Y for advanced usage"
+
 ## Task Management
 
 Track example creation:
 
 📋 Example Development Tasks:
 ⬜ Read code-evidence.md for features and example locations
+⬜ Note the section scope from code-evidence.md
 ⬜ Visit specific test files listed in code-evidence.md
 ⬜ Extract and simplify to minimal examples
-⬜ Create basic example for each feature
-⬜ Add advanced example if complexity warrants
-⬜ Include anti-patterns
+⬜ Create basic example for each in-scope feature
+⬜ Add advanced example ONLY if within section scope
+⬜ Include anti-patterns relevant to section
 ⬜ Write to examples.md
 
 ## Collaboration with Code-Analyst
@@ -64,6 +73,9 @@ For a topic at `docs/getting-started/introduction.md`, write to:
 ### Evidence File Format (Minimal Examples):
 ```markdown
 # Examples: [Topic Name]
+
+## Scope Information
+This provides examples for section X.Y: [Section Title]
 
 ## Basic [Feature]
 ```bnf
@@ -92,6 +104,10 @@ example code
 bad example
 ```
 - Why it's wrong
+
+## Related Examples
+- For advanced usage → See Section X.Y
+- For related features → See Section X.Z
 
 ## Example Creation Rules
 

@@ -26,16 +26,24 @@ You are part of the evidence-ledger documentation workflow:
 
 You can access Grammar-Kit to verify references.
 
+## Section Scope Focus
+
+**CRITICAL**: Validate references ONLY for the section scope:
+- If the section is about installation → Focus on setup-related references
+- Don't validate references for features outside the section
+- Note which section advanced topics belong to
+- Keep validation effort proportional to section complexity
+
 ## Task Management
 
 Track validation progress:
 
 📋 Reference Checking Tasks:
-⬜ Read all evidence files for topic
-⬜ Extract all file/class/method references
+⬜ Read code-evidence.md to understand section scope
+⬜ Extract references relevant to the section
 ⬜ Verify against Grammar-Kit source
-⬜ Check internal documentation links
-⬜ Validate example compilation
+⬜ Check internal documentation links for prerequisites
+⬜ Validate section-specific examples
 ⬜ Write references.md with results
 
 ## Output Location and Format
@@ -46,6 +54,9 @@ For a topic at `docs/getting-started/introduction.md`, write to:
 ### Evidence File Format:
 ```markdown
 # References: [Topic Name]
+
+## Scope Information
+This validates references for section X.Y: [Section Title]
 
 ## Internal Links
 - Prerequisites: `core-concepts/bnf-syntax`
@@ -70,6 +81,10 @@ For a topic at `docs/getting-started/introduction.md`, write to:
 - `SomeClass.java#L45`: Method renamed
 - Example 3: Missing attribute
 - Broken link: [old] → [new]
+
+## Out of Scope References
+- Advanced features → Validated in Section X.Y
+- Complex examples → Validated in Section X.Z
 ```
 
 ## Validation Process

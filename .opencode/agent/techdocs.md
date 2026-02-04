@@ -54,8 +54,9 @@ ALWAYS begin by:
 
 1. Reading evidence-ledger/metadata/evidence-index.json to check documentation progress
 2. Understanding the source code repository location (Grammar-Kit/)
-3. Creating a todo list based on missing or outdated evidence
-4. Showing the user both evidence status and planned tasks
+3. Reading info/documentation-outline.md to understand the documentation structure
+4. Creating a todo list based on missing or outdated evidence
+5. Showing the user both evidence status and planned tasks
 
 ## Project Intake
 
@@ -119,17 +120,37 @@ Two-tier structure:
 
 For each documentation topic:
 
-1. **Create Directory**: evidence-ledger/[section]/[topic]/
-2. **Collect Evidence** (parallel where possible):
-   - @code-analyst: Extract technical facts from Grammar-Kit
-   - @example-generator: Create minimal working examples
-   - @reference-checker: Validate all references and links
-3. **Synthesize** (after evidence collection):
-   - @topic-architect: Design documentation structure from evidence
-4. **Create Documentation**:
+1. **Read Section Scope**: Extract specific section from info/documentation-outline.md
+2. **Create Directory**: evidence-ledger/[section]/[topic]/
+3. **Collect Evidence** (parallel where possible):
+   - @code-analyst: Extract technical facts ONLY for the section scope
+   - @example-generator: Create minimal examples ONLY for section features
+   - @reference-checker: Validate references ONLY related to the section
+4. **Synthesize** (after evidence collection):
+   - @topic-architect: Design documentation structure from evidence and outline
+5. **Create Documentation**:
    - @drafter: Transform evidence into user documentation
    - @copyeditor: Polish using evidence as source of truth
-5. **Update Metadata**: Record in evidence-index.json
+6. **Update Metadata**: Record in evidence-index.json
+
+## Section-Based Evidence Collection
+
+When delegating to evidence writers:
+
+1. **Extract Section Requirements**:
+   - Read the specific section from info/documentation-outline.md
+   - Identify all bullet points and sub-items for that section
+   - Note what is explicitly OUT of scope (belongs to other sections)
+
+2. **Create Focused Prompts**:
+   - Include the exact section outline in each agent prompt
+   - Explicitly list what to include and what to exclude
+   - Reference other sections where out-of-scope items belong
+
+3. **Validate Scope Adherence**:
+   - Review evidence files for scope creep
+   - Ensure evidence matches section bullet points
+   - Flag any missing or extra content
 
 ## Metadata Structure
 
@@ -154,6 +175,36 @@ evidence-index.json tracks:
     }
   }
 }
+```
+
+## Example: Proper Section Scoping
+
+For section "1.2 Installation and Setup", the prompt to code-analyst should be:
+
+```
+Extract evidence ONLY for these specific items from section 1.2:
+
+INCLUDE:
+- Installing the GrammarKit plugin
+  - Via IDE plugin marketplace
+  - Version requirements (Java 17+ for recent versions)
+  - Verifying installation
+- Project setup
+  - Creating a new language plugin project
+  - Directory structure recommendations
+  - Essential dependencies
+- First grammar file
+  - Creating a `.bnf` file
+  - Basic grammar structure
+  - Editor features overview
+
+EXCLUDE (belongs to other sections):
+- Grammar syntax details → Section 2.1
+- Attribute system → Section 2.2
+- Parser generation → Section 3.x
+- Advanced IDE features → Section 5.2
+
+Write to: evidence-ledger/getting-started/installation/code-evidence.md
 ```
 
 ## Error Handling

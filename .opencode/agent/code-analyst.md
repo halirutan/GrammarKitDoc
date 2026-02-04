@@ -37,6 +37,19 @@ Use todos to track your analysis:
 ⬜ Write user-facing facts to code-evidence.md
 ⬜ Note any missing documentation
 
+## Section Scope Adherence
+
+**CRITICAL**: When given a specific documentation section:
+1. Extract ONLY features listed in that section's outline
+2. Ignore features that belong to other sections
+3. Note cross-references but don't extract their content
+4. Flag any discovered features not in any outline section
+
+If the prompt includes "INCLUDE" and "EXCLUDE" lists:
+- Follow them strictly
+- Add "Out of Scope" section for excluded items you find
+- Reference which section the excluded items belong to
+
 ## Analysis Approach (Focus on User-Facing Features)
 
 1. **Information Sources**
@@ -73,6 +86,9 @@ For a topic at `docs/getting-started/introduction.md`, write to:
 ```markdown
 # Code Evidence: [Topic Name]
 
+## Scope Information
+This evidence covers section X.Y: [Section Title]
+
 ## Grammar Syntax
 - Users can write: `rule ::= expression`
 - Supported modifiers: `private`, `external`, `meta`
@@ -97,6 +113,12 @@ For a topic at `docs/getting-started/introduction.md`, write to:
 - `testData/generator/Pin.bnf`: Pin attribute examples
 - `testData/livePreview/Json.bnf`: Complete grammar
 - `testData/generator/ExprParser.bnf`: Expression parsing
+
+## Out of Scope
+Features found but excluded (belong to other sections):
+- Advanced attributes → Section 2.2
+- Expression parsing → Section 3.2
+- Error recovery details → Section 3.3
 ```
 
 ## Evidence Writing Rules

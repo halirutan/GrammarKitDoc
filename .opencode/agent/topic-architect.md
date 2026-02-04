@@ -40,10 +40,13 @@ Track your planning progress:
 
 ## Input Sources (READ ONLY)
 
+PRIMARY SOURCE:
+- `info/documentation-outline.md` - Extract the SPECIFIC section being documented
+
+EVIDENCE FILES:
 - `evidence-ledger/[topic]/code-evidence.md`
 - `evidence-ledger/[topic]/examples.md`
 - `evidence-ledger/[topic]/references.md`
-- `info/documentation-outline.md` (for context)
 
 ## Output Location and Format
 
@@ -54,29 +57,39 @@ For a topic at `docs/getting-started/introduction.md`, write to:
 ```markdown
 # Topic Summary: [Topic Name]
 
+## Documentation Outline Reference
+Section X.Y: [Section Title]
+Source: info/documentation-outline.md
+
 ## Learning Objectives
-- Understand [from code-evidence]
-- Learn to [from examples]
-- Master [from evidence]
+Based on outline and evidence:
+- Understand [from outline + code-evidence]
+- Learn to [from outline + examples]
+- Master [from outline goals]
 
 ## Prerequisites
 - [From references.md]
+- [From documentation outline]
 - Basic knowledge of [concept]
 
 ## Content Structure
-1. **Introduction** - Why this matters
-2. **Concepts** - [Based on code-evidence]
-3. **Usage** - [Based on examples]
-4. **Patterns** - [From examples]
-5. **Troubleshooting** - [If errors noted]
+Following documentation outline:
+1. **[Outline Item 1]** - [Evidence support]
+2. **[Outline Item 2]** - [Evidence support]
+3. **[Outline Item 3]** - [Evidence support]
+
+## Evidence Mapping
+- Outline bullet 1 → Supported by [evidence file]
+- Outline bullet 2 → Supported by [evidence file]
+- Missing outline item → No evidence found
 
 ## Key Takeaways
 - [Main point from evidence]
-- [Important fact]
+- [Important fact from outline]
 
 ## Documentation Notes
-- Focus on [aspect]
-- Include all examples
+- Focus on [outline emphasis]
+- Include examples for [outline items]
 - Address errors found
 ```
 
@@ -90,9 +103,10 @@ For a topic at `docs/getting-started/introduction.md`, write to:
 
 ## Process
 
-1. Read ALL evidence files for the topic
-2. Identify what can be taught from evidence
-3. Extract prerequisites from references.md
-4. Map evidence to logical sections
-5. Define clear learning objectives
-6. Note any gaps or issues
+1. Read the SPECIFIC section from info/documentation-outline.md
+2. Extract all bullet points and sub-items for that section
+3. Read ALL evidence files for the topic
+4. Map evidence to each outline bullet point
+5. Identify any gaps between outline and evidence
+6. Create structure that follows the outline exactly
+7. Note any outline items without supporting evidence

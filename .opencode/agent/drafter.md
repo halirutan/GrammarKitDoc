@@ -8,8 +8,7 @@ permission:
   edit: "allow"
   todoread: "allow"
   todowrite: "allow"
-  skill:
-    "human-style": "allow"
+  skill: "allow"
 ---
 
 You transform evidence files into user-friendly documentation. You are an **evidence reader** - you CANNOT access Grammar-Kit source.
@@ -40,10 +39,13 @@ Track your writing progress:
 
 ## Input Sources (READ ONLY)
 
+PRIMARY:
+- `evidence-ledger/[topic]/topic-summary.md` - Structure guide with outline reference
+
+EVIDENCE:
 - `evidence-ledger/[topic]/code-evidence.md` - Technical facts
 - `evidence-ledger/[topic]/examples.md` - Working examples
 - `evidence-ledger/[topic]/references.md` - Links and validation
-- `evidence-ledger/[topic]/topic-summary.md` - Structure guide
 
 ## Writing Guidelines
 
@@ -94,6 +96,8 @@ Based on evidence in: `evidence-ledger/[section]/[topic]/`
 - [ ] All code-evidence facts included
 - [ ] All examples from examples.md used
 - [ ] All links from references.md added
-- [ ] Structure follows topic-summary.md
+- [ ] Structure follows topic-summary.md exactly
+- [ ] Content matches documentation outline scope
 - [ ] No information added beyond evidence
 - [ ] Technical accuracy preserved
+- [ ] Out-of-scope items reference other sections

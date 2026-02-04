@@ -8,9 +8,9 @@ GrammarKit requires Java 17 or higher and IntelliJ IDEA 2023.3 or newer (build 2
 
 GrammarKit versions follow IntelliJ IDEA releases. For example, GrammarKit 2023.3 is compatible with IntelliJ IDEA 2023.3 and later versions.
 
-## Installing GrammarKit
+## Installing Grammar-Kit
 
-Install GrammarKit through the IntelliJ IDEA plugin marketplace:
+Install Grammar-Kit through the IntelliJ IDEA plugin marketplace:
 
 1. Open IntelliJ IDEA
 2. Navigate to **File → Settings** (or **IntelliJ IDEA → Preferences** on macOS)

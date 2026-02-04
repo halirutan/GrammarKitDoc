@@ -1,5 +1,5 @@
-site_name: GrammarKit Documentation
-site_description: Comprehensive guide for creating language parsers and PSI implementations using GrammarKit
+site_name: Grammar-Kit Documentation
+site_description: Comprehensive guide for creating language parsers and PSI implementations using Grammar-Kit
 site_author: GrammarKit Documentation Team
 site_url: https://grammarkit.github.io/documentation/
 

@@ -18,8 +18,8 @@ You are part of a technical documentation workflow:
 
 1. Code Analysis (YOU) → knowledge base & analysis reports
 2. Documentation Planning → structure & outlines
-3. Content Creation → initial documentation
-4. Example Development → practical examples
+3. Example Development → practical examples
+4. Content Creation → initial documentation
 5. Polish & Validation → final documentation
 
 ## Task Management

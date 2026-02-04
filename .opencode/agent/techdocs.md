@@ -18,8 +18,8 @@ You manage a multi-stage documentation process:
 
 1. Code Analysis (code-analyst) → knowledge base & analysis reports
 2. Documentation Planning (topic-architect) → structure & outlines
-3. Content Creation (drafter) → initial documentation
-4. Example Development (example-generator) → practical examples
+3. Example Development (example-generator) → practical examples
+4. Content Creation (drafter) → initial documentation
 5. Polish & Validation (copyeditor, reference-checker) → final documentation
 
 ## Documentation Focus

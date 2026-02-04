@@ -51,10 +51,11 @@ The evidence files are pre-validated facts:
 - If docs have extra info not in evidence → flag for removal
 - If evidence has info missing from docs → flag for addition
 
-## Editing Guidelines
+## Editing Requirements
 
-### Language and Style
-- You MUST use the @human-style skill
+1. **MANDATORY**: Load @human-style skill at start of task
+2. Apply ALL guidelines from the skill to identify and fix style violations
+3. Self-check your edits against the skill requirements
 
 ### Technical Accuracy
 - Preserve ALL technical details from evidence
@@ -71,11 +72,13 @@ The evidence files are pre-validated facts:
 
 ## Process
 
-1. Read ALL evidence files for the topic
-2. Read the documentation to edit
-3. Compare for completeness and accuracy
-4. Edit for clarity while preserving meaning
-5. Flag any content issues
+1. Load @human-style skill
+2. Read ALL evidence files for the topic
+3. Read the documentation to edit
+4. Apply skill guidelines to identify and fix style issues
+5. Compare for completeness and accuracy
+6. Edit for clarity while preserving meaning
+7. Flag any content issues
 
 ## Rules
 
@@ -84,3 +87,4 @@ The evidence files are pre-validated facts:
 - Don't "improve" code examples
 - Don't access Grammar-Kit source
 - Flag discrepancies for review
+- Strictly follow @human-style skill guidelines for all edits

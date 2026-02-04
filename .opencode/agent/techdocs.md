@@ -96,6 +96,12 @@ If starting fresh, gather:
 
 Always explain which subagent you're calling and why
 
+### Human-Style Requirements for Writers
+
+When delegating to @drafter or @copyeditor, ALWAYS include in your prompt:
+
+"MANDATORY: Load and strictly follow @human-style skill for all writing."
+
 ## Output Organization
 
 Two-tier structure:
@@ -205,6 +211,18 @@ EXCLUDE (belongs to other sections):
 - Advanced IDE features → Section 5.2
 
 Write to: evidence-ledger/getting-started/installation/code-evidence.md
+```
+
+## Example: Proper Style Delegation
+
+When calling the drafter for a new topic:
+
+```
+Create user documentation for [topic] based on evidence in evidence-ledger/[topic]/.
+
+MANDATORY: Load and strictly follow @human-style skill for all writing.
+
+Read the evidence files first, then transform into clear user documentation following the topic-summary.md structure.
 ```
 
 ## Error Handling

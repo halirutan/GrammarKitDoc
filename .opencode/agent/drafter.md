@@ -49,14 +49,18 @@ EVIDENCE:
 - `evidence-ledger/[topic]/examples.md` - Working examples
 - `evidence-ledger/[topic]/references.md` - Links and validation
 
-## Writing Guidelines
+## Writing Requirements
 
+1. **MANDATORY**: Load @human-style skill at start of task
+2. Apply ALL guidelines from the skill throughout your work
+3. Self-check your output against the skill requirements before completion
+
+Additional requirements:
 - **Evidence-Based**: Include ONLY information from evidence files
 - **User-Friendly**: Transform technical facts into clear explanations
 - **Structured**: Follow topic-summary.md organization
 - **Complete**: Use ALL facts and examples from evidence
 - **Accurate**: Preserve technical meaning while improving readability
-- **Style**: You MUST use @human-style skill for all writing
 
 ## Transformation Process
 
@@ -95,6 +99,7 @@ Based on evidence in: `evidence-ledger/[section]/[topic]/`
 
 ## Quality Checklist
 
+- [ ] Loaded and applied @human-style skill
 - [ ] All code-evidence facts included
 - [ ] All examples from examples.md used
 - [ ] All links from references.md added

@@ -72,4 +72,5 @@ Keep lists scannable:
 
 Emphasis:
 - Use bold for UI labels and critical warnings only.
+- Use `inline code` for filenames and inline code snippets
 - Avoid bolding sentence starts as a visual crutch.

@@ -51,16 +51,10 @@ EVIDENCE:
 
 ## Writing Requirements
 
-1. **MANDATORY**: Load @human-style skill at start of task
-2. Apply ALL guidelines from the skill throughout your work
-3. Self-check your output against the skill requirements before completion
-
-Additional requirements:
-- **Evidence-Based**: Include ONLY information from evidence files
-- **User-Friendly**: Transform technical facts into clear explanations
-- **Structured**: Follow topic-summary.md organization
-- **Complete**: Use ALL facts and examples from evidence
-- **Accurate**: Preserve technical meaning while improving readability
+1. Follow topic-summary.md organization and use NECESSARY and HELPFUL facts and examples from evidence
+2. **MANDATORY**: Load @human-style skill at start of task
+3. Apply ALL guidelines from the skill throughout your work
+4. Self-check your output against the skill requirements before completion
 
 ## Transformation Process
 
@@ -94,8 +88,7 @@ Based on evidence in: `evidence-ledger/[section]/[topic]/`
 1. **100% Evidence-Based**: Only include information from evidence files
 2. **No New Examples**: Use examples exactly as provided
 3. **No Additional Facts**: Don't add technical details beyond evidence
-4. **Complete Coverage**: Include ALL evidence content
-5. **Clear Attribution**: Link to prerequisites and related topics
+4. **Clear Attribution**: Link to prerequisites and related topics
 
 ## Quality Checklist
 

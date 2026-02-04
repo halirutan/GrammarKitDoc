@@ -1,6 +1,6 @@
-# GrammarKit Documentation
+# Grammar-Kit Documentation
 
-Welcome to the comprehensive guide for creating language parsers and PSI (Program Structure Interface) implementations using GrammarKit, the IntelliJ IDEA plugin for BNF grammar development.
+Welcome to the comprehensive guide for creating language parsers and PSI (Program Structure Interface) implementations using Grammar-Kit, the IntelliJ IDEA plugin for BNF grammar development.
 
 TODO: Content to be added
 

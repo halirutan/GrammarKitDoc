@@ -54,7 +54,7 @@ The evidence files are pre-validated facts:
 ## Editing Guidelines
 
 ### Language and Style
-- Always use the @human-style skill
+- You MUST use the @human-style skill
 
 ### Technical Accuracy
 - Preserve ALL technical details from evidence

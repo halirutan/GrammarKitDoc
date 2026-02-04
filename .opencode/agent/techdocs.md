@@ -185,7 +185,7 @@ For section "1.2 Installation and Setup", the prompt to code-analyst should be:
 Extract evidence ONLY for these specific items from section 1.2:
 
 INCLUDE:
-- Installing the GrammarKit plugin
+- Installing the Grammar-Kit plugin
   - Via IDE plugin marketplace
   - Version requirements (Java 17+ for recent versions)
   - Verifying installation

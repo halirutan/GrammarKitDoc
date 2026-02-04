@@ -40,6 +40,8 @@ Use todos to track your analysis:
 ## Analysis Approach (Language-Agnostic)
 
 1. **Repository Structure**
+   - Read `info/file-meta.md` to understand the location of relevant files within the Grammar-Kit repository
+   - Read `info/main-image-description.md` to understand the main features of the BNF grammar used in Grammar-Kit
    - Identify project layout
    - Find main entry points
    - Locate configuration files

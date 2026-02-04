@@ -25,7 +25,7 @@ You are part of the evidence-ledger documentation workflow:
 ## Access Restrictions
 
 - **PRIMARY**: Read `evidence-ledger/[topic]/code-evidence.md` FIRST
-- **ALLOWED**: Access `Grammar-Kit/testData/` and `Grammar-Kit/bin/test` for real examples
+- **ALLOWED**: Access `Grammar-Kit/testData/`, `Grammar-Kit/bin/test`, and `Grammar-Kit/grammars` for real examples
 - **FORBIDDEN**: Only access other Grammar-Kit source if referenced by `code-evidence.md`
 
 ## Task Management

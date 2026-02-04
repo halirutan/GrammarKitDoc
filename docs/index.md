@@ -1,19 +1,7 @@
 # Grammar-Kit Documentation
 
-Welcome to the comprehensive guide for creating language parsers and PSI (Program Structure Interface) implementations using Grammar-Kit, the IntelliJ IDEA plugin for BNF grammar development.
+Grammar-Kit is an IntelliJ IDEA plugin that transforms BNF grammar definitions into working parsers, lexers, and PSI implementations for the IntelliJ Platform. Instead of writing complex parsing code by hand, you define your language syntax in a familiar BNF notation while Grammar-Kit handles the generation of efficient recursive-descent parsers, complete with error recovery and live preview capabilities.
 
-TODO: Content to be added
+The plugin serves developers building language support for IntelliJ-based IDEs, whether you're adding syntax highlighting and code completion to an existing language or designing a new domain-specific language from scratch. Grammar-Kit excels at creating parsers for programming languages, configuration formats like JSON or YAML, and specialized languages for build tools or template engines. Your generated parser integrates seamlessly with IntelliJ's indexing, navigation, and refactoring infrastructure.
 
-## Overview
-
-TODO: Add overview content
-
-## Target Audiences
-
-1. **IntelliJ Plugin Developers** - Creating custom language support with IDE features
-2. **Build/CI Users** - Automating parser generation in Gradle builds
-3. **Grammar Maintainers** - Evolving and optimizing existing grammars
-
-## Quick Navigation
-
-TODO: Add quick navigation links to key sections
+Grammar-Kit's real-time Live Preview shows how your grammar processes code as you write it, making grammar development an interactive experience. The built-in expression parsing handles operator precedence automatically, while advanced features like pin and recoverWhile attributes give you fine control over error recovery. From simple configuration parsers to full programming language implementations, Grammar-Kit provides the tools to build robust language support efficiently.

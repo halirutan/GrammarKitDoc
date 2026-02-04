@@ -1,185 +1,155 @@
 # Agent Guidelines for Grammar-Kit Documentation Project
 
-This document provides essential information for AI agents working on creating user-facing documentation for Grammar-Kit.
+This document provides essential information for AI agents working on the Grammar-Kit documentation project.
 
 ## Project Overview
 
-This project creates comprehensive user documentation for Grammar-Kit, an IntelliJ IDEA plugin that provides BNF Grammars and JFlex file editing support with parser/PSI code generation capabilities. The documentation aims to help language plugin developers effectively use Grammar-Kit.
+This project creates comprehensive user documentation for Grammar-Kit, an IntelliJ IDEA plugin that provides BNF Grammars and JFlex file editing support with parser/PSI code generation capabilities.
 
 ## Project Structure
 
-### Documentation Sources
-- `/Grammar-Kit/` - Source repository (READ-ONLY for feature extraction)
+### Core Directories
+
+- `/Grammar-Kit/` - Source repository (READ-ONLY)
   - `README.md`, `TUTORIAL.md`, `HOWTO.md` - Existing documentation
   - `/resources/messages/attributeDescriptions/` - Attribute documentation
   - `/testData/` - Example grammars and use cases
   - `/grammars/` - BNF and JFlex grammar definitions
-- `/info/` - Extracted information for documentation
-  - `user-task-map.md` - User tasks and workflows
-  - `file-meta.md` - Documentation-relevant files catalog
-  - `main-image-description.md` - Visual documentation assets
-  - `documentation-outline.md` - Comprehensive documentation structure
-- `/.opencode/skills/` - Technical writing guidelines
-- `/ai-out/` - Generated documentation output
-- `/prompts/` - Documentation generation prompts
+
+- `/evidence-ledger/` - Evidence-based documentation system
+  - `{topic-path}/code-evidence.md` - Technical evidence from source
+  - `{topic-path}/examples.md` - Code examples and snippets
+  - `{topic-path}/references.md` - Links and external references
+  - `{topic-path}/topic-summary.md` - Writing guidance for topic
+  - `metadata/evidence-index.json` - Evidence tracking
+
 - `/docs/` - MkDocs documentation source files
+  - `index.md` - Landing page
+  - `getting-started/` - Introduction, installation, quick start
+  - Additional sections per documentation outline
 
-### Key Information Sources
+- `/info/` - Project information
+  - `documentation-outline.md` - Complete documentation structure
+  - `user-task-map.md` - User personas and workflows
+  - `file-meta.md` - Documentation-relevant files catalog
 
-#### Grammar Examples
-- `grammars/Grammar.bnf` - BNF self-definition showing all features
-- `testData/generator/ExprParser.bnf` - Expression parsing patterns
-- `testData/livePreview/Json.bnf` - Real-world JSON grammar
+- `/.opencode/skills/` - Writing guidelines
+  - `human-style.md` - Technical writing style guide
 
-#### Attribute Documentation
-All files in `/resources/messages/attributeDescriptions/` contain HTML documentation for each Grammar-Kit attribute (pin, recoverWhile, extends, etc.)
+## Documentation Workflow
 
-#### User Workflows
-- `info/user-task-map.md` - Complete user journey mapping
-- Live Preview workflow with shortcuts
-- Parser generation and integration steps
+### Evidence-Based Process
 
-## Documentation Writing Guidelines
+1. **Evidence Collection** (code-analyst)
+   - Extract technical details from Grammar-Kit source
+   - Document features, APIs, and behaviors
+   - Create code examples from testData
 
-### Technical Writing Principles
-1. **User-Centric**: Focus on tasks users want to accomplish
-2. **Progressive Disclosure**: Basic usage first, advanced topics later
-3. **Practical Examples**: Working code users can copy and adapt
-4. **Clear Structure**: Logical flow from installation to advanced usage
+2. **Topic Architecture** (topic-architect)
+   - Create topic summaries based on evidence
+   - Structure content for clarity
+   - Map evidence to documentation sections
 
-### Documentation Style
-- **Voice**: Active, second person ("you can...")
-- **Tense**: Present tense for current behavior
-- **Code Examples**: Complete, runnable examples with context
-- **Terminology**: Define on first use, maintain consistency
+3. **Content Creation** (drafter)
+   - Write user-facing documentation
+   - Follow topic summaries and evidence
+   - Apply human-style guidelines
 
-### Content Organization
-1. **Getting Started** - Installation and first grammar
-2. **Core Concepts** - Rules, tokens, attributes
-3. **Common Tasks** - Typical user workflows
-4. **Advanced Features** - Expression parsing, error recovery
-5. **Reference** - Complete attribute/feature documentation
-6. **Troubleshooting** - Common issues and solutions
+4. **Quality Assurance** (copyeditor)
+   - Ensure technical accuracy
+   - Apply style guidelines
+   - Improve clarity and flow
 
-## Documentation Tasks
+### Writing Standards
 
-### Information Extraction
-When examining Grammar-Kit source:
-- Focus on user-visible features and behaviors
-- Extract examples from testData files
-- Note keyboard shortcuts and UI actions
-- Identify common patterns and best practices
+#### Style Guidelines (from human-style.md)
+- Write like a calm teammate: clear, direct, respectful
+- Use active voice and present tense
+- Avoid humor, pep talks, and motivational content
+- Limit paragraphs to 5 sentences
+- Use lists only when they improve scanning
+- Group related content under fewer headings
 
-### Content Creation
-- Write task-oriented guides ("How to...")
-- Create complete, working examples
-- Document all attributes with use cases
-- Explain error messages and solutions
+#### Grammar-Kit Specific
+- Always write "Grammar-Kit" with a dash
+- Define technical terms on first use
+- Include complete, runnable code examples
+- Focus on practical, task-oriented content
 
-### Quality Checks
-- Verify technical accuracy against source
-- Ensure examples are complete and correct
-- Check that terminology is consistent
-- Validate all keyboard shortcuts
+## Key Information Sources
 
-## Important Resources
+### Grammar Examples
+- `grammars/Grammar.bnf` - BNF self-definition
+- `testData/generator/ExprParser.bnf` - Expression parsing
+- `testData/livePreview/Json.bnf` - JSON grammar example
 
-### User Personas (from user-task-map.md)
-1. **IntelliJ Plugin Developer** - Interactive grammar development
-2. **Build/CI User** - Gradle-based generation
+### User Personas
+1. **IntelliJ Plugin Developer** - Creating language support
+2. **Build/CI User** - Gradle-based parser generation
 3. **Grammar Maintainer** - Evolving existing grammars
 
-### Key Features to Document
-- BNF grammar syntax and modifiers
-- Live Preview with structure view
-- Parser/PSI generation
-- JFlex lexer integration
-- Error recovery mechanisms
-- Expression parsing with precedence
-- Stub support for indexing
+### Common User Tasks
+- Creating a new grammar
+- Debugging parsing issues
+- Implementing error recovery
+- Integrating with IntelliJ PSI
+- Setting up build automation
 
-### Common User Questions
-- How to start with a new grammar?
-- How to debug parsing issues?
-- How to handle left recursion?
-- How to implement error recovery?
-- How to integrate with IntelliJ PSI?
+## MkDocs Documentation
 
-## Documentation Standards
+### Configuration
+- **Config**: `mkdocs.yml` in project root
+- **Theme**: Material for MkDocs
+- **Python**: 3.12 (via uv package manager)
 
-### File Naming
-- Use descriptive names: `error-recovery.md`, `expression-parsing.md`
-- Group related topics in directories
-- Maintain flat structure where possible
+### Commands
+- `make serve` - Local preview at http://127.0.0.1:8000
+- `make build` - Build static site
+- `make deploy` - Deploy to GitHub Pages
+- `make clean` - Clean build artifacts
 
-### Cross-References
-- Link between related topics
-- Reference source examples in Grammar-Kit
-- Point to IntelliJ Platform SDK where needed
+### Documentation Sections
+1. Getting Started
+2. Core Concepts
+3. Parser Development
+4. Code Generation
+5. IDE Integration
+6. Build Integration
+7. Advanced Topics
+8. Troubleshooting
+9. Reference
+10. Appendices
 
-### Code Examples
-```bnf
-// Always provide context
-{
-  // Grammar-level attributes
-  parserClass="com.example.MyParser"
-  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
-}
+## Agent-Specific Guidelines
 
-// Show complete, working rules
-statement ::= assignment | expression
-assignment ::= ID '=' expression {pin=2}
-```
+### For code-analyst
+- Focus on user-visible features
+- Extract practical examples
+- Document keyboard shortcuts
+- Note common patterns
 
-## MkDocs Documentation System
+### For topic-architect
+- Create beginner-friendly outlines
+- Map evidence to sections
+- Structure for progressive learning
+- Identify prerequisites
 
-### Documentation Structure
-- **Source Files**: Located in `/docs/` directory
-- **Configuration**: `mkdocs.yml` in project root
-- **Theme**: Material for MkDocs with professional features
-- **Navigation**: Organized by learning progression
+### For drafter
+- Write task-oriented content
+- Use evidence as source of truth
+- Apply human-style guidelines
+- Include practical examples
 
-### Documentation Outline
-The comprehensive documentation structure is defined in `/info/documentation-outline.md` and includes:
-1. Getting Started (installation, setup, quick start)
-2. Core Concepts (BNF syntax, attributes, Live Preview)
-3. Parser Development (grammar design, expressions, error recovery)
-4. Code Generation (parser, lexer, PSI customization)
-5. IDE Integration (ParserDefinition, language features, testing)
-6. Build Integration (Gradle setup, CI/CD)
-7. Advanced Topics (external rules, composition, performance)
-8. Troubleshooting (common issues, debugging, migration)
-9. Reference (complete attribute reference, syntax, shortcuts)
-10. Appendices (examples, resources, FAQ)
+### For copyeditor
+- Verify technical accuracy
+- Ensure style consistency
+- Improve clarity without changing meaning
+- Check "Grammar-Kit" spelling
 
-### Building Documentation
-- **Development**: `make serve` (runs local server at http://127.0.0.1:8000)
-- **Production**: `make build` (generates static site in `site/`)
-- **Dependencies**: Managed via uv (see `pyproject.toml`)
-- **Python Version**: 3.12 (specified in `.python-version`)
+## Important Notes
 
-## Tools and Commands
-
-### Documentation Generation
-- **Local Preview**: `make serve` or `uv run mkdocs serve`
-- **Build Static Site**: `make build` or `uv run mkdocs build`
-- **Deploy to GitHub Pages**: `make deploy`
-- **Clean Build**: `make clean`
-
-### Development Setup
-1. Install uv package manager
-2. Run `make install` to set up dependencies
-3. Use `make serve` to preview documentation
-4. Edit files in `/docs/` directory
-
-### Source Inspection
-- Read files from `/Grammar-Kit/` for feature details
-- Extract examples from `/testData/`
-- Reference attribute docs from `/resources/messages/`
-
-## Notes
-
-- This is a documentation project - never modify Grammar-Kit source
-- Focus on end-user documentation, not implementation details
-- Prioritize common use cases over edge cases
-- Keep examples practical and applicable
+- Never modify Grammar-Kit source files
+- Focus on end-user documentation
+- Prioritize common use cases
+- Keep examples practical and complete
+- Always use evidence-based approach for accuracy

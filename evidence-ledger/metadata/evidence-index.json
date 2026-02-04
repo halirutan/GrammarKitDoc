@@ -1,0 +1,71 @@
+{
+  "topics": {
+    "getting-started/introduction": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-04T00:00:00Z",
+      "evidence": {
+        "code-evidence": {
+          "exists": true,
+          "last-updated": "2026-02-04T00:00:00Z",
+          "hash": "pending"
+        },
+        "examples": {
+          "exists": true,
+          "last-updated": "2026-02-04T00:00:00Z",
+          "hash": "pending"
+        },
+        "references": {
+          "exists": true,
+          "last-updated": "2026-02-04T00:00:00Z",
+          "hash": "pending"
+        },
+        "topic-summary": {
+          "exists": true,
+          "last-updated": "2026-02-04T00:00:00Z",
+          "hash": "pending"
+        }
+      },
+      "documentation": {
+        "file": "docs/getting-started/introduction.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "getting-started/installation": {
+      "status": "evidence-complete",
+      "last-modified": "2024-02-04T10:00:00Z",
+      "evidence": {
+        "code-evidence": {
+          "exists": true,
+          "last-updated": "2024-02-04T10:00:00Z",
+          "hash": "pending"
+        },
+        "examples": {
+          "exists": true,
+          "last-updated": "2024-02-04T10:00:00Z",
+          "hash": "pending"
+        },
+        "references": {
+          "exists": true,
+          "last-updated": "2024-02-04T10:00:00Z",
+          "hash": "pending"
+        },
+        "topic-summary": {
+          "exists": true,
+          "last-updated": "2024-02-04T10:00:00Z",
+          "hash": "pending"
+        }
+      },
+      "documentation": {
+        "file": "docs/getting-started/installation.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    }
+  },
+  "metadata": {
+    "version": "1.0",
+    "created": "2024-02-04T10:00:00Z",
+    "last-updated": "2026-02-04T20:47:30Z"
+  }
+}

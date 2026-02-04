@@ -33,26 +33,26 @@
     },
     "getting-started/installation": {
       "status": "evidence-complete",
-      "last-modified": "2024-02-04T10:00:00Z",
+      "last-modified": "2026-02-04T18:30:00Z",
       "evidence": {
         "code-evidence": {
           "exists": true,
-          "last-updated": "2024-02-04T10:00:00Z",
+          "last-updated": "2026-02-04T00:00:00Z",
           "hash": "pending"
         },
         "examples": {
           "exists": true,
-          "last-updated": "2024-02-04T10:00:00Z",
+          "last-updated": "2026-02-04T00:00:00Z",
           "hash": "pending"
         },
         "references": {
           "exists": true,
-          "last-updated": "2024-02-04T10:00:00Z",
+          "last-updated": "2026-02-04T00:00:00Z",
           "hash": "pending"
         },
         "topic-summary": {
           "exists": true,
-          "last-updated": "2024-02-04T10:00:00Z",
+          "last-updated": "2026-02-04T00:00:00Z",
           "hash": "pending"
         }
       },
@@ -61,11 +61,42 @@
         "status": "completed",
         "needs-update": false
       }
+    },
+    "core-concepts/bnf-syntax": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-04T16:04:10Z",
+      "evidence": {
+        "code-evidence": {
+          "exists": true,
+          "last-updated": "2026-02-04T16:04:10Z",
+          "hash": "pending"
+        },
+        "examples": {
+          "exists": true,
+          "last-updated": "2026-02-04T16:04:10Z",
+          "hash": "pending"
+        },
+        "references": {
+          "exists": true,
+          "last-updated": "2026-02-04T16:04:10Z",
+          "hash": "pending"
+        },
+        "topic-summary": {
+          "exists": true,
+          "last-updated": "2026-02-04T18:45:00Z",
+          "hash": "pending"
+        }
+      },
+      "documentation": {
+        "file": "docs/core-concepts/bnf-syntax.md",
+        "status": "completed",
+        "needs-update": false
+      }
     }
   },
   "metadata": {
     "version": "1.0",
     "created": "2024-02-04T10:00:00Z",
-    "last-updated": "2026-02-04T20:47:30Z"
+    "last-updated": "2026-02-04T16:25:42Z"
   }
 }

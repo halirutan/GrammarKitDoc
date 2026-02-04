@@ -8,6 +8,8 @@ permission:
   edit: "allow"
   todoread: "allow"
   todowrite: "allow"
+  webfetch: "allow"
+  websearch: "allow"
 ---
 
 You validate references and cross-links in evidence files. You are an **evidence writer** with Grammar-Kit access for verification.
@@ -80,5 +82,6 @@ For a topic at `docs/getting-started/introduction.md`, write to:
    - Internal documentation links
    - External URLs
 4. Verify each reference
-5. Document findings in structured format
-6. Continue processing despite errors
+5. If required, search the web for the references (specifically `https://plugins.jetbrains.com/docs/intellij/welcome.html`)
+6. Document findings in structured format
+7. Continue processing despite errors

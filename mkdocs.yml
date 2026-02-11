@@ -48,38 +48,33 @@ markdown_extensions:
       permalink: true
 
 nav:
-  - Home: index.md
-  - Getting Started:
-      - Introduction to GrammarKit: getting-started/introduction.md
-      - Installation and Setup: getting-started/installation.md
-      - Quick Start Tutorial: getting-started/quick-start.md
-  - Core Concepts:
-      - BNF Grammar Syntax: core-concepts/bnf-syntax.md
-      - Attributes System: core-concepts/attributes.md
-      - Live Preview: core-concepts/live-preview.md
-  - Parser Development:
-      - Designing Grammar Rules: parser-development/grammar-design.md
-      - Expression Parsing: parser-development/expression-parsing.md
-      - Error Recovery: parser-development/error-recovery.md
-  - Code Generation:
+  - Introduction to Grammar-Kit: index.md
+  - Grammar Development:
+      - BNF Grammar Syntax: grammar-development/grammar-syntax.md
+      - Designing Grammar Rules: grammar-development/grammar-design.md
+      - Expression Parsing: grammar-development/expression-parsing.md
+      - Error Recovery: grammar-development/error-recovery.md
+      - Live Preview Workflow: grammar-development/live-preview.md
+      - External Rules: grammar-development/external-rules.md
+      - Grammar Composition: grammar-development/grammar-composition.md
+  - Code Generation & Customization:
+      - Attributes System: code-generation/attributes.md
       - Parser Generation: code-generation/parser-generation.md
       - Lexer Integration: code-generation/lexer-integration.md
       - PSI Customization: code-generation/psi-customization.md
-  - IDE Integration:
-      - Parser Definition: ide-integration/parser-definition.md
-      - Language Features: ide-integration/language-features.md
-      - Testing: ide-integration/testing.md
-  - Build Integration:
-      - Gradle Plugin Setup: build-integration/gradle-setup.md
-      - Gradle vs IDE Generation: build-integration/gradle-vs-ide.md
-  - Advanced Topics:
-      - External Rules: advanced-topics/external-rules.md
-      - Grammar Composition: advanced-topics/grammar-composition.md
-      - Performance Optimization: advanced-topics/performance.md
-  - Troubleshooting:
-      - Common Issues: troubleshooting/common-issues.md
-      - Debugging Techniques: troubleshooting/debugging.md
-      - Migration Guide: troubleshooting/migration.md
+  - Integration:
+      - IDE Integration:
+          - Parser Definition: integration/parser-definition.md
+          - Language Features: integration/language-features.md
+          - Testing: integration/testing.md
+      - Build Integration:
+          - Gradle Plugin Setup: integration/gradle-setup.md
+          - Gradle vs IDE Generation: integration/gradle-vs-ide.md
+  - Advanced Topics & Troubleshooting:
+      - Performance Optimization: advanced/performance.md
+      - Common Issues: advanced/common-issues.md
+      - Debugging Techniques: advanced/debugging.md
+      - Migration Guide: advanced/migration.md
   - Reference:
       - Attribute Reference: reference/attributes.md
       - Grammar Syntax Reference: reference/grammar-syntax.md

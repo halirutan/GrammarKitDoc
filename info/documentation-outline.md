@@ -10,10 +10,30 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 
 ---
 
-## 1. Introduction to Grammar-Kit (Home Page)
+## 1. Getting Started
 
 ### 1.1 What is Grammar-Kit?
 **File:** `docs/index.md`
+- **BNF-to-parser transformation tool**
+  - IntelliJ IDEA plugin for grammar development
+  - Transforms BNF grammar definitions into working parsers
+  - Generates lexers and PSI implementations automatically
+  - Eliminates need for hand-written parsing code
+- **Target use cases**
+  - Building language support for IntelliJ-based IDEs
+  - Adding syntax highlighting and code completion
+  - Creating parsers for programming languages
+  - Supporting configuration formats (JSON, YAML)
+  - Developing domain-specific languages (DSLs)
+- **Key development features**
+  - Live Preview for real-time grammar testing
+  - Interactive grammar development workflow
+  - Automatic expression parsing with operator precedence
+  - Advanced error recovery mechanisms
+  - Seamless IntelliJ Platform integration
+
+### 1.2 Features
+**File:** `docs/features.md`
 - **Overview of BNF grammar support and parser generation**
   - IntelliJ IDEA plugin for language development
   - BNF Grammars and JFlex file editing support
@@ -36,7 +56,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
   - Configuration file processors
   - Scripting language implementations
 
-### 1.2 Installation and Setup
+### 1.3 Installation and Setup
 **File:** `docs/installation.md`
 - **Prerequisites**
   - IntelliJ IDEA basics
@@ -73,7 +93,7 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
 - Project structure diagram
 - IDE setup walkthrough
 
-### 1.3 Quick Start Tutorial
+### 1.4 Quick Start Tutorial
 **File:** `docs/quick-start.md`
 - **Your first grammar**
   - Simple expression grammar example

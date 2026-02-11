@@ -1,90 +1,78 @@
 {
   "topics": {
-    "getting-started/introduction": {
+    "index": {
       "status": "evidence-complete",
       "last-modified": "2026-02-04T00:00:00Z",
       "evidence": {
         "code-evidence": {
           "exists": true,
-          "last-updated": "2026-02-04T00:00:00Z",
-          "hash": "pending"
+          "last-updated": "2026-02-04T00:00:00Z"
         },
         "examples": {
           "exists": true,
-          "last-updated": "2026-02-04T00:00:00Z",
-          "hash": "pending"
+          "last-updated": "2026-02-04T00:00:00Z"
         },
         "references": {
           "exists": true,
-          "last-updated": "2026-02-04T00:00:00Z",
-          "hash": "pending"
+          "last-updated": "2026-02-04T00:00:00Z"
         },
         "topic-summary": {
           "exists": true,
-          "last-updated": "2026-02-04T00:00:00Z",
-          "hash": "pending"
+          "last-updated": "2026-02-04T00:00:00Z"
         }
       },
       "documentation": {
-        "file": "docs/getting-started/introduction.md",
-        "status": "completed",
-        "needs-update": false
+        "file": "docs/index.md",
+        "status": "pending",
+        "needs-update": true
       }
     },
-    "getting-started/installation": {
+    "installation": {
       "status": "evidence-complete",
       "last-modified": "2026-02-04T18:30:00Z",
       "evidence": {
         "code-evidence": {
           "exists": true,
-          "last-updated": "2026-02-04T00:00:00Z",
-          "hash": "pending"
+          "last-updated": "2026-02-04T00:00:00Z"
         },
         "examples": {
           "exists": true,
-          "last-updated": "2026-02-04T00:00:00Z",
-          "hash": "pending"
+          "last-updated": "2026-02-04T00:00:00Z"
         },
         "references": {
           "exists": true,
-          "last-updated": "2026-02-04T00:00:00Z",
-          "hash": "pending"
+          "last-updated": "2026-02-04T00:00:00Z"
         },
         "topic-summary": {
           "exists": true,
-          "last-updated": "2026-02-04T00:00:00Z",
-          "hash": "pending"
+          "last-updated": "2026-02-04T00:00:00Z"
         }
       },
       "documentation": {
         "file": "docs/getting-started/installation.md",
-        "status": "completed",
-        "needs-update": false
+        "status": "pending",
+        "needs-update": true
       }
     },
-    "core-concepts/bnf-syntax": {
+    "grammar-development/grammar-syntax": {
       "status": "evidence-complete",
       "last-modified": "2026-02-04T16:04:10Z",
       "evidence": {
         "code-evidence": {
           "exists": true,
-          "last-updated": "2026-02-04T16:04:10Z",
-          "hash": "pending"
+          "last-updated": "2026-02-04T16:04:10Z"
         },
         "examples": {
           "exists": true,
-          "last-updated": "2026-02-04T16:04:10Z",
-          "hash": "pending"
+          "last-updated": "2026-02-04T16:04:10Z"
         },
         "references": {
           "exists": true,
-          "last-updated": "2026-02-04T16:04:10Z",
-          "hash": "pending"
+          "last-updated": "2026-02-04T16:04:10Z"
         },
         "topic-summary": {
           "exists": true,
-          "last-updated": "2026-02-04T18:45:00Z",
-          "hash": "pending"
+          "last-updated": "2026-02-04T18:45:00Z"
         }
       },
       "documentation": {

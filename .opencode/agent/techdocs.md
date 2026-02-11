@@ -46,7 +46,6 @@ You use BOTH systems for maximum visibility:
    - Read at session start to understand progress
    - Update after completing evidence for each topic
    - Tracks evidence completeness and documentation sync status
-   - Contains file hashes for change detection
 
 ## Starting a Session
 
@@ -168,10 +167,10 @@ evidence-index.json tracks:
       "status": "evidence-complete|evidence-incomplete|pending",
       "last-modified": "ISO-8601 timestamp",
       "evidence": {
-        "code-evidence": {"exists": true, "last-updated": "...", "hash": "..."},
-        "examples": {"exists": true, "last-updated": "...", "hash": "..."},
-        "references": {"exists": true, "last-updated": "...", "hash": "..."},
-        "topic-summary": {"exists": true, "last-updated": "...", "hash": "..."}
+        "code-evidence": {"exists": true, "last-updated": "..."},
+        "examples": {"exists": true, "last-updated": "..."},
+        "references": {"exists": true, "last-updated": "..."},
+        "topic-summary": {"exists": true, "last-updated": "..."}
       },
       "documentation": {
         "file": "docs/section/topic.md",

@@ -1,75 +1,68 @@
-# References: Introduction to GrammarKit
+# References: What is Grammar-Kit?
 
 ## Scope Information
-This validates references for section 1.1: Introduction to GrammarKit
+This validates references for section 1.1: What is Grammar-Kit? (Beginner-friendly introduction)
 
 ## Internal Links
-- Prerequisites: None (this is the first section)
-- Related: `getting-started/installation`, `getting-started/quick-start`
-- Advanced: `core-concepts/bnf-syntax`, `parser-development/*`
+- Prerequisites: None (this is the entry point for beginners)
+- Next Steps: `getting-started/installation`, `getting-started/quick-start`
+- Advanced Topics: `core-concepts/*`, `parser-development/*` (for later learning)
 
-## Code References
-- Plugin description: `resources/META-INF/plugin.xml#L5-6`
-- BNF grammar definition: `grammars/Grammar.bnf`
-- JSON example: `testData/livePreview/Json.bnf`
-- Tutorial grammar: `testData/livePreview/LivePreviewTutorial.bnf`
-- Expression parser: `testData/generator/ExprParser.bnf`
-- README overview: `README.md#L10-12`
-- Java 17 requirement: `README.md#L19`
+## Core Concept References (Beginner-Friendly)
+- **Transformation concept**: `README.md#L12` - "parser/PSI code generator"
+- **BNF basics**: `TUTORIAL.md#L3-4` - "BNF grammars are pretty easy to read"
+- **Simple example**: `testData/livePreview/Json.bnf` - JSON grammar (familiar format)
+- **Plugin description**: `plugin.xml#L5-6` - High-level purpose statement
 
-## External Links
-- IntelliJ Platform SDK: https://plugins.jetbrains.com/docs/intellij/welcome.html
-- Grammar-Kit Plugin Page: http://plugins.jetbrains.com/plugin/6606
-- Example Projects:
-  - Clojure-Kit: https://github.com/gregsh/Clojure-Kit
-  - intellij-rust: https://github.com/intellij-rust/intellij-rust
-  - intellij-erlang: https://github.com/ignatov/intellij-erlang
-  - intellij-elixir: https://github.com/KronicDeth/intellij-elixir
-  - Perl5-IDEA: https://github.com/Camelcade/Perl5-IDEA
-  - Dart: https://github.com/JetBrains/intellij-plugins/tree/master/Dart
+## Beginner-Accessible External Links
+- Grammar-Kit Plugin Page: http://plugins.jetbrains.com/plugin/6606 (installation info)
+- IntelliJ Platform Overview: https://plugins.jetbrains.com/docs/intellij/welcome.html (context only)
 
-## Validation
-- [x] Code refs valid (2026-02-04)
-- [x] Examples compile (2026-02-04)
-- [x] File paths accurate (2026-02-04)
+## Validation Focus: Beginner-Friendly Content
+- [x] High-level descriptions validated (2026-02-11)
+- [x] Transformation metaphor supported (2026-02-11)
+- [x] Complex technical details de-emphasized (2026-02-11)
+- [x] Examples are approachable (2026-02-11)
 
-## Errors Found
-- None - all references are accurate
+## Beginner-Friendly Validation
 
-## Validation Details
+### Core Transformation Concept (BNF → Parser)
+✅ **Simple definition**: `README.md#L12` confirms Grammar-Kit "Adds BNF Grammars... and a parser/PSI code generator"
+✅ **Visual transformation**: Live Preview feature (`README.md#L71`) shows real-time grammar processing
+✅ **Accessible example**: JSON grammar at `testData/livePreview/Json.bnf` uses familiar format
 
-### What is GrammarKit
-✅ **BNF grammar support**: Confirmed in `README.md#L12` - "Adds BNF Grammars and JFlex file editing support"
-✅ **Parser generation**: Confirmed in `README.md#L12` - "and a parser/PSI code generator"
-✅ **Key features**: All features listed in code-evidence.md are confirmed in `README.md#L54-77`:
-  - Live Preview: `README.md#L71` - "open language live preview editor (Ctrl-Alt-P/Cmd-Alt-P)"
-  - Structure view: `README.md#L63` - "quick grammar and flex file structure popup (Ctrl-F12/Cmd-F12)"
-  - Parser generation: `README.md#L73` - "generate parser/PSI code (Ctrl-Shift-G/Cmd-Shift-G)"
-  - JFlex support: `README.md#L75-76` - "generate *.flex" and "run JFlex generator"
-  - Refactoring: `README.md#L59-60` - "extract rule" and "introduce token"
-  - Navigation: `README.md#L64` - "go to related file (parser and PSI)"
-  - Inspections: `README.md#L68` - "a number of inspections"
-  - Documentation: `README.md#L69` - "rule documentation popup shows FIRST/FOLLOWS/PSI content"
-  - Diagram: `README.md#L77` - "PSI tree diagram (UML plugin required)"
+### What Grammar-Kit Does (Simplified)
+✅ **Main purpose**: Transforms grammar definitions into working parsers
+✅ **Key benefit**: Avoids writing complex parsing code by hand
+✅ **Interactive development**: Live Preview makes grammar development visual and immediate
 
-✅ **IntelliJ Platform relationship**: Confirmed in `plugin.xml#L6` - "Readable parser/PSI code generator"
-✅ **Included in platform**: Confirmed in `README.md#L209` - "included in *IntelliJ Platform* since version 12.1"
+### Who Uses Grammar-Kit (Beginner Context)
+✅ **Primary users**: Developers building language support for IntelliJ IDEs
+✅ **Use cases**: 
+  - Adding syntax highlighting to existing languages
+  - Creating domain-specific languages
+  - Building configuration file parsers (JSON, YAML-like)
+✅ **Real examples**: Multiple successful language plugins listed in `README.md#L21-30`
 
-### When to Use GrammarKit
-✅ **Custom language plugin development**: Confirmed with examples in `README.md#L21-30`
-✅ **DSL support**: Implicit from "language plugin developers" purpose
-✅ **File format parsers**: JSON example confirmed at `testData/livePreview/Json.bnf`
+### Getting Started Path
+✅ **No prerequisites needed**: Introduction stands alone
+✅ **Clear next steps**: Installation and Quick Start sections follow naturally
+✅ **Progressive learning**: Advanced topics clearly separated for later
 
-### Prerequisites
-✅ **IntelliJ IDEA requirements**: Confirmed in `plugin.xml#L9` - depends on "com.intellij.modules.lang"
-✅ **Java 17 requirement**: Confirmed in `README.md#L19` - "Since 2022.3, Grammar-Kit plugin requires Java 17"
-✅ **Java development knowledge**: Implicit from generated Java code
-✅ **Parsing concepts**: Confirmed helpful in `TUTORIAL.md#L3-4` - "BNF grammars are pretty easy to read"
+## Simplified External Resources
+- **Plugin Installation**: Direct link to plugin page for easy setup
+- **Platform Context**: IntelliJ SDK docs provided for background only
+- **Example Projects**: De-emphasized to avoid overwhelming beginners
 
-## Out of Scope References
-- Installation steps → Validated in Section 1.2
-- Grammar syntax details → Validated in Section 2.1
-- Attribute system → Validated in Section 2.2
-- Parser generation specifics → Validated in Section 3.x
-- Pin/recoverWhile attributes → Validated in Section 2.2
-- Expression parsing details → Validated in Section 3.2
+## Technical References (De-emphasized)
+The following technical details are validated but not emphasized in beginner content:
+- Complex grammar attributes (pin, recoverWhile)
+- PSI implementation details
+- Advanced parsing techniques
+- Build tool integration specifics
+
+## Out of Scope for Beginners
+- Installation details → Section 1.2
+- Grammar syntax specifics → Section 2.x
+- Advanced features → Sections 3.x and beyond
+- Complex examples → Later sections

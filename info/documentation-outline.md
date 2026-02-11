@@ -32,6 +32,8 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
   - Advanced error recovery mechanisms
   - Seamless IntelliJ Platform integration
 
+**Examples needed:** NOT REQUIRED
+
 ### 1.2 Features
 **File:** `docs/features.md`
 - **Overview of BNF grammar support and parser generation**
@@ -55,6 +57,8 @@ A comprehensive guide for creating language parsers and PSI (Program Structure I
   - File format parsers
   - Configuration file processors
   - Scripting language implementations
+
+**Examples needed:** NOT REQUIRED
 
 ### 1.3 Installation and Setup
 **File:** `docs/installation.md`

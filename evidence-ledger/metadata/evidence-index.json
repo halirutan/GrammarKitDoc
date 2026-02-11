@@ -2,29 +2,29 @@
   "topics": {
     "index": {
       "status": "evidence-complete",
-      "last-modified": "2026-02-04T00:00:00Z",
+      "last-modified": "2026-02-11T10:30:00Z",
       "evidence": {
         "code-evidence": {
           "exists": true,
-          "last-updated": "2026-02-04T00:00:00Z"
+          "last-updated": "2026-02-11T10:30:00Z"
         },
         "examples": {
           "exists": true,
-          "last-updated": "2026-02-04T00:00:00Z"
+          "last-updated": "2026-02-11T10:30:00Z"
         },
         "references": {
           "exists": true,
-          "last-updated": "2026-02-04T00:00:00Z"
+          "last-updated": "2026-02-11T10:30:00Z"
         },
         "topic-summary": {
           "exists": true,
-          "last-updated": "2026-02-04T00:00:00Z"
+          "last-updated": "2026-02-11T10:30:00Z"
         }
       },
       "documentation": {
         "file": "docs/index.md",
-        "status": "pending",
-        "needs-update": true
+        "status": "completed",
+        "needs-update": false
       }
     },
     "installation": {
@@ -85,6 +85,6 @@
   "metadata": {
     "version": "1.0",
     "created": "2024-02-04T10:00:00Z",
-    "last-updated": "2026-02-04T16:25:42Z"
+    "last-updated": "2026-02-11T10:30:00Z"
   }
 }

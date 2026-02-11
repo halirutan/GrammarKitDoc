@@ -1,89 +1,70 @@
-# Code Evidence: Introduction to GrammarKit
+# Code Evidence: What is Grammar-Kit?
 
 ## Scope Information
-This evidence covers section 1.1: Introduction to GrammarKit
+This evidence covers section 1.1: What is Grammar-Kit?
 
-## What is GrammarKit
+## Core Transformation Concept
+- Input: BNF grammar files (`.bnf` extension)
+- Output: Working Java parser code
+- Process: Automatic code generation
+- Result: IntelliJ language support
 
-### Overview
-- IntelliJ IDEA plugin for language plugin developers
-- BNF Grammars and JFlex file editing support
-- Parser/PSI code generator
-- Readable parser/PSI code generation
+## Primary Use Cases
 
-### Key Features and Capabilities
-- Live Preview: Test grammars
-- Structure view: Grammar visualization
-- Parser generation: Generate parser/PSI
-- JFlex support: Generate and run lexer
-- Refactoring: Extract rule, introduce token
-- Navigation: Go to related files
-- Inspections: Left recursion, unused rules
-- Diagram: PSI tree visualization
+### Language Support for IntelliJ IDEs
+- Build plugins for programming languages
+- Examples: Rust, Erlang, Elixir, Dart plugins
+- Create syntax highlighting and code completion
+- Enable refactoring and navigation
 
-### Relationship to IntelliJ Platform
-- Generates code for IntelliJ language support
-- Creates ParserDefinition components
-- Produces PSI (Program Structure Interface) classes
-- Integrates with IntelliJ Platform SDK
-- Included in IntelliJ Platform since 12.1
+### Domain-Specific Languages (DSLs)
+- Custom business rule languages
+- Query languages
+- Template languages
+- Scripting languages
 
-## When to Use GrammarKit
+### Configuration File Formats
+- JSON parser example: `testData/livePreview/Json.bnf`
+- YAML-like formats
+- Properties files
+- Custom config formats
 
-### Custom Language Plugin Development
-- Create parsers for new languages
-- Examples: Clojure-Kit, intellij-rust, intellij-erlang
-- Examples: intellij-elixir, Perl5-IDEA, Dart
-- Generate language support components
+## Key Development Features
 
-### DSL Support
-- Domain-specific language parsers
-- Custom file format support
-- Expression language parsing
-- Configuration file parsers
+### Live Preview
+- Test grammars interactively
+- See parsing results instantly
+- Debug grammar rules visually
+- No compilation needed
 
-### File Format Parsers
-- JSON grammar example: testData/livePreview/Json.bnf
-- Custom data format parsing
-- Structured text processing
+### Visual Tools
+- Structure view shows grammar organization
+- PSI tree visualization
+- Grammar diagram generation
+- Rule navigation
 
-## Prerequisites
+### Developer-Friendly Actions
+- Generate Parser: Creates Java code
+- Extract Rule: Refactoring support
+- Find Usages: Track rule references
+- Quick Documentation: Built-in help
 
-### IntelliJ IDEA Basics
-- Plugin requires IntelliJ IDEA
-- IntelliJ Platform SDK knowledge helpful
-
-### Java Development Knowledge
-- Generated code is Java
-- External rules require Java methods
-- PSI classes extend Java interfaces
-
-### Parsing Concepts
-- BNF grammar notation
-- PEG (Parsing Expression Grammar) basics
-- Token vs rule understanding
-- Optional: AST/PSI concepts
-
-## (Very Optional) Grammar Syntax Users Can Write
-- Rules: `rule ::= expression`
-- Sequences: `rule ::= part1 part2 part3`
-- Choices: `rule ::= option1 | option2`
-- Optional: `[optional]` or `optional?`
-- Repetition: `item*` (zero-or-more), `item+` (one-or-more)
-- Predicates: `&required`, `!forbidden`
-- Grouping: `(grouped items)`, `{braced items}`
+## IntelliJ Platform Integration
+- Seamless IDE integration
+- Part of IntelliJ Platform since 12.1
+- Works with all JetBrains IDEs
+- Standard plugin architecture
 
 ## Example Locations
-- `grammars/Grammar.bnf`: Complete BNF self-definition
-- `testData/livePreview/Json.bnf`: JSON parser example
-- `testData/livePreview/LivePreviewTutorial.bnf`: Tutorial grammar
-- `testData/generator/ExprParser.bnf`: Expression parsing
+- `testData/livePreview/Json.bnf`: Simple JSON parser
+- `testData/livePreview/LivePreviewTutorial.bnf`: Beginner tutorial
+- `grammars/Grammar.bnf`: BNF language itself
+- Plugin examples: Clojure-Kit, intellij-rust
 
 ## Out of Scope
 Features found but excluded (belong to other sections):
-- Installation steps → Section 1.2
-- Grammar syntax details → Section 2.1
+- Installation process → Section 1.2
+- BNF syntax details → Section 2.1
 - Attribute system → Section 2.2
-- Parser generation specifics → Section 3.x
-- Pin/recoverWhile attributes → Section 2.2
-- Expression parsing details → Section 3.2
+- Advanced parsing techniques → Section 3.x
+- Build integration → Section 6.x

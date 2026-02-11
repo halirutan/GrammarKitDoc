@@ -1,106 +1,83 @@
-# Topic Summary: Introduction to GrammarKit
+# Topic Summary: What is Grammar-Kit?
 
 ## Documentation Outline Reference
-Section 1.1: Introduction to GrammarKit
+Section 1.1: What is Grammar-Kit?
 Source: info/documentation-outline.md
 
 ## Learning Objectives
-Based on outline and evidence:
-- Understand what GrammarKit is and the problems it solves
-- Learn how GrammarKit fits into IntelliJ plugin development ecosystem
-- Recognize when GrammarKit is the right tool for your project
-- Master the basic concept of grammar-based parser generation
+After reading this introduction, readers will:
+- Understand Grammar-Kit as a tool that transforms grammar definitions into parser code
+- Know the primary use cases for Grammar-Kit in IntelliJ plugin development
+- Recognize how Grammar-Kit fits into the IntelliJ Platform ecosystem
+- Understand the basic workflow: write grammar rules, generate parser code
+- Know where to continue their learning path
 
 ## Prerequisites
-- IntelliJ IDEA basics (using the IDE, installing plugins)
-- Java development knowledge (reading Java code, basic OOP concepts)
-- Understanding of parsing concepts is helpful but not required
+- Basic familiarity with IntelliJ IDEA
+- General programming experience
+- Interest in language support or parsing
 
 ## Content Structure
-Following documentation outline:
+Following documentation outline with evidence support:
 
-### 1. **What is GrammarKit?** - Opening with the Problem
-   - Start with the problem: "How do you teach IntelliJ IDEA to understand a new language?"
-   - Introduce GrammarKit as the solution: A tool that turns grammar descriptions into working parsers
-   - Use analogy: Like a recipe (grammar) that produces a meal (parser)
-   - Evidence: code-evidence.md lines 8-13, examples.md lines 6-18
+### 1. **BNF-to-Parser Transformation Tool**
+   - Grammar-Kit is an IntelliJ IDEA plugin for grammar development
+   - Core function: transforms BNF grammar definitions into working parsers
+   - Generates lexers and PSI implementations automatically
+   - Eliminates need for hand-written parsing code
+   - Evidence: code-evidence.md lines 6-11
 
-### 2. **Overview of BNF grammar support and parser generation** - Core Capability
-   - Explain BNF as "a way to describe language rules" (avoid technical jargon initially)
-   - Show simplest possible example: `greeting ::= 'hello' 'world'`
-   - Explain that GrammarKit turns this into Java code that recognizes the pattern
-   - Evidence: examples.md lines 6-18, code-evidence.md lines 8-13
+### 2. **Target Use Cases**
+   - Building language support for IntelliJ-based IDEs
+   - Adding syntax highlighting and code completion
+   - Creating parsers for programming languages
+   - Supporting configuration formats (JSON, YAML)
+   - Developing domain-specific languages (DSLs)
+   - Evidence: code-evidence.md lines 14-31, examples include Rust, Erlang, Elixir plugins
 
-### 3. **Key features and capabilities** - What You Get
-   - Live Preview: "See your grammar work in real-time"
-   - Structure view: "Visualize how your grammar organizes code"
-   - Automatic generation: "One click creates all the Java code you need"
-   - Built-in helpers: Navigation, refactoring, error detection
-   - Evidence: code-evidence.md lines 14-23
+### 3. **Key Development Features**
+   - Live Preview for real-time grammar testing
+   - Interactive grammar development workflow
+   - Automatic expression parsing with operator precedence
+   - Advanced error recovery mechanisms
+   - Seamless IntelliJ Platform integration
+   - Evidence: code-evidence.md lines 34-50
 
-### 4. **Relationship to IntelliJ Platform language support** - The Bigger Picture
-   - GrammarKit generates the foundation for language plugins
-   - Creates PSI (Program Structure Interface) - "the way IntelliJ understands code structure"
-   - Integrates seamlessly with IntelliJ's language support framework
-   - Evidence: code-evidence.md lines 24-30, examples.md lines 35-48
+### 4. **Real-World Applications**
+   - Language plugins: Examples from code-evidence.md lines 15-17
+   - Configuration parsers: JSON example at testData/livePreview/Json.bnf
+   - DSL implementations: Business rules, query languages, templates
+   - Evidence: code-evidence.md lines 20-30, 59-62
 
-### 5. **When to use GrammarKit** - Use Cases
-   - Custom language plugin development: "Building support for a new programming language"
-   - DSL support: "Adding a mini-language to your application"
-   - File format parsers: "Teaching IntelliJ to understand your config files"
-   - Evidence: code-evidence.md lines 32-49, examples.md lines 49-86
+### 5. **Development Workflow**
+   - Write grammar rules in BNF format
+   - Test with Live Preview
+   - Generate parser code
+   - Integrate with IntelliJ Platform
+   - Evidence: code-evidence.md lines 34-50
 
-### 6. **Prerequisites** - What You Need to Know
-   - Frame as "helpful background" not "requirements"
-   - IntelliJ IDEA basics: Just need to know how to use the IDE
-   - Java knowledge: You'll read generated Java code
-   - Parsing concepts: Will be explained as we go
-   - Evidence: code-evidence.md lines 51-66, references.md lines 63-68
+### 6. **Platform Integration**
+   - Part of IntelliJ Platform since version 12.1
+   - Works with all JetBrains IDEs
+   - Standard plugin architecture
+   - Evidence: code-evidence.md lines 52-56
 
 ## Evidence Mapping
-- Outline: "Overview of BNF grammar support" → Supported by examples.md lines 6-18
-- Outline: "Key features and capabilities" → Supported by code-evidence.md lines 14-23
-- Outline: "Relationship to IntelliJ Platform" → Supported by code-evidence.md lines 24-30
-- Outline: "Custom language plugin development" → Supported by examples.md lines 49-62
-- Outline: "DSL support" → Supported by examples.md lines 63-73
-- Outline: "File format parsers" → Supported by examples.md lines 74-86
-- Outline: "Prerequisites" → Supported by code-evidence.md lines 51-66
+- BNF transformation → code-evidence.md lines 6-11
+- Use cases → code-evidence.md lines 14-31
+- Development features → code-evidence.md lines 34-50
+- Integration details → code-evidence.md lines 52-56
+- Example locations → code-evidence.md lines 59-62
 
 ## Key Takeaways
-- GrammarKit transforms grammar descriptions into working parsers
-- It's the standard tool for creating IntelliJ language plugins
-- You don't need to be a parsing expert to start using it
-- The tool handles the complex parts, you focus on your language design
+- Grammar-Kit transforms BNF grammars into Java parser code
+- Primary use is building language support for IntelliJ IDEs
+- Live Preview enables interactive grammar development
+- Suitable for languages, DSLs, and configuration formats
 
 ## Documentation Notes
-- **Tone**: Welcoming and encouraging, avoid intimidating technical terms
-- **Examples**: Use the simplest possible examples (greeting, calculator)
-- **Analogies**: Use cooking recipes, building blocks, or other familiar concepts
-- **Progressive disclosure**: Mention advanced features exist but don't explain them
-- **Visual elements**: Include screenshot of Live Preview to make it tangible
-- **Common concerns**: Address "Do I need to know compiler theory?" (No!)
-- **Next steps**: Clear path to installation and quick start tutorial
-
-## Writing Guidance for Documentation Author
-
-### Opening Hook
-Start with a relatable problem: "Have you ever wanted IntelliJ IDEA to understand your custom file format or programming language? Maybe you have configuration files with a specific syntax, or you're creating a domain-specific language for your application. GrammarKit is the tool that makes this possible."
-
-### Simplification Strategy
-1. Replace "BNF" with "grammar rules" on first mention
-2. Replace "PSI" with "code structure" initially
-3. Replace "parser" with "code that understands your language"
-4. Introduce technical terms gently with explanations
-
-### Example Progression
-1. Start with: `greeting ::= 'hello' 'world'` (everyone understands this)
-2. Then show: `assignment ::= ID '=' NUMBER` (still simple but useful)
-3. Avoid complex examples with recursion or advanced features
-
-### Addressing Concerns
-Include a box/callout: "You don't need a computer science degree! If you can describe your language's rules in plain English, you can write a grammar for it."
-
-### Visual Support
-- Screenshot of Live Preview showing a simple grammar
-- Diagram showing: Grammar → GrammarKit → Parser → IDE Features
-- Before/after: Grammar rule vs. IDE understanding the code
+- Focus on the transformation concept (BNF → parser)
+- Emphasize practical use cases
+- Show the development workflow
+- Keep technical details minimal for this introduction
+- Direct readers to installation as the next step

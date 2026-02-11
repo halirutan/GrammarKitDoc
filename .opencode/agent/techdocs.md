@@ -127,9 +127,9 @@ For each documentation topic:
 
 1. **Read Section Scope**: Extract specific section from info/documentation-outline.md
 2. **Create Directory**: evidence-ledger/[section]/[topic]/
-3. **Collect Evidence** (parallel where possible):
+3. **Collect Evidence**:
    - @code-analyst: Extract technical facts ONLY for the section scope
-   - @example-generator: Create minimal examples ONLY for section features
+   - @example-generator: Create minimal examples ONLY for section features and ONLY if examples are required
    - @reference-checker: Validate references ONLY related to the section
 4. **Synthesize** (after evidence collection):
    - @topic-architect: Design documentation structure from evidence and outline

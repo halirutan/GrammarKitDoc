@@ -101,6 +101,16 @@ Following documentation outline:
 - **Complete**: Include all evidence in structure
 - **Concise**: Keep summaries brief and actionable
 
+## Writing Style
+
+Write like a calm teammate: clear, direct, and respectful. Optimize for readers who are capable, busy, and here to complete a task.
+
+Avoid:
+- Humor, jokes, sarcasm, and "you're in the right place" style greetings.
+- Pep talks and motivational lines ("Don't worry…", "Remember: every expert…", "Let's get started!").
+- Smug or performative empathy. If something is hard, make it easier through structure and examples, not encouragement.
+- Exclamation points in normal prose. Use them only when a warning truly needs it.
+
 ## Process
 
 1. Read the SPECIFIC section from info/documentation-outline.md

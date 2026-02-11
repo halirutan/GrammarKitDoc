@@ -42,8 +42,9 @@ Use todos to track your analysis:
 **CRITICAL**: When given a specific documentation section:
 1. Extract ONLY features listed in that section's outline
 2. Ignore features that belong to other sections
-3. Note cross-references but don't extract their content
-4. Flag any discovered features not in any outline section
+3. If the section does not need example code, don't extract it!
+4. Note cross-references but don't extract their content
+5. Flag any discovered features not in any outline section
 
 If the prompt includes "INCLUDE" and "EXCLUDE" lists:
 - Follow them strictly

@@ -48,7 +48,10 @@ markdown_extensions:
       permalink: true
 
 nav:
-  - Introduction to Grammar-Kit: index.md
+  - Getting Started:
+      - What is Grammar-Kit?: index.md
+      - Installation and Setup: installation.md
+      - Quick Start Tutorial: quick-start.md
   - Grammar Development:
       - BNF Grammar Syntax: grammar-development/grammar-syntax.md
       - Designing Grammar Rules: grammar-development/grammar-design.md

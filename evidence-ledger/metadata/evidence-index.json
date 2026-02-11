@@ -80,11 +80,38 @@
         "status": "completed",
         "needs-update": false
       }
+    },
+    "grammar-development/expression-parsing": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-11T15:45:00Z",
+      "evidence": {
+        "code-evidence": {
+          "exists": true,
+          "last-updated": "2026-02-11T15:45:00Z"
+        },
+        "examples": {
+          "exists": true,
+          "last-updated": "2026-02-11T15:45:00Z"
+        },
+        "references": {
+          "exists": true,
+          "last-updated": "2026-02-11T15:45:00Z"
+        },
+        "topic-summary": {
+          "exists": true,
+          "last-updated": "2026-02-11T15:45:00Z"
+        }
+      },
+      "documentation": {
+        "file": "docs/grammar-development/expression-parsing.md",
+        "status": "completed",
+        "needs-update": false
+      }
     }
   },
   "metadata": {
     "version": "1.0",
     "created": "2024-02-04T10:00:00Z",
-    "last-updated": "2026-02-11T10:30:00Z"
+    "last-updated": "2026-02-11T15:45:00Z"
   }
 }

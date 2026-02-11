@@ -54,10 +54,10 @@ If the prompt includes "INCLUDE" and "EXCLUDE" lists:
 ## Analysis Approach (Focus on User-Facing Features)
 
 1. **Information Sources**
-   - Read `info/file-meta.md` for documentation-relevant files
-   - Read `info/main-image-description.md` for BNF grammar features
-   - Check `resources/messages/attributeDescriptions/` for attribute docs
-   - Note test file locations in `testData/` (don't extract examples)
+   - Read @info/file-meta.md for documentation-relevant files
+   - Read @info/main-image-description.md for BNF grammar features
+   - Check @resources/messages/attributeDescriptions/ for attribute docs
+   - Note test file locations in @Grammar-Kit/testData (don't extract examples)
 
 2. **User Feature Extraction**
    - Grammar syntax users can write
@@ -177,10 +177,10 @@ Never document: "How does Grammar-Kit implement this internally?"
 
 ## Special Considerations for Grammar-Kit
 
-- Check `attributeDescriptions/` for user-facing attribute docs
+- Check @Grammar-Kit/resources/messages/attributeDescriptions for user-facing attribute docs
 - Look for `@NonNls` strings - often user-visible messages
 - IDE action definitions show user-available commands
-- Test files in `testData/` contain examples (note paths only!)
+- Test files in @Grammar-Kit/testData contain examples (note paths only!)
 - Parser generation affects what users see in their IDE
 
 ## Important: Division of Labor

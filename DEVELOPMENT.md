@@ -1,140 +1,79 @@
-# GrammarKit Documentation Development
+# Development Guide
 
-This documentation project uses [uv](https://github.com/astral-sh/uv) for Python dependency management and [MkDocs](https://www.mkdocs.org/) with Material theme for building the documentation.
+This repository contains the user documentation for [Grammar-Kit](https://github.com/JetBrains/Grammar-Kit), built with [MkDocs](https://www.mkdocs.org/) and the Material theme. It uses [uv](https://github.com/astral-sh/uv) for Python dependency management.
 
-## Prerequisites
-
-- Python 3.12 or later
-- uv (install from https://github.com/astral-sh/uv)
+You need Python 3.12 or later and uv installed before you begin. Install uv from https://github.com/astral-sh/uv if you do not already have it.
 
 ## Quick Start
 
-1. Install dependencies:
-   ```bash
-   make install
-   # or
-   python scripts.py install
-   ```
+Run `make install` to install dependencies, then `make serve` to start the development server. Open http://127.0.0.1:8000 in your browser to preview the site. The server watches for file changes and reloads automatically.
 
-2. Run development server:
-   ```bash
-   make serve
-   # or
-   python scripts.py serve
-   ```
+On Windows, use `python scripts.py install` and `python scripts.py serve` instead.
 
-3. Open http://127.0.0.1:8000 in your browser
+## Commands
 
-## Available Commands
+All commands are available through `make` (Linux/macOS) or `python scripts.py` (Windows). Both interfaces support the same set of operations.
 
-### Using Make (Linux/macOS)
-- `make install` - Install all dependencies
-- `make serve` - Run local development server with live reload
-- `make build` - Build static documentation site
-- `make clean` - Clean build artifacts
-- `make deploy` - Deploy to GitHub Pages
-- `make requirements` - Export dependencies to requirements.txt
+| Command | What it does |
+|---------|-------------|
+| `make install` | Install all dependencies via `uv sync` |
+| `make serve` | Start the dev server at http://127.0.0.1:8000 with live reload |
+| `make build` | Build the static site in `site/` with `--strict` mode |
+| `make clean` | Remove `site/`, `.cache/`, and Python bytecode files |
+| `make deploy` | Build and deploy to GitHub Pages (requires push permissions) |
+| `make requirements` | Export production dependencies to `requirements.txt` |
 
-### Using Python scripts (Cross-platform)
-- `python scripts.py install` - Install all dependencies
-- `python scripts.py serve` - Run local development server
-- `python scripts.py build` - Build static documentation
-- `python scripts.py clean` - Clean build artifacts
-- `python scripts.py deploy` - Deploy to GitHub Pages
-- `python scripts.py requirements` - Export dependencies
+The `build` and `deploy` commands run in strict mode, which catches broken links and other issues that the dev server does not flag. Run `make clean` before building if you encounter stale output from a previous build.
 
 ## Project Structure
 
 ```
 .
-├── mkdocs.yml           # MkDocs configuration
-├── pyproject.toml       # Project metadata and dependencies
-├── .python-version      # Python version for uv
-├── Makefile            # Build commands for Unix-like systems
-├── scripts.py          # Cross-platform build scripts
-├── docs/               # Documentation source files
+├── mkdocs.yml              # MkDocs configuration and nav structure
+├── pyproject.toml           # Python dependencies (managed by uv)
+├── Makefile                 # Build commands (Linux/macOS)
+├── scripts.py               # Build commands (Windows)
+├── docs/                    # Documentation source (Markdown)
 │   ├── index.md
-│   ├── getting-started/
-│   ├── core-concepts/
-│   └── ...
-└── site/               # Generated documentation (git-ignored)
+│   ├── grammar-development/
+│   ├── code-generation/
+│   ├── integration/
+│   ├── advanced/
+│   ├── reference/
+│   └── appendices/
+├── evidence-ledger/         # Evidence files that back each topic
+├── Grammar-Kit/             # Grammar-Kit source (read-only submodule)
+├── info/                    # Project planning and outlines
+└── site/                    # Generated output (git-ignored)
 ```
 
-## Dependencies
+### Documentation content
 
-### Documentation
-- **mkdocs** - Static site generator
-- **mkdocs-material** - Material Design theme
-- **mkdocs-minify-plugin** - HTML/CSS/JS minification
-- **pymdown-extensions** - Enhanced Markdown features
+The `docs/` directory contains the Markdown source files organized by section. The navigation structure is defined in `mkdocs.yml`. When you add or move pages, update the `nav` key in that file.
 
-### Development
-- **watchdog** - File system monitoring for live reload
-- **ruff** - Python linting and formatting
-- **pre-commit** - Git hook management
+### Evidence ledger
+
+Documentation in this project follows an evidence-based workflow. The `evidence-ledger/` directory mirrors the structure of `docs/` and contains supporting files for each topic:
+
+- `code-evidence.md` has technical facts extracted from Grammar-Kit source code.
+- `examples.md` has code examples and snippets.
+- `references.md` has links and external references.
+- `topic-summary.md` has writing guidance and content structure for the topic.
+
+When writing or editing documentation, treat the evidence files as the source of truth for technical claims. The `Grammar-Kit/` submodule is the upstream source, but contributors working on docs should rely on the evidence ledger rather than reading source code directly.
+
+### Project planning
+
+The `info/` directory contains the documentation outline, user personas, and a catalog of documentation-relevant files from Grammar-Kit. These files guide content planning and prioritization.
 
 ## Working with uv
 
-uv automatically manages virtual environments and dependencies:
+Dependencies are declared in `pyproject.toml` and locked in `uv.lock`. The `make install` command runs `uv sync`, which creates a virtual environment and installs everything automatically. You do not need to activate the environment manually.
 
-```bash
-# Sync dependencies
-uv sync
-
-# Add a new dependency
-uv add package-name
-
-# Add a development dependency
-uv add --dev package-name
-
-# Run commands in the environment
-uv run mkdocs --help
-```
-
-## Building Documentation
-
-### Development Build
-The development server automatically rebuilds on file changes:
-```bash
-make serve
-```
-
-### Production Build
-Create optimized static files in the `site/` directory:
-```bash
-make build
-```
-
-### GitHub Pages Deployment
-Deploy directly to GitHub Pages (requires push permissions):
-```bash
-make deploy
-```
-
-## Tips
-
-1. **Live Preview**: The development server supports live reload. Save your Markdown files and see changes instantly.
-
-2. **Strict Mode**: Production builds use `--strict` flag to catch broken links and other issues.
-
-3. **Clean Builds**: Run `make clean` before building if you encounter caching issues.
-
-4. **Compatibility**: Use `make requirements` to generate a requirements.txt file for users without uv.
+To add a new MkDocs plugin or extension, run `uv add package-name`. For tools only needed during development, run `uv add --dev package-name`. If you need to run an arbitrary command inside the managed environment, prefix it with `uv run`, for example `uv run mkdocs --help`.
 
 ## Troubleshooting
 
-### Port Already in Use
-If port 8000 is busy, you can modify the port in Makefile or scripts.py.
+If port 8000 is already in use, edit the `--dev-addr` value in `Makefile` or `scripts.py` to use a different port.
 
-### Module Not Found
-Ensure you're using uv to run commands:
-```bash
-uv run mkdocs serve  # Correct
-mkdocs serve        # May fail if not in virtual environment
-```
-
-### Permission Errors
-Make sure scripts.py is executable:
-```bash
-chmod +x scripts.py
-```
+If you see "module not found" errors, make sure you are running commands through uv. Running `mkdocs serve` directly will fail unless the virtual environment is activated. Use `uv run mkdocs serve` or `make serve` instead.

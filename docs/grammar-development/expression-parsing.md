@@ -290,7 +290,7 @@ The `name` attribute replaces long token lists in error messages with a readable
 name(".*_expr")='expression'
 ```
 
-The IDE also provides a Quick Documentation feature for expression rules. Press Ctrl+Q (Cmd+J on macOS) on any expression rule to see the priority table with operator types and the current rule highlighted. This is useful for verifying that your precedence assignments are correct.
+The IDE also provides a Quick Documentation feature for expression rules. Press ++ctrl+q++ (++cmd+j++ on macOS) on any expression rule to see the priority table with operator types and the current rule highlighted. This is useful for verifying that your precedence assignments are correct.
 
 ### The Traditional Approach
 

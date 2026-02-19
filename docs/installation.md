@@ -20,7 +20,7 @@ You should be comfortable creating projects and navigating settings in IntelliJ 
 
 ### From the marketplace
 
-1. Open **Settings** (Ctrl+Alt+S / Cmd+,) and select **Plugins**.
+1. Open **Settings** (++ctrl+alt+s++ / ++cmd+comma++) and select **Plugins**.
 2. Switch to the **Marketplace** tab and search for "Grammar-Kit".
 3. Click **Install**, then restart the IDE when prompted.
 
@@ -47,7 +47,7 @@ Create a new file with the `.bnf` extension in any project. If Grammar-Kit is in
 2. Syntax highlighting for keywords, rules, and tokens.
 3. Code completion when you start typing attributes or rule names.
 
-Open Live Preview with Ctrl+Alt+P (Cmd+Alt+P on macOS) to confirm the editor is fully functional. The preview pane displays a parse tree as you type grammar rules and sample input.
+Open Live Preview with ++ctrl+alt+p++ (++cmd+alt+p++ on macOS) to confirm the editor is fully functional. The preview pane displays a parse tree as you type grammar rules and sample input.
 
 ## Project setup
 
@@ -210,19 +210,19 @@ You can reference tokens by their quoted value (`'='`) for readability or by the
 After saving the grammar file, test it:
 
 1. Confirm the file shows a BNF icon in the editor tab.
-2. Press Ctrl+Alt+P (Cmd+Alt+P) to open Live Preview.
+2. Press ++ctrl+alt+p++ (++cmd+alt+p++) to open Live Preview.
 3. Type sample input in the preview pane and check that a parse tree appears.
-4. Press Ctrl+Shift+G (Cmd+Shift+G) to generate parser code into your `gen/` directory.
+4. Press ++ctrl+shift+g++ (++cmd+shift+g++) to generate parser code into your `gen/` directory.
 
 Editor features available for `.bnf` files:
 
 | Feature | Shortcut | What it does |
 |---|---|---|
-| Live Preview | Ctrl+Alt+P / Cmd+Alt+P | Test grammar against sample input |
-| Generate Parser Code | Ctrl+Shift+G / Cmd+Shift+G | Generate parser, PSI, and element types |
-| Structure View | Ctrl+F12 / Cmd+F12 | Browse rules in the current file |
-| Quick Documentation | Ctrl+Q / Cmd+J | Show FIRST and FOLLOW sets for a rule |
-| Go to Related File | Ctrl+Alt+Home / Cmd+Alt+Home | Jump to the generated file for a rule |
+| Live Preview | ++ctrl+alt+p++ / ++cmd+alt+p++ | Test grammar against sample input |
+| Generate Parser Code | ++ctrl+shift+g++ / ++cmd+shift+g++ | Generate parser, PSI, and element types |
+| Structure View | ++ctrl+f12++ / ++cmd+f12++ | Browse rules in the current file |
+| Quick Documentation | ++ctrl+q++ / ++cmd+j++ | Show FIRST and FOLLOW sets for a rule |
+| Go to Related File | ++ctrl+alt+home++ / ++cmd+alt+home++ | Jump to the generated file for a rule |
 
 Eight inspections run by default, catching problems like unresolved references, unused rules, left recursion, and duplicate rules. Warnings appear directly in the editor as you type.
 

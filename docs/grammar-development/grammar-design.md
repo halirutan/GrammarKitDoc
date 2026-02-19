@@ -487,7 +487,7 @@ Avoid naming rules with the `rule_name_N1_N2_..._NX` pattern.
 Prefer declared tokens over text-matched (quoted) tokens. Text-matched tokens are matched by text at parse time and can span multiple lexer tokens, which is both slower and can produce unexpected behavior. The `BnfSuspiciousToken` inspection highlights tokens that look like they should be rule references.
 
 !!! note "IDE inspections"
-    Grammar-Kit provides inspections for left recursion, unused rules, duplicate rules, unresolved references, identical and unreachable choice branches, suspicious tokens, and unused attributes. Use **Quick Documentation** (Ctrl+Q / Cmd+J) to see FIRST/FOLLOWS sets, recovery predicate expansions, and expression priority tables for any rule. Use **Live Preview** (Ctrl+Alt+P) to test your grammar interactively without generating code. See [Live Preview](live-preview.md) for the full workflow.
+    Grammar-Kit provides inspections for left recursion, unused rules, duplicate rules, unresolved references, identical and unreachable choice branches, suspicious tokens, and unused attributes. Use **Quick Documentation** (++ctrl+q++ / ++cmd+j++) to see FIRST/FOLLOWS sets, recovery predicate expansions, and expression priority tables for any rule. Use **Live Preview** (++ctrl+alt+p++) to test your grammar interactively without generating code. See [Live Preview](live-preview.md) for the full workflow.
 
 The naming conventions for rules follow `snake_case` (`property_recover`, `root_item`, `literal_expr`). Generated PSI class names derive from rule names via CamelCase conversion: `literal_expr` becomes `LiteralExpr`. Generated parser methods follow the rule name directly: `static boolean literal_expr(..)`.
 

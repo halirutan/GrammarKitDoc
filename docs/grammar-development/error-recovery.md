@@ -113,7 +113,7 @@ Instead of writing a predicate by hand, you can use `recoverWhile="#auto"`. Gram
 item ::= number {recoverWhile="#auto"}
 ```
 
-The generated predicate uses `nextTokenIsFast` to test against the computed token set. You can verify what `#auto` produces by pressing Ctrl+Q (Cmd+J on macOS) on the rule. Quick Documentation shows a section labeled "#auto recovery predicate:" with the expanded `!(...tokens...)` expression.
+The generated predicate uses `nextTokenIsFast` to test against the computed token set. You can verify what `#auto` produces by pressing ++ctrl+q++ (++cmd+j++ on macOS) on the rule. Quick Documentation shows a section labeled "#auto recovery predicate:" with the expanded `!(...tokens...)` expression.
 
 Use `#auto` when the FOLLOWS set naturally covers the right boundary tokens. Write a manual predicate when you need additional boundaries that are not in the FOLLOWS set, such as statement-starting keywords.
 
@@ -339,4 +339,4 @@ For performance, use `consumeTokenFast` in recovery predicates and expression ru
 
 The default `consumeToken` method records error reporting information (token variants). `consumeTokenFast` skips this recording for better performance at the cost of less detailed error messages in those specific rules.
 
-You can test recovery behavior interactively using [Live Preview](live-preview.md). Open it with Ctrl+Alt+P (Cmd+Alt+P on macOS), type broken input, and inspect the PSI tree in the Structure tool window to verify that nodes are preserved and error elements appear where expected. Quick Documentation (Ctrl+Q / Cmd+J) on any rule shows its FIRST and FOLLOWS sets, which helps when designing recovery predicates or verifying what `#auto` generates.
+You can test recovery behavior interactively using [Live Preview](live-preview.md). Open it with ++ctrl+alt+p++ (++cmd+alt+p++ on macOS), type broken input, and inspect the PSI tree in the Structure tool window to verify that nodes are preserved and error elements appear where expected. Quick Documentation (++ctrl+q++ / ++cmd+j++) on any rule shows its FIRST and FOLLOWS sets, which helps when designing recovery predicates or verifying what `#auto` generates.

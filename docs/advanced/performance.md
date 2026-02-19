@@ -89,7 +89,7 @@ These caches are invalidated automatically when the grammar file changes. You do
 
 When you notice parsing slowdowns, check these areas in order:
 
-1. Run FIRST-set analysis (Ctrl+Q on a rule) to verify that your grammar's entry points have small, distinct FIRST sets. Overlapping FIRST sets force the parser to try multiple branches.
+1. Run FIRST-set analysis (++ctrl+q++ on a rule) to verify that your grammar's entry points have small, distinct FIRST sets. Overlapping FIRST sets force the parser to try multiple branches.
 2. Apply `consumeTokenFast` to recovery rules and expression operators where error reporting detail is not needed.
 3. Mark helper rules as `private` when they serve only as grouping constructs and do not need PSI nodes.
 4. Factor common prefixes in choice rules so the parser commits to a branch earlier. If two alternatives start with the same tokens, the parser must try both until they diverge.

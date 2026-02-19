@@ -19,7 +19,7 @@ The generated PSI tree integrates directly with the IntelliJ Platform, providing
 
 Grammar-Kit covers the full cycle from grammar authoring through code generation and IDE integration.
 
-Live Preview lets you test a grammar against sample text in real time, without generating code or compiling anything. Open it with Ctrl+Alt+P (Cmd+Alt+P on macOS), and a structure view shows the PSI tree as you edit the grammar. This is the fastest way to iterate on grammar rules. See [Live Preview](grammar-development/live-preview.md) for details.
+Live Preview lets you test a grammar against sample text in real time, without generating code or compiling anything. Open it with ++ctrl+alt+p++ (++cmd+alt+p++ on macOS), and a structure view shows the PSI tree as you edit the grammar. This is the fastest way to iterate on grammar rules. See [Live Preview](grammar-development/live-preview.md) for details.
 
 Expression parsing handles operator precedence automatically. You define expression rules in your grammar, and Grammar-Kit generates a compact Pratt-like parser that supports binary, prefix, postfix, and n-ary operators with correct priority and associativity. The entire expression hierarchy compiles down to just two generated methods. See [Expression Parsing](grammar-development/expression-parsing.md) for details.
 
@@ -27,7 +27,7 @@ Error recovery uses two attributes, `pin` and `recoverWhile`, to keep parsing us
 
 Generated parsers integrate directly with the IntelliJ Platform. They extend `LightPsiParser`, and the runtime base class (`GeneratedParserUtilBase`) ships with the IntelliJ Platform itself since version 12.1, so you do not need to bundle it. A [Gradle plugin](https://github.com/JetBrains/gradle-grammar-kit-plugin) supports automated parser generation in CI builds.
 
-The typical workflow is: create a `.bnf` file, prototype with Live Preview, generate parser and PSI classes (Ctrl+Shift+G / Cmd+Shift+G), generate a JFlex lexer, then implement `ParserDefinition` and register it in `plugin.xml`. The [Quick Start Tutorial](quick-start.md) walks through this process step by step.
+The typical workflow is: create a `.bnf` file, prototype with Live Preview, generate parser and PSI classes (++ctrl+shift+g++ / ++cmd+shift+g++), generate a JFlex lexer, then implement `ParserDefinition` and register it in `plugin.xml`. The [Quick Start Tutorial](quick-start.md) walks through this process step by step.
 
 ---
 

@@ -86,9 +86,9 @@ This grammar uses traditional precedence layers (`add_expr` calls `mul_expr`, wh
 
 ### Testing with Live Preview
 
-Live Preview lets you test the grammar against sample input without generating any code. Open `Calc.bnf` in the editor and press Ctrl+Alt+P (Cmd+Alt+P on macOS). A split editor opens with the grammar on one side and a preview pane on the other. Type an expression like `1 + 2;` in the preview pane, and Grammar-Kit parses it in real time using the grammar rules.
+Live Preview lets you test the grammar against sample input without generating any code. Open `Calc.bnf` in the editor and press ++ctrl+alt+p++ (++cmd+alt+p++ on macOS). A split editor opens with the grammar on one side and a preview pane on the other. Type an expression like `1 + 2;` in the preview pane, and Grammar-Kit parses it in real time using the grammar rules.
 
-Two additional tools help during prototyping. The structure view (Ctrl+F12 / Cmd+F12) shows the PSI tree for the preview input. Grammar highlighting at caret (Ctrl+Alt+F7 / Cmd+Alt+F7 in the preview editor) highlights the grammar rules that match the current caret position in the preview.
+Two additional tools help during prototyping. The structure view (++ctrl+f12++ / ++cmd+f12++) shows the PSI tree for the preview input. Grammar highlighting at caret (++ctrl+alt+f7++ / ++cmd+alt+f7++ in the preview editor) highlights the grammar rules that match the current caret position in the preview.
 
 Live Preview uses a simplified tokenizer built from the `regexp` tokens in the header block. This is sufficient for prototyping, but it does not match the behavior of a real JFlex lexer. Once your grammar stabilizes, switch to a generated JFlex lexer for accurate tokenization.
 
@@ -97,7 +97,7 @@ Live Preview uses a simplified tokenizer built from the `regexp` tokens in the h
 With the grammar tested in Live Preview, generate the parser and PSI classes:
 
 1. Open `Calc.bnf` in the editor.
-2. Press Ctrl+Shift+G (Cmd+Shift+G on macOS), or right-click the file and select **Generate Parser Code**.
+2. Press ++ctrl+shift+g++ (++cmd+shift+g++ on macOS), or right-click the file and select **Generate Parser Code**.
 3. A notification confirms success: `"Calc.bnf generated (size)"` with the output directory.
 
 The generated files appear in the `gen/` directory (configurable via the `grammar.kit.gen.dir` system property):
@@ -625,7 +625,7 @@ CalcFile
 
 Public rules become PSI nodes in the tree. Private rules (like `statement`) are transparent and do not appear. Tokens appear as `PsiElement` leaves.
 
-Open **Tools > View PSI Structure** to inspect the parse tree for any file in your project. This is useful for verifying that the grammar produces the expected structure. You can also use the structure view (Ctrl+F12 / Cmd+F12) for a quick tree outline.
+Open **Tools > View PSI Structure** to inspect the parse tree for any file in your project. This is useful for verifying that the grammar produces the expected structure. You can also use the structure view (++ctrl+f12++ / ++cmd+f12++) for a quick tree outline.
 
 For automated regression testing, extend `ParsingTestCase` from the IntelliJ test framework. This base class lets you provide input text and compare the resulting PSI tree against an expected dump file. See the [IntelliJ SDK Parsing Test documentation](https://plugins.jetbrains.com/docs/intellij/parsing-test.html) for setup details.
 
@@ -646,8 +646,8 @@ JFlex generates a `FlexLexer`, not a `Lexer`. Wrap it with `new FlexAdapter(new 
 The full sequence from grammar to working plugin:
 
 1. Create `Calc.bnf` with tokens and rules.
-2. Open Live Preview (Ctrl+Alt+P) to test the grammar interactively.
-3. Generate parser code (Ctrl+Shift+G).
+2. Open Live Preview (++ctrl+alt+p++) to test the grammar interactively.
+3. Generate parser code (++ctrl+shift+g++).
 4. Generate the JFlex lexer (right-click `.bnf` > **Generate JFlex Lexer**), then generate the Java lexer (right-click `.flex` > **Run JFlex Generator**).
 5. Write `CalcLanguage`, `CalcFileType`, `CalcFile`, and `CalcParserDefinition`.
 6. Write `CalcSyntaxHighlighter` and `CalcSyntaxHighlighterFactory`.

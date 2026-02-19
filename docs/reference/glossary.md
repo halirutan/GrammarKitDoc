@@ -52,7 +52,7 @@ Terms used throughout the Grammar-Kit documentation, organized alphabetically.
 :   A rule declared with the `fake` modifier. Only PSI classes are generated; no parsing code is produced. Fake rules are used to create abstract PSI base classes for expression hierarchies.
 
 **FIRST set**
-:   The set of tokens that can appear at the beginning of a rule. Grammar-Kit computes FIRST sets automatically and uses them for lookahead optimization. View a rule's FIRST set with Quick Documentation (Ctrl+Q / Cmd+J).
+:   The set of tokens that can appear at the beginning of a rule. Grammar-Kit computes FIRST sets automatically and uses them for lookahead optimization. View a rule's FIRST set with Quick Documentation (++ctrl+q++ / ++cmd+j++).
 
 ## G
 
@@ -60,7 +60,7 @@ Terms used throughout the Grammar-Kit documentation, organized alphabetically.
 :   The runtime support class that generated parsers depend on. It provides token consumption, error recovery, and other parsing utilities. Override it through the `parserUtilClass` attribute.
 
 **Grammar highlighting**
-:   An IDE feature that links the Live Preview caret position to the corresponding grammar expression. Toggle it with Ctrl+Alt+F7 / Cmd+Alt+F7.
+:   An IDE feature that links the Live Preview caret position to the corresponding grammar expression. Toggle it with ++ctrl+alt+f7++ / ++cmd+alt+f7++.
 
 ## I
 
@@ -90,7 +90,7 @@ Terms used throughout the Grammar-Kit documentation, organized alphabetically.
 :   An optimized parser interface in the IntelliJ platform. Generated parsers implement this interface for lightweight parsing.
 
 **Live Preview**
-:   A Grammar-Kit feature that lets you test a grammar in real time without generating code. Open it with Ctrl+Alt+P / Cmd+Alt+P. See [Live Preview](../grammar-development/live-preview.md).
+:   A Grammar-Kit feature that lets you test a grammar in real time without generating code. Open it with ++ctrl+alt+p++ / ++cmd+alt+p++. See [Live Preview](../grammar-development/live-preview.md).
 
 ## M
 

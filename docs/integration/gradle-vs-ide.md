@@ -1,10 +1,10 @@
 # Gradle vs IDE Generation
 
-Grammar-Kit offers three ways to generate parser code: from the IDE (Ctrl+Shift+G), from the Gradle plugin, and from the command-line JAR. Each approach makes different trade-offs between feature completeness, automation, and reproducibility. This page helps you choose the right one for your project.
+Grammar-Kit offers three ways to generate parser code: from the IDE (++ctrl+shift+g++), from the Gradle plugin, and from the command-line JAR. Each approach makes different trade-offs between feature completeness, automation, and reproducibility. This page helps you choose the right one for your project.
 
 ## Feature Comparison
 
-| Feature | IDE (Ctrl+Shift+G) | Gradle Plugin | CLI (grammar-kit.jar) |
+| Feature | IDE (++ctrl+shift+g++) | Gradle Plugin | CLI (grammar-kit.jar) |
 |---|---|---|---|
 | Two-pass generation | Yes | No | No |
 | Method mixins | Yes | No | No |
@@ -21,11 +21,11 @@ The most significant difference is two-pass generation. The IDE runs the generat
 
 ## IDE Generation
 
-IDE generation is the recommended approach during active grammar development. It provides the tightest feedback loop: edit the grammar, press Ctrl+Shift+G, and the generator writes files directly into your source tree. The IDE resolves output directories automatically from the `parserClass` attribute using `PackageIndex`, so you do not need to configure paths manually.
+IDE generation is the recommended approach during active grammar development. It provides the tightest feedback loop: edit the grammar, press ++ctrl+shift+g++, and the generator writes files directly into your source tree. The IDE resolves output directories automatically from the `parserClass` attribute using `PackageIndex`, so you do not need to configure paths manually.
 
 The generation runs as a background task with a progress indicator and reports results through a notification showing file count, total size, and duration. After generation, the IDE refreshes its virtual file system so you can immediately use the new code.
 
-IDE generation is also the only way to use Live Preview (Ctrl+Alt+P), which lets you test grammar changes against sample input in real time without regenerating.
+IDE generation is also the only way to use Live Preview (++ctrl+alt+p++), which lets you test grammar changes against sample input in real time without regenerating.
 
 !!! note
     Fleet IDE also supports Grammar-Kit generation through context menu actions: "Fleet: Generate Parser Code", "Fleet: Generate JFlex Lexer", and "Fleet: Run JFlex Generator".

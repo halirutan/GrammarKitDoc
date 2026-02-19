@@ -27,7 +27,7 @@ For the annotator layer, implement `Annotator` (with `DumbAware` if your highlig
 
 The `StructureViewFactory` extension gives users an outline of the file. Grammar-Kit's structure view shows rules and attribute blocks as top-level entries, with individual attributes nested inside their blocks. Implement `StructureViewBuilder` and `TreeBasedStructureViewBuilder` to define what PSI elements appear and how they display.
 
-For navigation, the `FindUsagesProvider` extension point enables "Find Usages" on your named elements. Grammar-Kit enables usage search on rules and attributes. The `DocumentationProvider` extension powers quick documentation (Ctrl+Q). Grammar-Kit shows computed FIRST and NEXT token sets for rules, and HTML descriptions for attributes.
+For navigation, the `FindUsagesProvider` extension point enables "Find Usages" on your named elements. Grammar-Kit enables usage search on rules and attributes. The `DocumentationProvider` extension powers quick documentation (++ctrl+q++). Grammar-Kit shows computed FIRST and NEXT token sets for rules, and HTML descriptions for attributes.
 
 Code completion uses `CompletionContributor`. Grammar-Kit registers three providers: one for attribute names inside `{...}` blocks, one for token and identifier references, and one for rule references. The contributor also integrates with parser-based keyword completion through `GeneratedParserUtilBase.CompletionState`, which suggests context-aware keywords based on what the parser expects at the caret position.
 

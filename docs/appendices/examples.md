@@ -1,6 +1,6 @@
 # Example Grammars
 
-This appendix contains three complete Grammar-Kit grammars, each demonstrating a different set of features. You can paste any of these into a `.bnf` file in IntelliJ IDEA with the Grammar-Kit plugin installed and immediately use Live Preview (**Ctrl+Alt+P**) to test them.
+This appendix contains three complete Grammar-Kit grammars, each demonstrating a different set of features. You can paste any of these into a `.bnf` file in IntelliJ IDEA with the Grammar-Kit plugin installed and immediately use Live Preview (++ctrl+alt+p++) to test them.
 
 ## JSON Parser
 

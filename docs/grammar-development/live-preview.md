@@ -6,12 +6,12 @@ The recommended workflow is to prototype your grammar in Live Preview first, the
 
 ## Opening and Using Live Preview
 
-Press **Ctrl-Alt-P** (Windows/Linux) or **Cmd-Alt-P** (macOS) with a `.bnf` file open. Grammar-Kit splits the editor horizontally and opens a preview file named `<grammar>.bnf.preview` in the new pane. Type sample input in this preview pane to test your grammar.
+Press ++ctrl+alt+p++ (Windows/Linux) or ++cmd+alt+p++ (macOS) with a `.bnf` file open. Grammar-Kit splits the editor horizontally and opens a preview file named `<grammar>.bnf.preview` in the new pane. Type sample input in this preview pane to test your grammar.
 
 | Action | Windows/Linux | macOS |
 |---|---|---|
-| Open Live Preview | Ctrl-Alt-P | Cmd-Alt-P |
-| Start/Stop Grammar Highlighting | Ctrl-Alt-F7 | Cmd-Alt-F7 |
+| Open Live Preview | ++ctrl+alt+p++ | ++cmd+alt+p++ |
+| Start/Stop Grammar Highlighting | ++ctrl+alt+f7++ | ++cmd+alt+f7++ |
 
 Both actions are also available from the **Tools** menu and the editor context menu.
 
@@ -70,9 +70,9 @@ The `space` token uses `regexp:\s+` and does not appear in any rule, so Live Pre
 
 Several IDE tools work with the preview file, giving you visibility into the parse tree and grammar behavior.
 
-The **Structure** tool window and **File Structure** popup (Ctrl-F12 / Cmd-F12) display the PSI tree for the preview input. Each node shows its element type and a snippet of the matched text. Error nodes are marked so you can spot parsing failures at a glance. You can also open the **PSI Viewer** dialog for a more detailed view of the tree.
+The **Structure** tool window and **File Structure** popup (++ctrl+f12++ / ++cmd+f12++) display the PSI tree for the preview input. Each node shows its element type and a snippet of the matched text. Error nodes are marked so you can spot parsing failures at a glance. You can also open the **PSI Viewer** dialog for a more detailed view of the tree.
 
-**Grammar-at-caret highlighting** connects the preview pane back to the grammar. Press **Ctrl-Alt-F7** (Windows/Linux) or **Cmd-Alt-F7** (macOS) while the preview editor is focused to toggle this feature. When active, Grammar-Kit highlights the BNF expressions in your grammar file that correspond to the caret position in the preview. Matched expressions use one highlight color and unmatched expressions use another, so you can see exactly which rules succeeded or failed at a given position.
+**Grammar-at-caret highlighting** connects the preview pane back to the grammar. Press ++ctrl+alt+f7++ (Windows/Linux) or ++cmd+alt+f7++ (macOS) while the preview editor is focused to toggle this feature. When active, Grammar-Kit highlights the BNF expressions in your grammar file that correspond to the caret position in the preview. Matched expressions use one highlight color and unmatched expressions use another, so you can see exactly which rules succeeded or failed at a given position.
 
 Live Preview also automatically creates brace pairs for `{}`, `()`, `[]`, and `<>` if matching tokens exist in your grammar. This gives you basic brace matching in the preview pane without any configuration.
 

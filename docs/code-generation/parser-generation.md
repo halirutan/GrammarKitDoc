@@ -6,7 +6,7 @@ Grammar-Kit transforms BNF rules into a recursive-descent parser implemented as 
 
 You can trigger generation in three ways.
 
-**IDE action** is the preferred approach. Open a `.bnf` file and press **Ctrl+Shift+G** (Windows/Linux) or **Cmd+Shift+G** (macOS). Grammar-Kit saves all open files, resolves the output directory from the `parserClass` attribute's package, runs the generator in a background task, and reports the number of files, total size, and duration in a notification. The output directory structure mirrors the Java package hierarchy.
+**IDE action** is the preferred approach. Open a `.bnf` file and press ++ctrl+shift+g++ (Windows/Linux) or ++cmd+shift+g++ (macOS). Grammar-Kit saves all open files, resolves the output directory from the `parserClass` attribute's package, runs the generator in a background task, and reports the number of files, total size, and duration in a notification. The output directory structure mirrors the Java package hierarchy.
 
 **Command line** works for automation outside the IDE:
 

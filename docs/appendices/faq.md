@@ -49,7 +49,7 @@ Quoted strings in rule bodies that do not correspond to a named token in the `to
 
 Setting `recoverWhile="#auto"` on a rule generates a recovery predicate that matches everything except the rule's computed NEXT set. Grammar-Kit uses `BnfFirstNextAnalyzer` to calculate which tokens can follow the rule, then generates `!(token1 | token2 | ...)` as the recovery expression.
 
-You can inspect the generated predicate by placing the cursor on the rule and pressing **Ctrl+Q** (Quick Documentation). See [Error Recovery and Pin](../grammar-development/error-recovery.md) for details on recovery strategies.
+You can inspect the generated predicate by placing the cursor on the rule and pressing ++ctrl+q++ (Quick Documentation). See [Error Recovery and Pin](../grammar-development/error-recovery.md) for details on recovery strategies.
 
 ### When should I use left rules versus Pratt-style expression parsing?
 
@@ -61,7 +61,7 @@ The [Simple Scripting Language example](examples.md#simple-scripting-language) u
 
 ### Why are my method mixins not working with Gradle?
 
-The Gradle grammar-kit plugin runs a single-pass generation. Method mixins require two passes: the first pass discovers the mixin class's methods, and the second pass adds those methods to the generated PSI interfaces. Only IDE generation (**Ctrl+Shift+G**) supports two-pass mode.
+The Gradle grammar-kit plugin runs a single-pass generation. Method mixins require two passes: the first pass discovers the mixin class's methods, and the second pass adds those methods to the generated PSI interfaces. Only IDE generation (++ctrl+shift+g++) supports two-pass mode.
 
 If you need method mixins in a Gradle build, generate the PSI code from the IDE and commit it to version control. See [Gradle vs IDE Generation](../integration/gradle-vs-ide.md) for a full comparison of capabilities.
 

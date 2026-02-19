@@ -8,9 +8,9 @@ These shortcuts are specific to Grammar-Kit and work when editing `.bnf` or `.fl
 
 | Action | Windows / Linux | macOS | Description |
 |---|---|---|---|
-| Generate Parser | Ctrl+Shift+G | Cmd+Shift+G | Generate parser and PSI code from the current grammar |
-| Live Preview | Ctrl+Alt+P | Cmd+Alt+P | Open the [Live Preview](../grammar-development/live-preview.md) panel for the current grammar |
-| Grammar Highlighting | Ctrl+Alt+F7 | Cmd+Alt+F7 | Toggle grammar-at-caret highlighting, which links the Live Preview cursor position to the matching grammar expression |
+| Generate Parser | ++ctrl+shift+g++ | ++cmd+shift+g++ | Generate parser and PSI code from the current grammar |
+| Live Preview | ++ctrl+alt+p++ | ++cmd+alt+p++ | Open the [Live Preview](../grammar-development/live-preview.md) panel for the current grammar |
+| Grammar Highlighting | ++ctrl+alt+f7++ | ++cmd+alt+f7++ | Toggle grammar-at-caret highlighting, which links the Live Preview cursor position to the matching grammar expression |
 
 ## Refactoring
 
@@ -18,9 +18,9 @@ Grammar-Kit registers refactoring actions that use standard IntelliJ shortcut ma
 
 | Action | Windows / Linux | macOS | Description |
 |---|---|---|---|
-| Introduce Rule | Ctrl+Alt+M | Cmd+Alt+M | Extract the selected expression into a new rule (uses the Extract Method shortcut) |
-| Introduce Token | Ctrl+Alt+C | Cmd+Alt+C | Extract the selected token into a named token constant (uses the Introduce Constant shortcut) |
-| Inline Rule | Ctrl+Alt+N | Cmd+Alt+N | Inline a rule reference, replacing it with the rule's body |
+| Introduce Rule | ++ctrl+alt+m++ | ++cmd+alt+m++ | Extract the selected expression into a new rule (uses the Extract Method shortcut) |
+| Introduce Token | ++ctrl+alt+c++ | ++cmd+alt+c++ | Extract the selected token into a named token constant (uses the Introduce Constant shortcut) |
+| Inline Rule | ++ctrl+alt+n++ | ++cmd+alt+n++ | Inline a rule reference, replacing it with the rule's body |
 
 ## Navigation and Information
 
@@ -28,8 +28,8 @@ These are standard IntelliJ actions that Grammar-Kit enhances with grammar-speci
 
 | Action | Windows / Linux | macOS | Description |
 |---|---|---|---|
-| File Structure | Ctrl+F12 | Cmd+F12 | Show the file structure popup with all rules in the current grammar |
-| Quick Documentation | Ctrl+Q | Cmd+J | Show documentation for the element at the caret, including FIRST and NEXT sets for rules |
+| File Structure | ++ctrl+f12++ | ++cmd+f12++ | Show the file structure popup with all rules in the current grammar |
+| Quick Documentation | ++ctrl+q++ | ++cmd+j++ | Show documentation for the element at the caret, including FIRST and NEXT sets for rules |
 
 ## Context Menu Actions
 

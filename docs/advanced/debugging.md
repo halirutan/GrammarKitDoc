@@ -4,7 +4,7 @@ When a grammar does not parse as expected, Grammar-Kit provides several tools fo
 
 ## Analyzing Rules with Quick Documentation
 
-Press **Ctrl+Q** (or **F1** on macOS) on any rule in the grammar editor to see its analysis. The documentation popup shows:
+Press ++ctrl+q++ (or ++f1++ on macOS) on any rule in the grammar editor to see its analysis. The documentation popup shows:
 
 | Field | Shows |
 |---|---|
@@ -21,7 +21,7 @@ This is the fastest way to verify that a rule's FIRST and NEXT sets look correct
 
 ## Live Preview
 
-Live Preview provides real-time parsing feedback while you edit your grammar. Open it with **Ctrl+Alt+P**. As you type sample input in the preview editor, Grammar-Kit parses it using the current grammar and shows the resulting tree in the Structure View.
+Live Preview provides real-time parsing feedback while you edit your grammar. Open it with ++ctrl+alt+p++. As you type sample input in the preview editor, Grammar-Kit parses it using the current grammar and shows the resulting tree in the Structure View.
 
 ### What Live Preview Shows
 
@@ -29,7 +29,7 @@ Error elements appear highlighted with error attributes, so you can immediately 
 
 ### Grammar-at-Caret Highlighting
 
-Press **Ctrl+Alt+F7** to enable grammar-at-caret highlighting. When you place the cursor in the preview editor, Grammar-Kit highlights the corresponding BNF expressions in the grammar file:
+Press ++ctrl+alt+f7++ to enable grammar-at-caret highlighting. When you place the cursor in the preview editor, Grammar-Kit highlights the corresponding BNF expressions in the grammar file:
 
 - Matched expressions use search-result highlighting
 - Unmatched expressions use write-search-result highlighting
@@ -74,7 +74,7 @@ PsiFile file = LightPsi.parseFile(
 
 ## FIRST and NEXT Set Analysis
 
-The `BnfFirstNextAnalyzer` computes the token sets that drive parser decisions. You can access these through Quick Documentation (Ctrl+Q), but understanding what they mean helps you diagnose problems:
+The `BnfFirstNextAnalyzer` computes the token sets that drive parser decisions. You can access these through Quick Documentation (++ctrl+q++), but understanding what they mean helps you diagnose problems:
 
 - `FIRST(rule)`: tokens that can start parsing this rule. If two alternatives in a choice have overlapping FIRST sets, the parser tries them in order and backtracks on failure.
 - `NEXT(rule)`: tokens that can follow this rule. The `#auto` recovery predicate uses NEXT sets to determine when to stop consuming error tokens.
@@ -87,8 +87,8 @@ If a rule's FIRST set contains `-never-matches-`, the rule is unreachable. If NE
 When a grammar produces unexpected parse results, follow this sequence:
 
 1. Open Live Preview and enter the problematic input. Check where the parse tree diverges from your expectation.
-2. Place the cursor at the failure point and enable grammar-at-caret highlighting (Ctrl+Alt+F7). Identify which rule the parser was in when it failed.
-3. Press Ctrl+Q on that rule to inspect its FIRST and NEXT sets. Verify that the expected token is in the FIRST set.
+2. Place the cursor at the failure point and enable grammar-at-caret highlighting (++ctrl+alt+f7++). Identify which rule the parser was in when it failed.
+3. Press ++ctrl+q++ on that rule to inspect its FIRST and NEXT sets. Verify that the expected token is in the FIRST set.
 4. If the FIRST set is wrong, trace the rule's definition to find which subrule or alternative is causing the unexpected set.
 5. If the parse succeeds but produces the wrong tree structure, check `pin` and `extends` attributes on the relevant rules. Pin affects where the parser commits; `extends` affects how nodes are wrapped.
 

@@ -39,6 +39,7 @@ plugins:
 markdown_extensions:
   - admonition
   - codehilite
+  - pymdownx.keys
   - pymdownx.superfences
   - pymdownx.tabbed
   - pymdownx.details
@@ -50,6 +51,7 @@ markdown_extensions:
 nav:
   - Getting Started:
       - What is Grammar-Kit?: index.md
+      - Features: features.md
       - Installation and Setup: installation.md
       - Quick Start Tutorial: quick-start.md
   - Grammar Development:

@@ -1,76 +1,142 @@
 # References: BNF Grammar Syntax
 
-## Scope Information
-This validates references for section 2.1: BNF Grammar Syntax
+## Internal File References (Verified)
 
-## Internal Links
-- Prerequisites: None (this is foundational)
-- Related: `core-concepts/attributes` (Section 2.2)
-- Related: `core-concepts/live-preview` (Section 2.3)
-- Advanced: `parser-development/expression-parsing` (Section 3.2)
-- Advanced: `code-generation/parser-generation` (Section 4.1)
+### Grammar Definition Files
+| File | Path | Status | Notes |
+|------|------|--------|-------|
+| Grammar.bnf | `grammars/Grammar.bnf` | Verified | Self-defining BNF grammar; 123 lines; defines all syntax constructs |
+| BnfConstants.java | `src/org/intellij/grammar/psi/BnfConstants.java` | Verified | Constants including `REGEXP_PREFIX`, `RECOVER_AUTO` |
+| KnownAttribute.java | `src/org/intellij/grammar/KnownAttribute.java` | Verified | All 38+ known attributes with types and defaults |
+| BnfFileType.java | `src/org/intellij/grammar/BnfFileType.java` | Verified | Registers `.bnf` file extension |
 
-## Code References
-- BNF self-definition: `grammars/Grammar.bnf`
-- Token definitions: `grammars/Grammar.bnf#L22-47`
-- Rule syntax examples: `testData/livePreview/Json.bnf`
-- Expression parsing: `testData/generator/ExprParser.bnf`
-- External rules demo: `testData/generator/ExternalRules.bnf`
-- Tutorial grammar: `testData/livePreview/LivePreviewTutorial.bnf`
-- Rule modifiers docs: `resources/messages/attributeDescriptions/*.html`
+### Test Data Files
+| File | Path | Status | Notes |
+|------|------|--------|-------|
+| Small.bnf | `testData/generator/Small.bnf` | Verified | 28 lines; empty rules, private rules, token references, left/inner modifiers |
+| ExternalRules.bnf | `testData/generator/ExternalRules.bnf` | Verified | 100 lines; meta rules, external rules, `;{` section separators, parameter passing |
+| ExprParser.bnf | `testData/generator/ExprParser.bnf` | Verified | 76 lines; expression parsing with all operator types, `extends`, `fake`, `extraRoot` |
+| LeftAssociative.bnf | `testData/generator/LeftAssociative.bnf` | Verified | 11 lines; `left`, `inner`, `private left` modifier combinations |
+| UpperRules.bnf | `testData/generator/UpperRules.bnf` | Verified | 23 lines; `upper` modifier with `extends` pattern |
+| PsiGen.bnf | `testData/generator/PsiGen.bnf` | Verified | 76 lines; fake rules, multiple parser classes via `;{}`, elementType="" |
+| AutoRecovery.bnf | `testData/generator/AutoRecovery.bnf` | Verified | 6 lines; `#auto` recoverWhile example |
+| Autopin.bnf | `testData/generator/Autopin.bnf` | Verified | 31 lines; pattern-based pin, `extends` on statements |
+| Json.bnf | `testData/livePreview/Json.bnf` | Verified | 27 lines; complete JSON grammar with regexp tokens |
+| LivePreviewTutorial.bnf | `testData/livePreview/LivePreviewTutorial.bnf` | Verified | 43 lines; TUTORIAL.md's sample grammar |
+| AlternativeSyntax.bnf | `testData/parser/AlternativeSyntax.bnf` | Referenced | Alternative syntax forms including `<>` in rule names |
 
-## External Links
-- IntelliJ SDK: https://plugins.jetbrains.com/docs/intellij/custom-language-support.html
-- Grammar-Kit Repository: https://github.com/JetBrains/Grammar-Kit
-- BNF Wikipedia: https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form
-- EBNF Standard: https://www.iso.org/standard/26153.html
+### Documentation Files
+| File | Path | Status | Notes |
+|------|------|--------|-------|
+| README.md | `README.md` | Verified | Primary syntax overview (lines 80-251); rule modifiers, tokens, attributes |
+| TUTORIAL.md | `TUTORIAL.md` | Verified | 130 lines; sample grammar walkthrough with Live Preview |
+| HOWTO.md | `HOWTO.md` | Verified | 431 lines; parser basics, recoverWhile, external rules, expression parsing |
 
-## Validation
-- [x] Code refs valid (2025-02-04)
-- [x] Examples compile (2025-02-04)
-- [x] File paths accurate (2025-02-04)
-- [x] External links accessible (2025-02-04)
+### Attribute Description Files
+| File | Path | Status | Notes |
+|------|------|--------|-------|
+| tokens.html | `resources/messages/attributeDescriptions/tokens.html` | Verified | Token declaration syntax; confirms regexp tokens required for Live Preview |
+| name.html | `resources/messages/attributeDescriptions/name.html` | Verified | Display name for error messages |
+| pin.html | `resources/messages/attributeDescriptions/pin.html` | Verified | Pin contract and parenthesized list example |
+| recoverWhile.html | `resources/messages/attributeDescriptions/recoverWhile.html` | Verified | Recovery contract, `#auto` = `! FOLLOWS(rule)` |
+| extends.html | `resources/messages/attributeDescriptions/extends.html` | Verified | PSI hierarchy + AST collapsing |
+| extendedPin.html | `resources/messages/attributeDescriptions/extendedPin.html` | Verified | Default true; generates sequence tail parsing |
+| parserImports.html | `resources/messages/attributeDescriptions/parserImports.html` | Verified | Static imports for external rule resolution |
+| consumeTokenMethod.html | `resources/messages/attributeDescriptions/consumeTokenMethod.html` | Verified | `consumeToken` vs `consumeTokenFast` |
 
-## Errors Found
-None - all references validated successfully
+---
 
-## Out of Scope References
-- Attribute-specific references → Validated in Section 2.2
-- Live Preview tool references → Validated in Section 2.3
-- Parser generation references → Validated in Section 4.1
-- Grammar design pattern references → Validated in Section 3.1
-- Expression parsing patterns → Validated in Section 3.2
+## External References
 
-## Additional References Found
+### Foundational Concepts
+- **PEG (Parsing Expression Grammar)**: <https://en.wikipedia.org/wiki/Parsing_expression_grammar>
+  - Referenced in README.md line 82: "See Parsing Expression Grammar (PEG) for basic syntax"
+  - Grammar-Kit uses PEG semantics: `::=` replaces PEG `←`; ordered choice, not ambiguous
 
-### Token Type Documentation
-- Literal tokens: Demonstrated in `grammars/Grammar.bnf` with quotes
-- Named tokens: `grammars/Grammar.bnf#L22-39` shows token declarations
-- Regexp tokens: `grammars/Grammar.bnf#L41-47` shows regexp syntax
-- Token precedence: Not explicitly documented in source, inferred from implementation
+### Grammar-Kit Project
+- **GitHub repository**: <https://github.com/JetBrains/Grammar-Kit>
+- **Plugin page**: <https://plugins.jetbrains.com/plugin/6606>
+- **Gradle plugin**: <https://github.com/JetBrains/gradle-grammar-kit-plugin>
 
-### Rule Modifier Definitions
-- `private`: Documented in `resources/messages/attributeDescriptions/pin.html`
-- `external`: Documented in `resources/messages/attributeDescriptions/parserUtilClass.html`
-- `meta`: Referenced in `testData/generator/ExternalRules.bnf`
-- `left`: Documented in `resources/messages/attributeDescriptions/methods.html`
-- `inner`, `upper`, `fake`: Referenced in attribute descriptions
+### IntelliJ Platform SDK
+- **Custom Language Support Tutorial**: <https://plugins.jetbrains.com/docs/intellij/custom-language-support-tutorial.html>
+  - Referenced in README.md line 33
+- **PsiBuilder documentation**: <https://plugins.jetbrains.com/docs/intellij/implementing-parser-and-psi.html>
+- **ParserDefinition**: <https://plugins.jetbrains.com/docs/intellij/language-and-filetype.html>
 
-### BNF Syntax Elements
-- Rule definition operator `::=`: `grammars/Grammar.bnf#L23`
-- Choice operator `|`: `grammars/Grammar.bnf#L25`
-- Quantifiers `?`, `+`, `*`: `grammars/Grammar.bnf#L26-28`
-- Predicates `&`, `!`: `grammars/Grammar.bnf#L29-30`
-- Grouping `()`, `[]`, `{}`: `grammars/Grammar.bnf#L32-37`
-- External expressions `<<>>`: `grammars/Grammar.bnf#L38-39`
+### JFlex
+- **JFlex documentation**: <https://jflex.de/manual.html>
+  - Referenced in README.md line 240 for regexp subset limitations
 
-### Related Documentation
-- README.md: Basic PEG BNF syntax overview
-- TUTORIAL.md: BNF readability explanation
-- HOWTO.md: Expression parsing and operator precedence
+---
 
-## Notes
-- Grammar-Kit extends standard BNF with PEG-like features (predicates, quantifiers)
-- The `grammars/Grammar.bnf` file serves as both the BNF definition and a complete example
-- Token precedence is implementation-dependent and follows declaration order
-- Rule modifiers are Grammar-Kit specific extensions not found in standard BNF
+## Key Technical Claims Verified Against Source
+
+### Grammar File Structure
+| Claim | Source | Verified |
+|-------|--------|----------|
+| `.bnf` file extension | `BnfFileType.java` | Yes |
+| Grammar contains attrs or rules | `Grammar.bnf:59` — `private grammar_element ::= !<<eof>> (attrs \| rule)` | Yes |
+| `::=` is the rule definition operator | `Grammar.bnf:24` — `OP_IS="::="` | Yes |
+| `=` is for attribute assignment only | `Grammar.bnf:23` — `OP_EQ="="` | Yes |
+| Optional trailing `;` on rules | `Grammar.bnf:64` — `rule ::= rule_start expression attrs? ';'?` | Yes |
+
+### Token Definitions
+| Claim | Source | Verified |
+|-------|--------|----------|
+| Tokens declared via `tokens=[...]` | `Grammar.bnf:22-47`, `tokens.html` | Yes |
+| Regexp prefix `regexp:` | `Grammar.bnf:41-46`, confirmed `BnfConstants.java:16` | Yes |
+| Name-only tokens allowed | `tokens.html:10` — `string  // no value or pattern` | Yes |
+| Recommended to use token values over names | `README.md:177` | Yes |
+| Implicit unquoted tokens: name equals value | `README.md:181` | Yes |
+| Text-matched tokens are slower | `README.md:182-183` | Yes |
+
+### Rule Modifiers
+| Claim | Source | Verified |
+|-------|--------|----------|
+| 7 modifiers: private, left, inner, upper, meta, external, fake | `Grammar.bnf:66-67` | Yes |
+| `inner` only with `left` | `README.md:143` | Yes |
+| `private left` = `private left inner` | `README.md:144` | Yes |
+| `fake` should not combine with `private` | `README.md:145` | Yes |
+| First rule is implicitly private | `HOWTO.md:232` | Yes |
+
+### Quantifiers and Grouping
+| Claim | Source | Verified |
+|-------|--------|----------|
+| `?`, `+`, `*` as quantifiers | `Grammar.bnf:104` — `quantifier ::= '?' \| '+' \| '*'` | Yes |
+| `[expr]` is shorthand for `(expr)?` | `Grammar.bnf:121`, `README.md:83,94` | Yes |
+| `{expr \| expr}` for choices | `Grammar.bnf:120`, `README.md:83,96` | Yes |
+
+### Predicates
+| Claim | Source | Verified |
+|-------|--------|----------|
+| `&` and-predicate (lookahead) | `Grammar.bnf:106-107` | Yes |
+| `!` not-predicate (negative lookahead) | `Grammar.bnf:106-107` | Yes |
+| Predicates do not consume input | `TUTORIAL.md:22`, PEG semantics | Yes |
+
+### External and Meta Rules
+| Claim | Source | Verified |
+|-------|--------|----------|
+| `<< >>` external expression syntax | `Grammar.bnf:114` | Yes |
+| `<<eof>>` tests end of input | `Grammar.bnf:59`, `TUTORIAL.md:110` | Yes |
+| Meta rules use `<<param>>` syntax | `ExternalRules.bnf:38`, `README.md:155` | Yes |
+| Double-quoted strings passed "as is" | `README.md:165-168` | Yes |
+| Single-quoted strings unquoted first | `README.md:167` | Yes |
+| `<<>>` empty external expression valid | `ExternalRules.bnf:75` | Yes |
+
+### `;{` Section Separator
+| Claim | Source | Verified |
+|-------|--------|----------|
+| `;{` starts new attributes section | `ExternalRules.bnf:84-86` | Yes |
+| Splits grammar into multiple parser classes | `ExternalRules.bnf` shows 3 classes: `ExternalRules`, `ExternalRules2`, `ExternalRules3` | Yes |
+| Also used in PsiGen.bnf | `PsiGen.bnf:39-41,57-59` — 3 classes: `PsiGen`, `PsiGen2`, `PsiGenFixes` | Yes |
+
+### Empty Rules and Edge Cases
+| Claim | Source | Verified |
+|-------|--------|----------|
+| `empty ::= ()` is valid | `Small.bnf:17` | Yes |
+| `empty2 ::= {}` is valid | `Small.bnf:18` | Yes |
+| `empty3 ::= []` is valid | `Small.bnf:19` | Yes |
+| `&()` always-true predicate | `Small.bnf:22` | Yes |
+| `!()` always-false predicate | `Small.bnf:23` | Yes |
+| `[({})]` nested empty groupings valid | `Small.bnf:24` | Yes |

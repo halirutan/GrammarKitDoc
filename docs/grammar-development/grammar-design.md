@@ -1,419 +1,494 @@
 # Designing Grammar Rules
 
-This page guides you through designing effective grammar rules for your language parser. You'll learn how to organize your grammar, apply common patterns, and avoid pitfalls that can lead to parsing errors or poor performance. The techniques presented here help you create maintainable grammars that generate efficient parsers with clean PSI hierarchies.
+Writing syntactically correct BNF is only the first step. A working parser requires deliberate decisions about rule organization, PSI tree shape, and error handling hooks. As the Grammar-Kit documentation puts it: "Writing a grammar doesn't mean the generated parser will work. The tricky part is to *tune* some raw grammar into a *working* grammar."
 
-## Grammar Organization and Structure
+This page covers the architectural principles, common patterns, and pitfalls that turn a raw grammar into a robust parser. It assumes you already know the BNF syntax covered in [Grammar Syntax](grammar-syntax.md).
 
-Effective grammar organization starts with understanding how Grammar-Kit processes rules and generates code. Each public rule becomes a PSI element type, while private rules serve as internal parsing logic without creating AST nodes. This distinction drives many organizational decisions. Begin your grammar with the highest-level constructs and work down to terminals. This approach naturally creates a logical PSI hierarchy and makes the grammar easier to understand.
+## Grammar Architecture
 
-Start with your root rule that defines what constitutes a complete file in your language:
+A Grammar-Kit grammar has a predictable top-down structure. The decisions you make about that structure determine what the generated parser produces and what the resulting PSI tree looks like.
+
+### Top-Down Structure
+
+The first rule in the file is the grammar root. Grammar-Kit treats it as implicitly private, so no PSI class is generated for it. The root typically delegates to a private helper that loops over top-level constructs:
 
 ```bnf
+root ::= item *
+```
+
+Each public rule produces one PSI node and one `IElementType` constant. Private rules produce neither. Their matched content merges into the parent node instead. This distinction is the primary tool for controlling what appears in your PSI tree.
+
+The following template shows a well-organized grammar. Read the inline comments for the role of each section:
+
+```bnf
+// 1. Global attributes
 {
-  parserClass="com.example.lang.MyLanguageParser"
-  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
-  
-  elementTypeHolderClass="com.example.lang.psi.MyLanguageTypes"
-  elementTypeClass="com.example.lang.psi.MyLanguageElementType"
-  tokenTypeClass="com.example.lang.psi.MyLanguageTokenType"
-  
-  psiClassPrefix="MyLanguage"
+  parserClass="com.example.lang.parser.MyLangParser"
+  parserUtilClass="com.example.lang.parser.MyLangParserUtil"
+
+  psiClassPrefix="MyLang"
   psiImplClassSuffix="Impl"
   psiPackage="com.example.lang.psi"
   psiImplPackage="com.example.lang.psi.impl"
+
+  elementTypeHolderClass="com.example.lang.psi.MyLangTypes"
+  elementTypeClass="com.example.lang.psi.MyLangElementType"
+  tokenTypeClass="com.example.lang.psi.MyLangTokenType"
+
+  // Pattern-based attributes
+  extends(".*_expr")=expr
+  name(".*_expr")='expression'
+  consumeTokenMethod(".*_recover")="consumeTokenFast"
+
+  // 2. Token declarations
+  tokens=[
+    SEMI=';'
+    COMMA=','
+    EQ='='
+    LP='('
+    RP=')'
+    LB='{'
+    RB='}'
+
+    space='regexp:\s+'
+    comment='regexp://.*'
+    number='regexp:\d+(\.\d*)?'
+    id='regexp:\p{Alpha}\w*'
+    string="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
+  ]
 }
 
-// Root rule - what constitutes a complete file
-root ::= file
+// 3. Root rule (implicitly private)
+root ::= item *
 
-// File contains a series of top-level elements
-file ::= file_element*
-
-// Each file element is a specific construct
-private file_element ::= import_statement 
-  | function_declaration 
-  | class_declaration
-  | statement
-  {recoverWhile=file_element_recover}
-
-// Recovery rule to skip to next top-level construct
-private file_element_recover ::= !(IMPORT | FUNCTION | CLASS | ID)
-```
-
-This structure provides clear entry points and natural recovery boundaries. The private `file_element` rule handles the choice without creating an intermediate PSI node, while the recovery rule ensures the parser can continue after errors. Identify the major constructs in your language and create rules that reflect their logical structure. Group related rules together and use consistent naming patterns:
-
-```bnf
-// Declarations
-class_declaration ::= CLASS identifier class_body
-interface_declaration ::= INTERFACE identifier interface_body
-function_declaration ::= FUNCTION identifier parameter_list block
-
-// Statements
-statement ::= expression_statement
-  | block_statement
-  | if_statement
-  | while_statement
-  | return_statement
-  {recoverWhile=statement_recover}
-
-private statement_recover ::= !(';' | '}' | statement_start)
-private statement_start ::= IF | WHILE | RETURN | '{' | ID
-
-// Expressions (see Expression Hierarchy section)
-expression ::= assignment_expression
-  | binary_expression
-  | unary_expression
-  | postfix_expression
-  | primary_expression
-```
-
-### Naming Conventions and Rule Types
-
-Consistent naming makes grammars more maintainable and helps other developers understand your intent. Grammar-Kit follows several conventions that you should adopt. Public rules create PSI nodes and should have descriptive names that reflect the language construct: `class_declaration` declares a class, `import_statement` imports a module, `parameter_list` lists function parameters, and `block_statement` represents a code block with braces.
-
-Private rules handle internal parsing logic without creating nodes. Use underscores and descriptive suffixes: `statement_recover` for recovery predicates, `expr_recover` for expression recovery, `keyword_or_id` for matching either keywords or identifiers, and `comma_separated_list` for internal list parsing. Common suffix patterns communicate the rule's purpose: `*_expression` or `*_expr` for expression rules, `*_statement` for statements, `*_list` for list structures, `*_recover` for recovery predicates, and `*_start` for lookahead predicates.
-
-The distinction between private and public rules is fundamental to grammar design. Public rules generate PSI element types and classes, while private rules exist only in the parser:
-
-```bnf
-// Public rule - creates ParameterListElement in PSI
-parameter_list ::= '(' [ parameter (',' parameter)* ] ')' {pin=1}
-
-// Public rule - creates ParameterElement in PSI  
-parameter ::= type identifier default_value?
-
-// Private rule - no PSI node, just parsing logic
-private default_value ::= '=' expression {pin=1}
-
-// Private rule - used for recovery, no PSI needed
-private list_recover ::= !(')' | ',' | ';')
-```
-
-Use private rules when implementing recovery predicates, creating reusable parsing patterns, avoiding unnecessary PSI nodes, or handling internal choices that don't need AST representation.
-
-### Advanced Rule Types
-
-Meta rules provide reusable parsing patterns that can be instantiated with different parameters. They're particularly useful for lists and common structures:
-
-```bnf
-// Define a reusable comma-separated list pattern
-meta comma_separated_list ::= <<param>> ( ',' <<param>> )* {pin(".*")=1}
-
-// Use the meta rule for different list types
-argument_list ::= '(' [ <<comma_separated_list expression>> ] ')'
-parameter_list ::= '(' [ <<comma_separated_list parameter>> ] ')'
-type_parameter_list ::= '<' <<comma_separated_list type_parameter>> '>'
-
-// Meta rule for optional semicolon-terminated items
-meta optional_semi ::= <<param>> ';'?
-
-// Usage in different contexts
-statement ::= <<optional_semi expression_statement>>
-class_member ::= <<optional_semi field_declaration>>
-```
-
-Fake rules shape the PSI hierarchy without affecting parsing. They're useful for creating common base classes or organizing the PSI tree:
-
-```bnf
-// Fake rule defines common PSI interface
-fake binary_expression ::= expression
-
-// Actual rules extend the fake rule
-additive_expression ::= expression '+' expression {extends=binary_expression}
-multiplicative_expression ::= expression '*' expression {extends=binary_expression}
-relational_expression ::= expression '<' expression {extends=binary_expression}
-
-// All binary expressions now share a common PSI type
-// This enables uniform handling in visitors and utilities
-```
-
-## Common Patterns and Design Decisions
-
-Certain patterns appear repeatedly in language grammars. Understanding these patterns helps you implement them correctly and consistently. Lists are fundamental to most grammars, and Grammar-Kit provides several ways to handle them effectively:
-
-```bnf
-// Simple list - zero or more items
-statement_list ::= statement*
-
-// Non-empty list - one or more items
-declaration_list ::= declaration+
-
-// Comma-separated list with optional trailing comma
-array_elements ::= '[' [ element_list ','? ] ']' {pin=1}
-private element_list ::= expression (',' expression)*
-
-// List with recovery - continues parsing after errors
-argument_list ::= '(' [ argument (',' argument)* ] ')' {
+// 4. Top-level dispatch (private — no PSI node needed)
+private item ::= !<<eof>> statement ';' {
   pin=1
-  recoverWhile=argument_list_recover
+  recoverWhile=item_recover
 }
-private argument_list_recover ::= !(')' | ';' | '{')
+private item_recover ::= !(';' | id)
 
-// List with pinning on separators for better error recovery
-field_list ::= field (pin_comma field)* {pin(".*")=1}
-private pin_comma ::= ',' {pin=1}
+// 5. Statement alternatives (private dispatch)
+private statement ::= assignment | function_call
+
+// 6. Public rules (each generates a PSI node)
+assignment ::= id '=' expr {pin=2}
+function_call ::= id '(' [!')' expr (',' expr) *] ')' {pin(".*")=1}
+
+// 7. Expression hierarchy
+expr ::= add_group | mul_group | primary_group
+private add_group ::= plus_expr | minus_expr
+private mul_group ::= mul_expr | div_expr
+private primary_group ::= literal_expr | ref_expr | paren_expr
+
+plus_expr ::= expr '+' expr
+minus_expr ::= expr '-' expr
+mul_expr ::= expr '*' expr
+div_expr ::= expr '/' expr
+literal_expr ::= number | string
+ref_expr ::= id
+paren_expr ::= '(' expr ')' {pin=1}
 ```
 
-Optional elements are common in language design. Grammar-Kit provides multiple ways to express them. You can use the `?` quantifier, `[]` brackets (equivalent to `?`), or create separate rules for complex optional structures:
+The key principles at work here: global attributes and tokens go at the top, the root rule delegates to a private helper with a loop, the `!<<eof>>` guard prevents an infinite loop at end of file, private rules dispatch to public rules so no unnecessary PSI nodes are created, and recovery rules sit near the rules they protect.
+
+### Choosing Private vs. Public
+
+Rules are public by default. Every public rule generates a PSI class and an `IElementType` constant, which means every public rule creates a node in the PSI tree. Use `private` when a rule is structural plumbing that should not appear in the tree.
+
+Common uses for `private` rules:
+
+- Root loop items (`private item ::= ...`)
+- Dispatch rules that group alternatives (`private statement ::= select | delete | ...`)
+- Recovery predicates (`private item_recover ::= !(';' | id)`)
+- Operator priority groups in expressions (`private mul_group ::= mul_expr | div_expr`)
+
+The Grammar-Kit guidance is direct: "Specify *private* attribute on any rule if you don't want it to be present in AST as early as possible."
+
+!!! warning "Public helper rules create noise"
+    If you leave helper rules public, the PSI tree fills with nodes that carry no semantic meaning. Compare:
+
+    ```bnf
+    // Unnecessary PSI nodes for 'item' and 'statement'
+    root ::= item *
+    item ::= !<<eof>> statement ';'
+    statement ::= assignment | function_call
+    ```
+
+    ```bnf
+    // Clean tree — only 'assignment' and 'function_call' appear
+    root ::= item *
+    private item ::= !<<eof>> statement ';' {pin=1 recoverWhile=item_recover}
+    private item_recover ::= !(';' | id)
+    statement ::= assignment | function_call
+    ```
+
+### Flattening with `extends`
+
+Without `extends`, expression grammars produce deeply nested PSI trees. A simple literal like `42` might be wrapped in several layers:
+
+```
+FileNode
+  Expr
+    PlusExpr
+      LiteralExpr
+        number: '42'
+```
+
+Adding `extends(".*_expr")=expr` collapses the redundant wrapping nodes. The root expression rule never appears in the tree, and the AST becomes flat:
+
+```
+FileNode
+  LiteralExpr
+    number: '42'
+```
+
+Here is the before and after in grammar form:
+
+```bnf
+// BEFORE: no extends — deep AST
+expr ::= factor plus_expr *
+left plus_expr ::= ('+' | '-') factor
+private factor ::= primary mul_expr *
+left mul_expr ::= ('*' | '/') primary
+private primary ::= literal_expr
+literal_expr ::= number
+```
+
+```bnf
+// AFTER: with extends — flat AST
+{
+  extends(".*_expr")=expr
+}
+expr ::= factor plus_expr *
+left plus_expr ::= ('+' | '-') factor
+private factor ::= primary mul_expr *
+left mul_expr ::= ('*' | '/') primary
+private primary ::= literal_expr
+literal_expr ::= number
+```
+
+For the full expression parsing framework, including priority tables and associativity, see [Expression Parsing](expression-parsing.md).
+
+## Common Patterns
+
+These patterns are reusable building blocks. Adapt them to your language rather than designing from scratch.
+
+### Lists and Separators
+
+A comma-separated list appears in almost every grammar. Define it once as a meta rule and reuse it:
+
+```bnf
+// Define once as a meta rule
+meta comma_list ::= <<param>> (',' <<param>>) *
+
+// Use for any comma-separated construct
+import_list ::= <<comma_list import_item>>
+param_list ::= <<comma_list param_decl>>
+arg_list ::= <<comma_list expr>>
+```
+
+For parenthesized lists that need error recovery, use this pattern:
+
+```bnf
+list ::= '(' [!')' item (',' item) *] ')' {pin(".*")=1}
+item ::= number {recoverWhile=item_recover}
+private item_recover ::= !(',' | ')')
+```
+
+The `pin(".*")=1` pins every sub-sequence at its first item. The `!')'` lookahead before `item` prevents matching an empty list as an error. The `recoverWhile` on each item skips unrecognized tokens until `,` or `)`.
+
+You can simplify the recovery predicate by using `#auto`, which computes `!FOLLOWS(item)` automatically:
+
+```bnf
+list ::= '(' [!')' item (',' item) *] ')' {pin(".*")=1}
+item ::= number {recoverWhile="#auto"}
+```
+
+To allow trailing commas, use an and-predicate that accepts `)` after the last comma:
+
+```bnf
+element_list ::= '(' element (',' (element | &')'))* ')' {pin(".*")=1}
+```
+
+The `&')'` and-predicate allows a trailing comma: after the last `,`, seeing `)` is acceptable.
+
+For full details on `pin`, `recoverWhile`, and `#auto`, see [Error Recovery](error-recovery.md).
+
+### Declarations and Blocks
+
+The property or assignment pattern pins on the operator. Once the `=` is seen, the rule is committed. A missing right-hand side produces an error, but the PSI node is still created:
+
+```bnf
+property ::= id '=' expr {pin=2}
+```
+
+Block structures pin on the opening delimiter:
+
+```bnf
+block ::= '{' statement * '}' {pin=1}
+```
+
+For optional elements, use the `?` quantifier or bracket syntax (they are equivalent):
 
 ```bnf
 // Using ? quantifier
-variable_declaration ::= VAR type? identifier initializer?
+field_decl ::= type_ref id default_value? ';'
 
-// Using [] brackets (equivalent to ?)
-function_declaration ::= FUNCTION identifier parameter_list return_type? block
-return_type ::= ':' type
-
-// Optional with default parsing behavior
-class_declaration ::= CLASS identifier extends_clause? implements_clause? class_body
-extends_clause ::= EXTENDS type
-implements_clause ::= IMPLEMENTS type_list
-
-// Complex optional with pinning
-initializer ::= '=' expression {pin=1}
-// If '=' is seen, expression must follow
+// Using bracket syntax (equivalent)
+field_decl2 ::= type_ref id ['=' expr] ';'
 ```
 
-Properly handling nested structures requires careful attention to precedence and recovery:
+Nested structures use lookahead negation to avoid consuming the closing delimiter. The JSON grammar demonstrates this clearly with `!'}' ` and `!']'` guards before list items.
 
-```bnf
-// Nested blocks with clear boundaries
-block ::= '{' statement* '}' {pin=1}
+### Statement-Level Design
 
-// Nested expressions with precedence
-expression ::= assignment_expression
-  | conditional_expression  
-  | logical_or_expression
-  | logical_and_expression
-  | equality_expression
-  | relational_expression
-  | additive_expression
-  | multiplicative_expression
-  | unary_expression
-  | postfix_expression
-  | primary_expression
-
-// Nested with recovery at each level
-class_body ::= '{' class_member* '}' {
-  pin=1
-  recoverWhile=class_body_recover
-}
-private class_body_recover ::= !'}'
-
-class_member ::= field_declaration 
-  | method_declaration 
-  | class_declaration  // nested classes
-  {recoverWhile=class_member_recover}
-private class_member_recover ::= !('}' | FIELD | METHOD | CLASS)
-```
-
-Most languages distinguish between statements (which don't produce values) and expressions (which do). This distinction affects grammar organization:
-
-```bnf
-// Statements - no value produced
-statement ::= expression_statement
-  | declaration_statement  
-  | if_statement
-  | while_statement
-  | return_statement
-  | block_statement
-  {recoverWhile=statement_recover}
-
-// Expression statement - expression used as statement
-expression_statement ::= expression ';'
-
-// Expressions - produce values
-expression ::= assignment_expr
-  | ternary_expr
-  | binary_expr
-  | unary_expr
-  | postfix_expr
-  | call_expr
-  | primary_expr
-
-// Some constructs can be both
-// Block expression (like Rust/Kotlin)
-block_expression ::= '{' statement* expression? '}' {
-  extends=expression
-  // Last expression is the block's value
-}
-```
-
-### Expression Hierarchy Pattern
-
-The expression hierarchy pattern is crucial for parsing expressions with proper precedence and associativity:
+Statement-oriented languages follow a consistent pattern: a root loop, a private dispatch rule, and individual pinned statements. Here is a complete example:
 
 ```bnf
 {
-  extends(".*_expr")=expression
+  extends(".*_statement")=statement
+  pin("create_.*")=2
+  consumeTokenMethod(".*_recover")="consumeTokenFast"
+  tokens=[
+    SEMI=';'
+    LP='('
+    RP=')'
+    space='regexp:\s+'
+    id='regexp:\p{Alpha}\w*'
+    number='regexp:\d+'
+  ]
 }
 
-// Top-level expression rule
-expression ::= assignment_expr
-  | ternary_expr
-  | or_expr
-  | and_expr
-  | equality_expr
-  | relational_expr  
-  | shift_expr
-  | additive_expr
-  | multiplicative_expr
-  | unary_expr
-  | postfix_expr
-  | primary_expr
+// Root with loop
+script ::= script_item *
 
-// Assignment (right-associative)
-assignment_expr ::= expression '=' expression {rightAssociative=true}
+// Private loop item with recovery
+private script_item ::= !<<eof>> statement ';' {
+  pin=1
+  recoverWhile=statement_recover
+}
+private statement_recover ::= !(';' | CREATE | DROP | SELECT)
 
-// Ternary conditional
-ternary_expr ::= expression '?' expression ':' expression
+// Statement dispatch (private — structural grouping)
+statement ::= create_statement | drop_statement | select_statement
 
-// Binary operators (left-associative by default)
-or_expr ::= expression '||' expression
-and_expr ::= expression '&&' expression
-equality_expr ::= expression ('==' | '!=') expression
-relational_expr ::= expression ('<' | '>' | '<=' | '>=') expression
-shift_expr ::= expression ('<<' | '>>') expression
-additive_expr ::= expression ('+' | '-') expression
-multiplicative_expr ::= expression ('*' | '/' | '%') expression
+// Individual statements (public — each gets a PSI node)
+create_statement ::= CREATE TABLE id '(' column_list ')' {pin=2}
+drop_statement ::= DROP TABLE id {pin=2}
+select_statement ::= SELECT column_list FROM id {pin=1}
 
-// Unary operators
-unary_expr ::= ('+' | '-' | '!' | '~') expression
-
-// Postfix operators
-postfix_expr ::= expression ( '++' | '--' )
-
-// Primary expressions - the atoms
-primary_expr ::= literal
-  | identifier  
-  | '(' expression ')'
-  | array_literal
-  | object_literal
-
-// Literals
-literal ::= NUMBER | STRING | TRUE | FALSE | NULL
+// Shared sub-rules
+column_list ::= column_def (',' column_def) *
+column_def ::= id id {pin=1}           // name type
 ```
 
-## Avoiding Common Pitfalls
+The design decisions here: `extends(".*_statement")=statement` creates a PSI hierarchy with `Statement` as the base type. The pattern-based pin `pin("create_.*")=2` pins all create statements at position 2. Statement recovery stops at `;` or any statement-starting keyword. Each statement type gets its own PSI class through public rules, and `column_list` is public because it carries semantic meaning in the tree.
 
-Understanding common grammar design problems helps you avoid them from the start. Left recursion occurs when a rule references itself as its first element. While Grammar-Kit supports left recursion with the `left` modifier, it's important to understand when and how to use it:
+### JSON Grammar Walkthrough
 
-```bnf
-// Direct left recursion - use 'left' modifier
-left binary_expression ::= expression operator expression
-
-// Or restructure to avoid left recursion
-expression ::= primary_expression suffix*
-private suffix ::= binary_operator expression
-  | '[' expression ']'  
-  | '(' argument_list ')'
-
-// Expression hierarchy pattern (recommended)
-expression ::= assignment_expr
-assignment_expr ::= ternary_expr [ '=' assignment_expr ]
-ternary_expr ::= or_expr [ '?' expression ':' ternary_expr ]
-or_expr ::= and_expr ( '||' and_expr )*
-and_expr ::= equality_expr ( '&&' equality_expr )*
-// ... continue hierarchy
-```
-
-Ambiguity occurs when input can be parsed in multiple ways. Resolve ambiguity through rule ordering, pinning, or restructuring:
-
-```bnf
-// Ambiguous - is "if (x) if (y) a; else b;" parsed as:
-// if (x) { if (y) a; else b; }  OR  if (x) { if (y) a; } else b;
-if_statement ::= IF '(' expression ')' statement else_clause?
-else_clause ::= ELSE statement
-
-// Resolved using pinning - else binds to nearest if
-if_statement ::= IF '(' expression ')' statement else_clause? {pin=2}
-else_clause ::= ELSE statement {pin=1}
-
-// Ambiguous - call or array access?
-postfix ::= expression '(' argument_list ')'
-  | expression '[' expression ']'
-
-// Resolved with clear precedence
-postfix_expression ::= primary_expression postfix_suffix*
-private postfix_suffix ::= arguments | index | member_access
-arguments ::= '(' argument_list ')' {pin=1}
-index ::= '[' expression ']' {pin=1}
-member_access ::= '.' identifier {pin=1}
-```
-
-Token conflicts arise when the lexer can't determine which token to produce. Design your tokens and keywords carefully:
+The JSON grammar from Grammar-Kit's test data demonstrates several patterns working together. Read the annotations for each design decision:
 
 ```bnf
 {
   tokens = [
-    // Define keywords explicitly
-    IF = 'if'
-    ELSE = 'else'
-    WHILE = 'while'
-    
-    // Use regexp for flexible matching
-    ID = 'regexp:\p{Alpha}\w*'
-    NUMBER = 'regexp:\d+(\.\d+)?'
-    STRING = "regexp:\"([^\"\\]|\\.)*\""
-    
-    // Operators - be careful with overlap
-    PLUS_PLUS = '++'
-    PLUS = '+'
-    ARROW = '->'
-    MINUS = '-'
+    space='regexp:\s+'
+    string = "regexp:\"[^\"]*\"|'[^']*'"
+    number = "regexp:(\+|\-)?\p{Digit}*"
+    id = "regexp:\p{Alpha}\w*"
+    comma = ","
+    colon = ":"
+    brace1 = "{"
+    brace2 = "}"
+    brack1 = "["
+    brack2 = "]"
   ]
+  extends("array|object|json")=value
 }
 
-// In the grammar, keywords take precedence over ID
-identifier ::= ID
-  | KEYWORD_AS_ID  // if you need keywords as identifiers
+root ::= json
+json ::= array | object
 
-// Use & predicate to resolve ambiguity
-type_or_expr ::= &type type | expression
+value ::= string | number | json {name="value"}
+
+// Array: pinned parenthesized list with item recovery
+array ::= '[' [!']' item (!']' ',' item) *] ']' {pin(".*")=1 extends=json}
+private item ::= json {recoverWhile=recover}
+
+// Object: pinned parenthesized list with property recovery
+object ::= '{' [!'}' prop (!'}' ',' prop) *] '}' {pin(".*")=1 extends=json}
+prop ::= [] name ':' value {pin=1 recoverWhile=recover}
+name ::= id | string {name="name"}
+
+// Shared recovery predicate — stops at structural delimiters
+private recover ::= !(',' | ']' | '}' | '[' | '{')
 ```
 
-Grammar design significantly impacts parser performance. Follow these guidelines for optimal performance. Use consumeToken methods for simple token sequences, minimize backtracking with proper pinning, optimize expression parsing with priorities, use first-token optimization for statement choices, and avoid deep recursion in lists:
+Several patterns are at work here. The `item` rule is private, so only `json`, `array`, and `object` appear in the PSI tree. One `recover` rule serves both array items and object properties. The `!']'` and `!'}' ` lookahead guards prevent consuming closing delimiters.
+
+The `prop ::= []` trick with `pin=1` makes `name` optional in error scenarios because the empty optional always matches, so the pin is always reached. The `name` attribute on `value` improves error messages from a raw token list to the readable `<value> expected`. The nested `extends` chain (`array` and `object` extend `json`, which extends `value`) builds a clean PSI hierarchy.
+
+## Reducing Repetition
+
+As grammars grow, repeated attributes and structural patterns become a maintenance burden. Grammar-Kit provides two mechanisms to address this: pattern-based attributes and meta rules.
+
+Pattern-based attributes apply a single attribute to every rule whose name matches a regex. Compare the verbose approach to the concise one:
 
 ```bnf
-// Use consumeToken methods for simple token sequences
-{
-  consumeTokenMethod(".*_list")="consumeTokenFast"
-}
-
-// Minimize backtracking with proper pinning
-function_call ::= identifier '(' argument_list ')' {pin=2}
-// Once '(' is seen, commit to function call
-
-// Optimize expression parsing with priorities
-expression ::= or_expr
-or_expr ::= and_expr ( '||' and_expr )*
-and_expr ::= equality_expr ( '&&' equality_expr )*
-// Continues down to primary - no backtracking needed
-
-// Use first-token optimization
-statement ::= if_statement
-  | while_statement  
-  | for_statement
-  | return_statement
-  | expression_statement
-// Parser can decide based on first token
-
-// Avoid deep recursion in lists
-// Bad - creates deep tree
-list ::= item | item ',' list
-
-// Good - creates flat tree  
-list ::= item ( ',' item )*
+// BEFORE: attributes repeated on each rule
+plus_expr ::= expr '+' expr {extends=expr}
+minus_expr ::= expr '-' expr {extends=expr}
+mul_expr ::= expr '*' expr {extends=expr}
+div_expr ::= expr '/' expr {extends=expr}
 ```
 
-## Best Practices and Next Steps
+```bnf
+// AFTER: single pattern attribute covers all rules
+{
+  extends(".*_expr")=expr
+}
+plus_expr ::= expr '+' expr
+minus_expr ::= expr '-' expr
+mul_expr ::= expr '*' expr
+div_expr ::= expr '/' expr
+```
 
-Following these practices will help you create maintainable, efficient grammars. Start with structure by designing your PSI hierarchy before writing rules. Use private rules to keep the PSI tree clean by making internal rules private. Pin strategically on tokens that commit the parser to a path. Recover gracefully by adding recovery rules at major structure boundaries. Test incrementally using Live Preview to validate rules as you write them. Document patterns by adding comments explaining complex rules and design decisions. Follow naming conventions throughout your grammar. Get correctness first, then optimize for performance.
+The same approach works for `pin`, `name`, and `consumeTokenMethod`:
 
-With a well-designed grammar structure in place, you can focus on specific parsing challenges:
+- `pin(".*_list(?:_\\d+)*")=1` pins all list rules and their sub-expressions.
+- `name(".*_expr")='expression'` makes error messages say `<expression> expected` instead of listing every token.
+- `consumeTokenMethod(".*_recover")="consumeTokenFast"` skips error-reporting overhead in recovery predicates.
 
-- [Expression Parsing](expression-parsing.md) - Deep dive into expression precedence and optimization
-- [Error Recovery](error-recovery.md) - Advanced techniques for resilient parsers
-- [PSI Customization](../code-generation/psi-customization.md) - Shaping your PSI hierarchy
+!!! tip "Cleaner error messages with `name`"
+    Without the `name` attribute, a failed expression match produces something like: `'+', '-', '*', '/', number, id, '(' expected`. With `name(".*_expr")='expression'`, the message becomes: `<expression> expected`.
 
-For complete examples of well-structured grammars, see the [Example Grammars](../appendices/examples.md) appendix.
+Meta rules extract reusable structural patterns. The `comma_list` meta rule shown in the [Lists and Separators](#lists-and-separators) section is the most common example.
+
+For large grammars that generate thousands of lines of code, split the parser across multiple classes using `;{ parserClass="..." }` section separators:
+
+```bnf
+// Main parser handles top-level structure
+{
+  parserClass="com.example.MainParser"
+  tokens=[...]
+}
+
+root ::= (statement | expression) *
+statement ::= var_decl | assignment
+
+// Expression rules go into a separate parser class
+;{
+  parserClass="com.example.ExpressionParser"
+}
+
+meta comma_list ::= <<param>> (',' <<param>>) *
+expression ::= binary_expr | unary_expr | atom_expr
+binary_expr ::= expression ('+' | '-' | '*' | '/') expression
+unary_expr ::= ('-' | '!') expression
+atom_expr ::= id | number | '(' expression ')'
+
+// Utility parsing goes into a third class
+;{
+  parserClass="com.example.UtilityParser"
+}
+
+type_ref ::= id ('.' id) *
+qualified_name ::= id ('.' id) *
+```
+
+Each `;{parserClass="..."}` section generates methods in the named class.
+
+## Pitfalls and Inspections
+
+Grammar-Kit's IDE integration catches many common mistakes through inspections. Knowing these pitfalls upfront saves debugging time.
+
+### Left Recursion
+
+Left recursion causes a `StackOverflowError` in recursive descent parsers. The `BnfLeftRecursion` inspection detects it with the message: `'<ruleName>' employs left-recursion unsupported by generator`.
+
+```bnf
+// BAD: left recursion causes StackOverflowError
+expr ::= expr '+' term | term
+```
+
+There are two fixes. Refactor to an iterative form:
+
+```bnf
+// GOOD: iterative
+expr ::= term ('+' term) *
+```
+
+Or use the expression parsing framework, where left recursion is handled automatically through the `extends` mechanism:
+
+```bnf
+// GOOD: expression parsing framework handles left recursion
+{
+  extends(".*_expr")=expr
+}
+expr ::= plus_expr | literal_expr
+plus_expr ::= expr '+' expr
+literal_expr ::= number
+```
+
+Left recursion is only valid within the expression parsing framework (rules with `extends` pointing to a common root). See [Expression Parsing](expression-parsing.md) for details.
+
+### Unreachable Choice Branches
+
+Grammar-Kit uses [PEG](https://en.wikipedia.org/wiki/Parsing_expression_grammar) ordered choice: the first matching branch wins. A branch preceded by one that can match empty input is never reached. The `BnfUnreachableChoiceBranch` and `BnfIdenticalChoiceBranches` inspections detect these problems:
+
+```bnf
+// BAD: identical branches
+value ::= number | string | number    // third branch is identical to first
+
+// BAD: unreachable branch (preceded by branch matching empty)
+item ::= optional_thing? | concrete_thing  // first branch always matches (empty)
+```
+
+### Public Recovery Predicates
+
+Recovery predicates should always be `private`. A public recovery rule creates an unwanted PSI node. The `BnfUnusedRuleInspection` warns with "Non-private recovery rule."
+
+```bnf
+// BAD: creates unwanted PSI node
+item_recover ::= !(',' | ')')
+
+// GOOD: recovery predicates must be private
+private item_recover ::= !(',' | ')')
+```
+
+### Missing Pin with recoverWhile
+
+A `recoverWhile` attribute without a corresponding `pin` (on the rule itself or somewhere in its sub-rules) means recovery runs but the rule never commits. The node is not created in the PSI tree.
+
+```bnf
+// BAD: recoverWhile without pin — recovery runs but rule never commits
+item ::= number {recoverWhile=item_recover}
+
+// GOOD: pin must be present somewhere
+list ::= '(' [!')' item (',' item) *] ')' {pin(".*")=1}
+item ::= number {recoverWhile=item_recover}
+private item_recover ::= !(',' | ')')
+```
+
+### Rule Name Conflicts
+
+Grammar-Kit generates internal methods named `rule_name_0`, `rule_name_N1_N2_NX` for sub-expressions. Naming your own rules with this pattern causes conflicts:
+
+```bnf
+// BAD: conflicts with generated sub-expression name
+my_rule ::= a b c
+my_rule_0 ::= d e f
+```
+
+Avoid naming rules with the `rule_name_N1_N2_..._NX` pattern.
+
+### Token Conflicts
+
+Prefer declared tokens over text-matched (quoted) tokens. Text-matched tokens are matched by text at parse time and can span multiple lexer tokens, which is both slower and can produce unexpected behavior. The `BnfSuspiciousToken` inspection highlights tokens that look like they should be rule references.
+
+!!! note "IDE inspections"
+    Grammar-Kit provides inspections for left recursion, unused rules, duplicate rules, unresolved references, identical and unreachable choice branches, suspicious tokens, and unused attributes. Use **Quick Documentation** (Ctrl+Q / Cmd+J) to see FIRST/FOLLOWS sets, recovery predicate expansions, and expression priority tables for any rule. Use **Live Preview** (Ctrl+Alt+P) to test your grammar interactively without generating code. See [Live Preview](live-preview.md) for the full workflow.
+
+The naming conventions for rules follow `snake_case` (`property_recover`, `root_item`, `literal_expr`). Generated PSI class names derive from rule names via CamelCase conversion: `literal_expr` becomes `LiteralExpr`. Generated parser methods follow the rule name directly: `static boolean literal_expr(..)`.
+
+For the complete attribute catalog, including `extends`, `pin`, `name`, and `consumeTokenMethod`, see the [Attributes System](../code-generation/attributes.md). For error recovery mechanics, see [Error Recovery](error-recovery.md).

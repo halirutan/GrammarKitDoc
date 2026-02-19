@@ -1,244 +1,165 @@
 # Parser Generation
 
-This page covers the parser generation process in Grammar-Kit, including configuration options, generated components, and integration with build systems.
+Grammar-Kit transforms BNF rules into a recursive-descent parser implemented as static Java methods. The generator reads your `.bnf` file, resolves attributes, and produces up to five categories of output files: the parser class, an element types holder, PSI interfaces, PSI implementation classes, and a visitor class.
 
-## Generator Overview
+## Running the Generator
 
-Grammar-Kit uses a sophisticated two-pass generation process to create efficient parsers from BNF grammars.
+You can trigger generation in three ways.
 
-### Two-Pass Generation Process
+**IDE action** is the preferred approach. Open a `.bnf` file and press **Ctrl+Shift+G** (Windows/Linux) or **Cmd+Shift+G** (macOS). Grammar-Kit saves all open files, resolves the output directory from the `parserClass` attribute's package, runs the generator in a background task, and reports the number of files, total size, and duration in a notification. The output directory structure mirrors the Java package hierarchy.
 
-TODO:
-- Explain the first pass: grammar analysis and validation
-- Explain the second pass: code generation based on analysis
-- Describe how the two-pass approach enables better optimization
-- Explain error detection and reporting during generation
+**Command line** works for automation outside the IDE:
 
-### Generated File Structure
+```bash
+java -jar grammar-kit.jar src/gen src/grammars/MyLang.bnf
+```
 
-TODO:
-- Detail the typical structure of generated parser files
-- Explain the relationship between grammar rules and generated methods
-- Describe the organization of generated token types
-- Show how package structure is determined
+Or with an explicit classpath when the grammar-kit jar does not bundle all dependencies:
 
-### Package Organization
+```bash
+java -cp grammar-kit.jar:intellij-deps.jar \
+  org.intellij.grammar.Main src/gen src/grammars/
+```
 
-TODO:
-- Explain default package conventions
-- Describe how to customize package structure
-- Show best practices for organizing generated code
-- Discuss integration with existing project structure
+**Gradle plugin** integrates generation into the build. Use the [gradle-grammar-kit-plugin](https://github.com/JetBrains/gradle-grammar-kit-plugin) for CI/CD pipelines and team builds. See [Build Integration](../integration/gradle-setup.md) for configuration details.
 
-### Naming Conventions
+!!! warning
+    The Gradle plugin does not support method mixins (two-pass generation is not implemented). Generic signatures and annotations may also differ. If your grammar uses `mixin` or `psiImplUtilClass` method injection, generate from the IDE and commit the output.
 
-TODO:
-- Document the naming patterns for generated classes
-- Explain how rule names translate to method names
-- Describe element type naming conventions
-- Show how to customize naming through attributes
+## Generated Files
 
-## Configuration Options
+The generator produces files in a fixed order. Each category can be controlled through attributes.
 
-Control how Grammar-Kit generates parser code through various attributes and settings.
+**Parser class.** One Java class (or several, if you use section-level `parserClass` overrides) containing a static method for each BNF expression. The class implements `LightPsiParser` and delegates to `GeneratedParserUtilBase` for marker management, error recovery, and section handling. The name and package come from the `parserClass` attribute.
 
-### Generation Attributes
+**Element types holder.** An interface containing `IElementType` constants for all composite (rule) types and, if `tokens="yes"`, all token types. It also contains a `Factory` class with a `createElement` method that maps each element type to its PSI implementation:
 
-TODO:
-- List all generation-related global attributes
-- Explain parserClass and its usage
-- Describe parserPackage configuration
-- Detail parserImports for custom imports
-- Cover generatePsi and its implications
+```java
+public interface MyTypes {
+  IElementType STATEMENT = new IElementType("STATEMENT", MyLanguage.INSTANCE);
+  IElementType EXPRESSION = new IElementType("EXPRESSION", MyLanguage.INSTANCE);
 
-### Output Directory Setup
+  IElementType PLUS = new MyTokenType("PLUS");
+  IElementType NUMBER = new MyTokenType("NUMBER");
 
-TODO:
-- Explain default output directory structure
-- Show how to configure custom output paths
-- Describe IDE vs build tool directory handling
-- Discuss version control considerations
+  class Factory {
+    public static PsiElement createElement(ASTNode node) {
+      IElementType type = node.getElementType();
+      if (type == STATEMENT) return new StatementImpl(node);
+      if (type == EXPRESSION) return new ExpressionImpl(node);
+      throw new AssertionError("Unknown element type: " + type);
+    }
+  }
+}
+```
 
-### Package Structure Control
+The holder class name comes from `elementTypeHolderClass`. Constant name casing is controlled by `generate=[element-case="upper"]` and `generate=[token-case="upper"]`. The `elementTypePrefix` attribute adds a prefix to all constant names.
 
-TODO:
-- Detail psiPackage and psiImplPackage attributes
-- Explain separation of interfaces and implementations
-- Show how to organize multi-module projects
-- Describe namespace management strategies
+**PSI interfaces.** One interface per non-private, non-fake rule that produces an AST node. Each interface extends the class or interface specified by `implements` (default: `PsiElement`) and contains getter methods for child elements.
 
-### Class Naming Patterns
+**PSI implementation classes.** One class per PSI interface. Each extends the class specified by `extends` (default: `ASTWrapperPsiElement`) or the `mixin` class, and implements its corresponding interface. The class suffix is controlled by `psiImplClassSuffix` (default: `"Impl"`).
 
-TODO:
-- Document psiClassPrefix and psiClassSuffix usage
-- Show examples of custom naming schemes
-- Explain impact on generated code readability
-- Describe naming conflict resolution
+**Visitor class.** Generated when `generate=[visitor="yes"]` (the default). Contains a `visit` method for each PSI type, with dispatch following the `extends` hierarchy. The visitor class name comes from `psiVisitorName` (default: `"Visitor"`). If `visitor-value` is set, the visitor becomes generic: `Visitor<R>`.
 
-## Generated Parser Components
+## Grammar-to-Code Mapping
 
-Understanding the structure and purpose of generated parser components.
+Understanding how BNF constructs map to Java helps when reading generated code or debugging parse failures.
 
-### Parser Class Structure
+A **sequence** becomes a short-circuit `&&` chain. If any part fails before a pin point, the parser rolls back:
 
-TODO:
-- Explain the main parser class organization
-- Detail the role of static methods
-- Describe instance methods and their purpose
-- Show the integration with parser utility classes
+```bnf
+rule ::= part1 part2 part3
+```
 
-### Static Parse Methods
+```java
+public static boolean rule(PsiBuilder b, int l) {
+  if (!recursion_guard_(b, l, "rule")) return false;
+  boolean r;
+  Marker m = enter_section_(b);
+  r = part1(b, l + 1);
+  r = r && part2(b, l + 1);
+  r = r && part3(b, l + 1);
+  exit_section_(b, m, RULE, r);
+  return r;
+}
+```
 
-TODO:
-- Explain entry point methods
-- Describe parameter handling
-- Show error reporting mechanisms
-- Detail return value conventions
+An **ordered choice** becomes a fallthrough chain. The parser tries each alternative until one succeeds:
 
-### Rule Methods
+```bnf
+rule ::= part1 | part2 | part3
+```
 
-TODO:
-- Explain how grammar rules become methods
-- Describe method signatures and parameters
-- Show the parsing logic implementation
-- Detail error recovery integration
-
-### Utility Integration
-
-TODO:
-- Explain parserUtilClass usage
-- Show common utility methods
-- Describe custom utility integration
-- Detail performance optimizations
-
-### Error Handling
-
-TODO:
-- Explain error reporting mechanisms
-- Describe error recovery integration
-- Show custom error handling patterns
-- Detail error message customization
-
-## Element Types System
-
-The foundation of Grammar-Kit's type system for parsed elements.
-
-### IElementType Hierarchy
-
-TODO:
-- Explain IElementType and its role
-- Describe the type hierarchy structure
-- Show relationships between element types
-- Detail custom element type creation
-
-### Token Type Constants
-
-TODO:
-- Explain token type generation
-- Describe naming conventions
-- Show usage in lexer integration
-- Detail token set creation
-
-### Rule Element Types
-
-TODO:
-- Explain how rules map to element types
-- Describe the relationship to PSI elements
-- Show custom element type attributes
-- Detail performance considerations
-
-### Element Type Holder
-
-TODO:
-- Explain elementTypeHolderClass purpose
-- Show default generation behavior
-- Describe customization options
-- Detail integration patterns
-
-## Generation Customization
-
-Advanced options for customizing the parser generation process.
-
-### Java Version Targeting
-
-TODO:
-- Explain version compatibility options
-- Show how to target specific Java versions
-- Describe language feature usage
-- Detail backward compatibility
-
-### Code Style Options
-
-TODO:
-- Document available style configurations
-- Show indentation and formatting options
-- Explain naming convention choices
-- Detail import organization
-
-### Debug Information
-
-TODO:
-- Explain debug information generation
-- Show how to enable parser tracing
-- Describe debugging aids in generated code
-- Detail production vs debug builds
-
-### Optimization Levels
-
-TODO:
-- Explain available optimization options
-- Show performance vs readability tradeoffs
-- Describe specific optimizations
-- Detail measurement and profiling
-
-### Custom Templates
-
-TODO:
-- Explain template customization possibilities
-- Show how to override default templates
-- Describe template variables and expansion
-- Detail advanced customization scenarios
-
-## Build Integration
-
-Integrating parser generation into your build process.
-
-### IDE Generation (Ctrl+Shift+G)
-
-TODO:
-- Explain the IDE generation workflow
-- Show keyboard shortcuts and menu options
-- Describe generation options dialog
-- Detail error reporting and feedback
-
-### Command-Line Generation
-
-TODO:
-- Document command-line usage
-- Show available command-line options
-- Explain batch processing
-- Detail integration with scripts
-
-### Gradle Plugin Usage
-
-TODO:
-- Show basic Gradle configuration
-- Explain task dependencies
-- Describe incremental generation
-- Detail multi-module setups
-
-### CI/CD Pipelines
-
-TODO:
-- Show GitHub Actions integration
-- Explain Jenkins pipeline setup
-- Describe reproducible builds
-- Detail artifact management
-
-## Examples
-
-TODO:
-- Add complete generation setup example
-- Include generated code walkthrough
-- Show customization examples
-- Provide build configuration samples
+```java
+public static boolean rule(PsiBuilder b, int l) {
+  if (!recursion_guard_(b, l, "rule")) return false;
+  boolean r;
+  Marker m = enter_section_(b);
+  r = part1(b, l + 1);
+  if (!r) r = part2(b, l + 1);
+  if (!r) r = part3(b, l + 1);
+  exit_section_(b, m, RULE, r);
+  return r;
+}
+```
+
+A **zero-or-more** repetition becomes a `while(true)` loop that always returns true (zero matches is valid):
+
+```bnf
+rule ::= part *
+```
+
+```java
+public static boolean rule(PsiBuilder b, int l) {
+  while (true) {
+    if (!part(b, l + 1)) break;
+  }
+  return true;
+}
+```
+
+**Expression rules** that use the `extends` pattern produce an optimized Pratt parser. Instead of one method per precedence level, Grammar-Kit generates two methods for the root expression rule and a priority table as a comment:
+
+```java
+// Expression root: expr
+// Operator priority table:
+// 0: BINARY(assign_expr)
+// 1: BINARY(plus_expr) BINARY(minus_expr)
+// 2: BINARY(mul_expr) BINARY(div_expr)
+// 3: PREFIX(unary_plus_expr) PREFIX(unary_min_expr)
+// 4: POSTFIX(factorial_expr)
+// 5: ATOM(literal_expr) PREFIX(paren_expr)
+public static boolean expr(PsiBuilder b, int l, int g) { ... }
+```
+
+The generator names sub-expression methods by appending position indices: `rule_name_0`, `rule_name_1_2`. Avoid naming your own rules in this `rule_name_N1_N2` pattern to prevent conflicts.
+
+## Configuration
+
+The `generate` attribute controls several aspects of the generated output. The most commonly adjusted options:
+
+| Option | Values | Effect |
+|---|---|---|
+| `java` | 6, 8, **11** | Java version; affects lambda vs anonymous class syntax |
+| `names` | **short**, long, classic | Variable names in generated parser (`b`/`l`/`r` vs `builder`/`level`/`result`) |
+| `fqn` | yes, **no** | Fully qualified names instead of imports |
+| `element-case` | lower, **upper**, as-is | Casing for element type constants |
+| `token-case` | lower, **upper**, as-is | Casing for token type constants |
+| `psi` | **yes**, no | Generate PSI classes |
+| `visitor` | **yes**, no | Generate visitor class |
+| `visitor-value` | **void**, type name | Visitor return type parameter |
+
+Bold values are defaults. See [Attributes System](attributes.md) for the complete options table.
+
+The `classHeader` attribute adds a comment header to all generated files. It accepts either literal text or a filename (resolved relative to the grammar file's directory):
+
+```bnf
+{
+  classHeader="license.txt"
+}
+```
+
+!!! tip
+    Use `generate=[names="long"]` during development if you need to step through the generated parser in a debugger. Switch back to `names="short"` for production to keep the generated code compact.
+
+For Gradle-based generation and CI/CD setup, see [Gradle Plugin Setup](../integration/gradle-setup.md).

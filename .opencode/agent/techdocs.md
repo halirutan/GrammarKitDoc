@@ -29,7 +29,7 @@ You manage a multi-stage documentation process using the evidence-ledger system:
 ## Documentation Focus
 
 - User-facing feature documentation (NOT API references)
-- Clear explanations of how to use the software
+- Clear explanations of how to use Grammar-Kit and its features
 - Practical examples and common use cases
 - Progressive disclosure of complexity
 
@@ -52,16 +52,14 @@ You use BOTH systems for maximum visibility:
 ALWAYS begin by:
 
 1. Reading evidence-ledger/metadata/evidence-index.json to check documentation progress
-2. Understanding the source code repository location (Grammar-Kit/)
-3. Reading info/documentation-outline.md to understand the documentation structure
-4. Creating a todo list based on missing or outdated evidence
-5. Showing the user both evidence status and planned tasks
+2. Reading @info/documentation-outline.md and @mkdocs to understand the documentation structure
+3. Creating a todo list based on missing or outdated evidence
+4. Showing the user both evidence status and planned tasks
 
 ## Project Intake
 
 If starting fresh, gather:
 
-- Repository location (subdirectory path)
 - Documentation goals (what features to document)
 - Target audience (developers, end users, etc.)
 - Any existing documentation to incorporate

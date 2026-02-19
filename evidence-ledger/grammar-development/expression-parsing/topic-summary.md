@@ -1,86 +1,179 @@
 # Topic Summary: Expression Parsing
 
-## Documentation Outline Reference
-Section 2.3: Expression Parsing
-Source: info/documentation-outline.md (lines 208-242)
+## Target File
+`docs/grammar-development/expression-parsing.md`
 
-## Learning Objectives
-Based on outline and evidence:
-- Understand the difference between expression and statement parsing
-- Learn to implement operator precedence using Grammar-Kit patterns
-- Master associativity control for different operator types
-- Apply expression optimization techniques for efficient PSI trees
-- Build complex expression parsers with mixed operator types
+## Page Title
+**Expression Parsing**
 
-## Prerequisites
-- Basic BNF syntax (Section 2.1)
-- Rule design principles (Section 2.2)
-- Understanding of PSI tree structure
-- Basic knowledge of operator precedence concepts
+## Purpose
+Explain how Grammar-Kit handles operator precedence and associativity in expression grammars. This is a key technical topic because expression parsing is where Grammar-Kit diverges most from textbook BNF: it supports left-recursive rules via a Pratt-style mechanism and auto-detects operator types. Readers arrive here when building a language with infix operators, and they need to understand both the recommended approach and how to handle complex patterns like ternary operators and function calls.
 
-## Content Structure
-Following documentation outline:
+## Audience
+Plugin developers implementing expression parsing in their language grammar. Assumes familiarity with BNF syntax (Section 2.1) and basic grammar design (Section 2.2). May know what operator precedence means conceptually but needs to learn Grammar-Kit's specific mechanism.
 
-1. **Expression parsing fundamentals** - Supported by examples.md (lines 8-54)
-   - Expression vs. statement parsing examples
-   - Operator types with code samples
-   - Precedence and associativity concepts from code-evidence.md
-   - Expression grammar patterns from testData examples
+---
 
-2. **Implementing precedence** - Supported by examples.md (lines 56-126) and code-evidence.md (lines 55-61)
-   - Traditional precedence climbing with deep nesting example
-   - Layer-based approach using private groups
-   - Priority attributes and generated tables
-   - Operator precedence tables in parser comments
+## Recommended Structure
 
-3. **Associativity control** - Supported by examples.md (lines 128-206) and code-evidence.md (lines 62-67)
-   - Left associative operators (default behavior)
-   - Right associative operators with attribute
-   - Non-associative operators preventing chaining
-   - Mixed associativity in single expression tree
+### H1: Expression Parsing
 
-4. **Expression optimization** - Supported by examples.md (lines 208-309) and code-evidence.md (lines 68-75)
-   - Avoiding deep PSI trees comparison
-   - Using extends for flat structure with examples
-   - The expression parsing idiom pattern
-   - Binary and n-ary operations syntax
+Opening paragraph: Grammar-Kit provides a compact, Pratt-style mechanism for expression parsing that handles operator precedence and associativity through rule ordering and attributes. The generated parser rewrites left-recursive expression rules into an efficient iterative parser that produces a flat PSI tree. This page covers the recommended approach, how precedence and associativity work, and patterns for complex expression constructs.
 
-5. **Complex expressions** - Supported by examples.md (lines 311-441) and code-evidence.md (lines 76-82)
-   - Mixing operator types (prefix, infix, postfix)
-   - Ternary operators implementation
-   - Function calls and indexing patterns
-   - Type constraints in expressions
-   - Contextual expressions (lambda, let)
+Reference: HOWTO.md -- "a procedural rewrite of the Pratt parsing" and link to Crockford's TDOP paper.
 
-## Evidence Mapping
-- Outline bullet "Expression vs. statement parsing" → examples.md lines 38-54
-- Outline bullet "Operator types" → code-evidence.md lines 8-15, examples.md lines 311-340
-- Outline bullet "Traditional precedence climbing" → examples.md lines 58-68
-- Outline bullet "Layer-based approach" → examples.md lines 70-101
-- Outline bullet "Priority attributes" → code-evidence.md lines 55-61, examples.md lines 103-126
-- Outline bullet "Left associative operators" → examples.md lines 130-145
-- Outline bullet "Right associative operators" → examples.md lines 147-159
-- Outline bullet "Using extends for flat structure" → examples.md lines 230-256
-- Outline bullet "The expression parsing idiom" → examples.md lines 258-288
-- Outline bullet "Ternary operators" → examples.md lines 342-366
-- Outline bullet "Function calls and indexing" → examples.md lines 368-389
-- Missing outline item "Operator precedence tables" → Partially in code-evidence.md line 29
+### H2: How Expression Parsing Works
 
-## Key Takeaways
-- Grammar-Kit uses a priority-based approach where rules listed first have lower precedence
-- The `extends` attribute is essential for creating flat, efficient PSI trees
-- Left recursion with the `left` modifier creates optimal parsing for chains
-- Private rule groups organize operators of the same precedence level
-- The expression parsing idiom combines all optimizations into a standard pattern
-- Different operator types (prefix, infix, postfix) can coexist in one grammar
-- Associativity is controlled per-operator with the `rightAssociative` attribute
+The fundamentals of Grammar-Kit's expression parsing mechanism.
 
-## Documentation Notes
-- Focus on the practical "expression parsing idiom" pattern that users should adopt
-- Include side-by-side comparisons of deep vs. flat PSI tree approaches
-- Provide complete, runnable examples for each precedence implementation method
-- Address common mistakes found in examples.md anti-patterns section (lines 486-555)
-- Emphasize performance benefits of proper expression grammar design
-- Include visual representation of operator precedence table if possible
-- Reference the theoretical foundation (Pratt parsing) for interested readers
-- Show real-world examples from ExprParser.bnf and FleetExprParser.bnf
+#### H3: The Expression Root
+
+- The expression root rule lists all expression alternatives as ordered choices.
+- Grammar-Kit auto-detects expression roots by: left recursion + empty PSI children (ExprParser.bnf comment).
+- Priority increases from top to bottom in the choice list (first alternative = lowest priority).
+- Private rules group operators at the same priority level.
+- The generator produces only two methods for the root: `expr()` and `expr_0()`.
+- The `extends(".*_expr")=expr` attribute is required for AST flattening and for enabling the expression framework.
+
+Show the expression root and priority groups from examples.md Example 1 (complete expression grammar). Show the generated priority table as a comment block.
+
+#### H3: Operator Types
+
+Grammar-Kit auto-detects five operator types from rule structure:
+
+- **ATOM**: no reference to root expression rule (e.g., `literal_expr ::= number`).
+- **PREFIX**: root expression reference after operator (e.g., `unary_min_expr ::= '-' expr`).
+- **POSTFIX**: root expression reference before operator (e.g., `factorial_expr ::= expr '!'`).
+- **BINARY**: two references to root expression rule (e.g., `plus_expr ::= expr '+' expr`).
+- **N_ARY**: uses `(<op> expr)+` syntax (e.g., `exp_expr ::= expr ('**' expr) +`).
+
+Note: `paren_expr ::= '(' expr ')'` is classified as PREFIX (not ATOM) because it does not start with `expr`.
+
+Reference code-evidence "Operator Types" and the priority table from examples.md Example 2.
+
+### H2: Precedence and Associativity
+
+How to control operator binding.
+
+#### H3: Defining Precedence
+
+- Position in the root rule's choice list determines priority: first = lowest, last = highest.
+- Private groups: `private mul_group ::= mul_expr | div_expr` -- all operators in a group share the same priority.
+- Walk through a concrete example: `1 + 2 * 3` parses as `1 + (2 * 3)` because `mul_expr` has higher priority than `plus_expr`.
+
+Use examples.md Example 2 (operator precedence table) as the reference.
+
+#### H3: Associativity
+
+- Left associativity is the default: `a + b + c` parses as `(a + b) + c`.
+- Right associativity via `rightAssociative=true`: `a = b = c` parses as `a = (b = c)`.
+- The attribute is per-rule, allowing different operators to have different associativity.
+- No explicit non-associativity attribute; comparison operators at the same priority level approximate non-associative behavior (they parse left-associatively).
+
+Use examples.md Example 5 (right associativity) and Example 9 (associativity comparison with parse trees).
+
+### H2: Complex Expression Patterns
+
+Patterns beyond simple binary and unary operators.
+
+#### H3: Ternary and Multi-Token Operators
+
+- Ternary: `elvis_expr ::= expr '?' expr ':' expr` -- treated as BINARY with a tail.
+- Multi-token operators: `is_not_expr ::= expr IS NOT expr`.
+- Choice operators: `conditional_expr ::= expr ('<' | '>' | '<=' | '>=') expr`.
+- The operator part can contain any valid BNF expression.
+
+Reference examples.md Example 6 (complex expression patterns).
+
+#### H3: Function Calls and Qualification
+
+- Function call as postfix: `call_expr ::= ref_expr arg_list` -- uses type-constrained left operand.
+- Qualification: `qualification_expr ::= expr '.' identifier`.
+- Fake rules for PSI unification: `fake ref_expr ::= expr? '.' identifier` with `elementType=ref_expr` on concrete rules.
+- The `elementType` attribute maps multiple rules to a single PSI type.
+
+Reference examples.md Example 6 (call_expr, qualification_expr).
+
+#### H3: Narrowing Operand Types
+
+- Use a specific expression rule or private group instead of generic `expr` to restrict what operands are accepted.
+- Example: `between_expr ::= expr BETWEEN add_group AND add_group` -- restricts operands to add-level priority and above.
+- The generated code passes the priority of the referenced group.
+
+Reference code-evidence "Narrowing Parse to Specific Expression Rules."
+
+#### H3: Multiple Expression Roots
+
+- A grammar can have multiple independent expression hierarchies.
+- Constraint: hierarchies must not intersect (no rule in both).
+- `extraRoot=true` attribute marks an additional expression root.
+- Each root generates its own pair of methods.
+
+Reference examples.md Example 8.
+
+### H2: PSI Tree Shape and Performance
+
+Practical considerations for the generated output.
+
+- **Flat vs. deep PSI tree**: without `extends`, the AST has redundant wrapping nodes. With `extends`, nodes collapse. Show the side-by-side comparison from examples.md Example 3.
+- **`consumeTokenMethod(".*_expr|expr")="consumeTokenFast"`**: skips error reporting in expression rules for better performance. "No one really needs to know that + - * / are expected at any offset."
+- **`name(".*_expr")='expression'`**: cleans up error messages from token lists to `<expression> expected`.
+- **Quick Documentation**: Ctrl-Q / Cmd-J on expression rules shows the priority table with operator types and the current rule highlighted. Useful for verifying precedence.
+
+Mention the traditional approach (manual `left` modifier layering) briefly, noting it is more verbose and the Pratt approach is recommended for new grammars. Reference examples.md Example 4 for anyone maintaining legacy grammars.
+
+---
+
+## Key Points Mapped to Evidence
+
+| Point | Evidence Source |
+|-------|---------------|
+| Pratt-style mechanism, "procedural rewrite of Pratt parsing" | code-evidence "Two Approaches" (HOWTO.md:199) |
+| Only 2 methods generated for root | code-evidence "Pratt/Priority-Based Approach" (HOWTO.md:201) |
+| Five operator types: ATOM, PREFIX, POSTFIX, BINARY, N_ARY | code-evidence "Operator Types" (ExpressionHelper.OperatorType) |
+| Priority increases top to bottom | code-evidence "Root Rule Structure" (HOWTO.md:131) |
+| Private groups share priority | code-evidence "Private Priority Groups" |
+| `rightAssociative=true` for right associativity | code-evidence "Right Associativity" (ExprParser.bnf:58) |
+| No explicit non-associativity attribute | code-evidence "Non-Associative Operators" |
+| `extends` collapses redundant AST nodes | code-evidence "The extends Attribute" (extends.html) |
+| Root expression rule never appears in AST | code-evidence "Expression Optimization" (HOWTO.md:130) |
+| `paren_expr` classified as PREFIX | code-evidence (HOWTO.md priority table line 213) |
+| Ternary treated as BINARY with tail | code-evidence "Ternary Operators" |
+| `call_expr` uses type-constrained left operand | code-evidence "Function Calls as Postfix" |
+| `between_expr` narrows operand types | code-evidence "Narrowing Parse to Specific Expression Rules" |
+| `extraRoot=true` for multiple expression roots | code-evidence "Multiple Expression Roots" (ExprParser.bnf:37) |
+| `consumeTokenFast` for expression performance | code-evidence "consumeTokenMethod" (consumeTokenMethod.html) |
+| Quick Documentation priority table | code-evidence "IDE Feature" (BnfDocumentationProvider) |
+| Traditional approach with `left` modifier | code-evidence "Traditional Layer-Based Approach" |
+| Expression root auto-detection | code-evidence "Expression Root Detection" (ExprParser.bnf:25) |
+
+---
+
+## Tone Guidance
+
+- Technical but grounded in practical examples. Every concept should be illustrated with a concrete grammar snippet and, where helpful, a parse tree showing the result.
+- Use the ExprParser.bnf grammar as the running example throughout the page. It contains all operator types and is the canonical reference.
+- Avoid abstract parser theory. Explain Pratt parsing only enough for readers to understand why they write rules the way they do.
+- Be direct about the recommended approach (Pratt/priority) vs. the traditional approach (manual `left` layering). Do not present them as equal alternatives; the Pratt approach is clearly preferred for new grammars.
+- Parse tree diagrams (text-based) are valuable for showing precedence and associativity effects.
+
+---
+
+## Cross-References
+
+- **BNF Grammar Syntax** (`grammar-syntax.md`): `left`, `fake`, `extends` modifier definitions; `<<param>>` and meta rule syntax.
+- **Grammar Design** (`grammar-design.md`): when to use `private` groups, `extends` for PSI hierarchy, pattern-based attributes.
+- **Error Recovery** (`error-recovery.md`): wrapping expressions in a loop with recovery (the `element` pattern at the top of the expression grammar).
+- **Attribute Reference** (Section 3.1): `rightAssociative`, `extends`, `extraRoot`, `consumeTokenMethod`, `name`, `elementType`.
+- **PSI Customization** (Section 3.4): `fake` rules for PSI interfaces, `mixin`, `implements`, `methods`.
+
+---
+
+## What to Avoid (Scope Boundaries)
+
+- Do NOT re-explain BNF syntax constructs (sequences, choices, quantifiers, predicates) -- that is Section 2.1.
+- Do NOT cover `pin` and `recoverWhile` mechanics in depth -- that is Section 2.4. Mention the `element` recovery wrapper briefly.
+- Do NOT cover PSI class customization (`mixin`, `implements`, `methods`, `stubClass`) -- that is Section 3.x. Mention `fake` rules and `elementType` only in the context of expression PSI unification.
+- Do NOT cover the full attribute catalog -- that is Section 3.1.
+- Do NOT provide a tutorial-style walkthrough of building an expression grammar from scratch. The examples should be reference-oriented, showing the complete pattern and explaining how it works.
+- Do NOT cover the `upper` modifier (rare, minimal documentation, not expression-related).

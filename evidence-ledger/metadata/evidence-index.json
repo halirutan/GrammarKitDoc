@@ -1,25 +1,20 @@
 {
+  "last-updated": "2026-02-19T00:00:00Z",
+  "summary": {
+    "total-topics": 31,
+    "evidence-complete": 31,
+    "documentation-complete": 31,
+    "needs-update": 0
+  },
   "topics": {
-    "index": {
+    "getting-started/introduction": {
       "status": "evidence-complete",
-      "last-modified": "2026-02-11T10:30:00Z",
+      "last-modified": "2026-02-19T00:00:00Z",
       "evidence": {
-        "code-evidence": {
-          "exists": true,
-          "last-updated": "2026-02-11T10:30:00Z"
-        },
-        "examples": {
-          "exists": true,
-          "last-updated": "2026-02-11T10:30:00Z"
-        },
-        "references": {
-          "exists": true,
-          "last-updated": "2026-02-11T10:30:00Z"
-        },
-        "topic-summary": {
-          "exists": true,
-          "last-updated": "2026-02-11T10:30:00Z"
-        }
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": false, "last-updated": null },
+        "references": { "exists": true, "last-updated": "2026-02-19" },
+        "topic-summary": { "exists": true, "last-updated": "2026-02-19" }
       },
       "documentation": {
         "file": "docs/index.md",
@@ -27,91 +22,455 @@
         "needs-update": false
       }
     },
-    "installation": {
+    "getting-started/features": {
       "status": "evidence-complete",
-      "last-modified": "2026-02-04T18:30:00Z",
+      "last-modified": "2026-02-19T00:00:00Z",
       "evidence": {
-        "code-evidence": {
-          "exists": true,
-          "last-updated": "2026-02-04T00:00:00Z"
-        },
-        "examples": {
-          "exists": true,
-          "last-updated": "2026-02-04T00:00:00Z"
-        },
-        "references": {
-          "exists": true,
-          "last-updated": "2026-02-04T00:00:00Z"
-        },
-        "topic-summary": {
-          "exists": true,
-          "last-updated": "2026-02-04T00:00:00Z"
-        }
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": false, "last-updated": null },
+        "references": { "exists": true, "last-updated": "2026-02-19" },
+        "topic-summary": { "exists": true, "last-updated": "2026-02-19" }
       },
       "documentation": {
-        "file": "docs/getting-started/installation.md",
-        "status": "pending",
-        "needs-update": true
+        "file": "docs/features.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "getting-started/installation": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": true, "last-updated": "2026-02-19" },
+        "references": { "exists": true, "last-updated": "2026-02-19" },
+        "topic-summary": { "exists": true, "last-updated": "2026-02-19" }
+      },
+      "documentation": {
+        "file": "docs/installation.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "getting-started/quick-start": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": true, "last-updated": "2026-02-19" },
+        "references": { "exists": true, "last-updated": "2026-02-19" },
+        "topic-summary": { "exists": true, "last-updated": "2026-02-19" }
+      },
+      "documentation": {
+        "file": "docs/quick-start.md",
+        "status": "completed",
+        "needs-update": false
       }
     },
     "grammar-development/grammar-syntax": {
       "status": "evidence-complete",
-      "last-modified": "2026-02-04T16:04:10Z",
+      "last-modified": "2026-02-19T00:00:00Z",
       "evidence": {
-        "code-evidence": {
-          "exists": true,
-          "last-updated": "2026-02-04T16:04:10Z"
-        },
-        "examples": {
-          "exists": true,
-          "last-updated": "2026-02-04T16:04:10Z"
-        },
-        "references": {
-          "exists": true,
-          "last-updated": "2026-02-04T16:04:10Z"
-        },
-        "topic-summary": {
-          "exists": true,
-          "last-updated": "2026-02-04T18:45:00Z"
-        }
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": true, "last-updated": "2026-02-19" },
+        "references": { "exists": true, "last-updated": "2026-02-19" },
+        "topic-summary": { "exists": true, "last-updated": "2026-02-19" }
       },
       "documentation": {
-        "file": "docs/core-concepts/bnf-syntax.md",
+        "file": "docs/grammar-development/grammar-syntax.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "grammar-development/grammar-design": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": true, "last-updated": "2026-02-19" },
+        "references": { "exists": true, "last-updated": "2026-02-19" },
+        "topic-summary": { "exists": true, "last-updated": "2026-02-19" }
+      },
+      "documentation": {
+        "file": "docs/grammar-development/grammar-design.md",
         "status": "completed",
         "needs-update": false
       }
     },
     "grammar-development/expression-parsing": {
       "status": "evidence-complete",
-      "last-modified": "2026-02-11T15:45:00Z",
+      "last-modified": "2026-02-19T00:00:00Z",
       "evidence": {
-        "code-evidence": {
-          "exists": true,
-          "last-updated": "2026-02-11T15:45:00Z"
-        },
-        "examples": {
-          "exists": true,
-          "last-updated": "2026-02-11T15:45:00Z"
-        },
-        "references": {
-          "exists": true,
-          "last-updated": "2026-02-11T15:45:00Z"
-        },
-        "topic-summary": {
-          "exists": true,
-          "last-updated": "2026-02-11T15:45:00Z"
-        }
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": true, "last-updated": "2026-02-19" },
+        "references": { "exists": true, "last-updated": "2026-02-19" },
+        "topic-summary": { "exists": true, "last-updated": "2026-02-19" }
       },
       "documentation": {
         "file": "docs/grammar-development/expression-parsing.md",
         "status": "completed",
         "needs-update": false
       }
+    },
+    "grammar-development/error-recovery": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": true, "last-updated": "2026-02-19" },
+        "references": { "exists": true, "last-updated": "2026-02-19" },
+        "topic-summary": { "exists": true, "last-updated": "2026-02-19" }
+      },
+      "documentation": {
+        "file": "docs/grammar-development/error-recovery.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "grammar-development/live-preview": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": true, "last-updated": "2026-02-19" },
+        "references": { "exists": true, "last-updated": "2026-02-19" },
+        "topic-summary": { "exists": true, "last-updated": "2026-02-19" }
+      },
+      "documentation": {
+        "file": "docs/grammar-development/live-preview.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "grammar-development/external-rules": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": true, "last-updated": "2026-02-19" },
+        "references": { "exists": true, "last-updated": "2026-02-19" },
+        "topic-summary": { "exists": true, "last-updated": "2026-02-19" }
+      },
+      "documentation": {
+        "file": "docs/grammar-development/external-rules.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "grammar-development/grammar-composition": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": true, "last-updated": "2026-02-19" },
+        "references": { "exists": true, "last-updated": "2026-02-19" },
+        "topic-summary": { "exists": true, "last-updated": "2026-02-19" }
+      },
+      "documentation": {
+        "file": "docs/grammar-development/grammar-composition.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "code-generation/attributes": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": true, "last-updated": "2026-02-19" },
+        "references": { "exists": true, "last-updated": "2026-02-19" },
+        "topic-summary": { "exists": true, "last-updated": "2026-02-19" }
+      },
+      "documentation": {
+        "file": "docs/code-generation/attributes.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "code-generation/parser-generation": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": true, "last-updated": "2026-02-19" },
+        "references": { "exists": true, "last-updated": "2026-02-19" },
+        "topic-summary": { "exists": true, "last-updated": "2026-02-19" }
+      },
+      "documentation": {
+        "file": "docs/code-generation/parser-generation.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "code-generation/lexer-integration": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": true, "last-updated": "2026-02-19" },
+        "references": { "exists": true, "last-updated": "2026-02-19" },
+        "topic-summary": { "exists": true, "last-updated": "2026-02-19" }
+      },
+      "documentation": {
+        "file": "docs/code-generation/lexer-integration.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "code-generation/psi-customization": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": true, "last-updated": "2026-02-19" },
+        "references": { "exists": true, "last-updated": "2026-02-19" },
+        "topic-summary": { "exists": true, "last-updated": "2026-02-19" }
+      },
+      "documentation": {
+        "file": "docs/code-generation/psi-customization.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "integration/parser-definition": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": false, "last-updated": null },
+        "references": { "exists": false, "last-updated": null },
+        "topic-summary": { "exists": false, "last-updated": null }
+      },
+      "documentation": {
+        "file": "docs/integration/parser-definition.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "integration/language-features": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": false, "last-updated": null },
+        "references": { "exists": false, "last-updated": null },
+        "topic-summary": { "exists": false, "last-updated": null }
+      },
+      "documentation": {
+        "file": "docs/integration/language-features.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "integration/testing": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": false, "last-updated": null },
+        "references": { "exists": false, "last-updated": null },
+        "topic-summary": { "exists": false, "last-updated": null }
+      },
+      "documentation": {
+        "file": "docs/integration/testing.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "integration/gradle-setup": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": false, "last-updated": null },
+        "references": { "exists": false, "last-updated": null },
+        "topic-summary": { "exists": false, "last-updated": null }
+      },
+      "documentation": {
+        "file": "docs/integration/gradle-setup.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "integration/gradle-vs-ide": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": false, "last-updated": null },
+        "references": { "exists": false, "last-updated": null },
+        "topic-summary": { "exists": false, "last-updated": null }
+      },
+      "documentation": {
+        "file": "docs/integration/gradle-vs-ide.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "advanced/performance": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": false, "last-updated": null },
+        "references": { "exists": false, "last-updated": null },
+        "topic-summary": { "exists": false, "last-updated": null }
+      },
+      "documentation": {
+        "file": "docs/advanced/performance.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "advanced/common-issues": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": false, "last-updated": null },
+        "references": { "exists": false, "last-updated": null },
+        "topic-summary": { "exists": false, "last-updated": null }
+      },
+      "documentation": {
+        "file": "docs/advanced/common-issues.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "advanced/debugging": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": false, "last-updated": null },
+        "references": { "exists": false, "last-updated": null },
+        "topic-summary": { "exists": false, "last-updated": null }
+      },
+      "documentation": {
+        "file": "docs/advanced/debugging.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "advanced/migration": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": false, "last-updated": null },
+        "references": { "exists": false, "last-updated": null },
+        "topic-summary": { "exists": false, "last-updated": null }
+      },
+      "documentation": {
+        "file": "docs/advanced/migration.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "reference/attributes": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": false, "last-updated": null },
+        "references": { "exists": false, "last-updated": null },
+        "topic-summary": { "exists": false, "last-updated": null }
+      },
+      "documentation": {
+        "file": "docs/reference/attributes.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "reference/grammar-syntax": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": false, "last-updated": null },
+        "references": { "exists": false, "last-updated": null },
+        "topic-summary": { "exists": false, "last-updated": null }
+      },
+      "documentation": {
+        "file": "docs/reference/grammar-syntax.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "reference/shortcuts": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": false, "last-updated": null },
+        "references": { "exists": false, "last-updated": null },
+        "topic-summary": { "exists": false, "last-updated": null }
+      },
+      "documentation": {
+        "file": "docs/reference/shortcuts.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "reference/glossary": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": false, "last-updated": null },
+        "references": { "exists": false, "last-updated": null },
+        "topic-summary": { "exists": false, "last-updated": null }
+      },
+      "documentation": {
+        "file": "docs/reference/glossary.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "appendices/examples": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": false, "last-updated": null },
+        "references": { "exists": false, "last-updated": null },
+        "topic-summary": { "exists": false, "last-updated": null }
+      },
+      "documentation": {
+        "file": "docs/appendices/examples.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "appendices/resources": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": false, "last-updated": null },
+        "references": { "exists": false, "last-updated": null },
+        "topic-summary": { "exists": false, "last-updated": null }
+      },
+      "documentation": {
+        "file": "docs/appendices/resources.md",
+        "status": "completed",
+        "needs-update": false
+      }
+    },
+    "appendices/faq": {
+      "status": "evidence-complete",
+      "last-modified": "2026-02-19T00:00:00Z",
+      "evidence": {
+        "code-evidence": { "exists": true, "last-updated": "2026-02-19" },
+        "examples": { "exists": false, "last-updated": null },
+        "references": { "exists": false, "last-updated": null },
+        "topic-summary": { "exists": false, "last-updated": null }
+      },
+      "documentation": {
+        "file": "docs/appendices/faq.md",
+        "status": "completed",
+        "needs-update": false
+      }
     }
-  },
-  "metadata": {
-    "version": "1.0",
-    "created": "2024-02-04T10:00:00Z",
-    "last-updated": "2026-02-11T15:45:00Z"
   }
 }

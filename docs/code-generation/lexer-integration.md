@@ -1,243 +1,132 @@
 # Lexer Integration
 
-This page covers lexer integration options in Grammar-Kit, including JFlex development, automatic lexer generation, and advanced tokenization techniques.
+The parser generator produces `IElementType` constants that a lexer must recognize and return. Grammar-Kit integrates with JFlex to generate a lexer from the token definitions in your grammar. The workflow has two steps: generate a `.flex` file from the grammar, then compile it with JFlex to produce the Java lexer class.
 
-## Lexer Options
+## Defining Tokens
 
-Grammar-Kit provides multiple approaches for lexical analysis, each with different capabilities and use cases.
+Tokens are declared in the `tokens` attribute of the grammar header. Each entry maps a token name to either a literal value or a regular expression pattern:
 
-### JFlex Integration
+```bnf
+{
+  tokens=[
+    PLUS="+"
+    MINUS="-"
+    number='regexp:\d+(\.\d*)?'
+    id='regexp:\p{Alpha}\w*'
+    string="regexp:('([^'\\]|\\.)*'|\"([^\"\\]|\\.)*\")"
+    comment='regexp://.*'
+  ]
+}
+```
 
-TODO:
-- Explain JFlex as the primary lexer generator
-- Describe the integration with Grammar-Kit
-- Show when to choose JFlex over alternatives
-- Detail the development workflow
+Token entries fall into three categories. **Explicit tokens with patterns** use the `regexp:` prefix and define a regular expression for matching (e.g., `number='regexp:\d+'`). **Explicit tokens with literal values** specify the exact text (e.g., `PLUS="+"`). Any unquoted name used in a rule that does not match a rule name is treated as an **implicit keyword token** where the name equals the value.
 
-### Grammar-Kit Lexer
+Quoted strings that appear in rules but are not declared in the `tokens` list are matched by text at runtime rather than by `IElementType`. This text-based matching is slower because the parser compares character sequences instead of object identity.
 
-TODO:
-- Explain automatic lexer generation from grammar
-- Describe capabilities and limitations
-- Show when automatic generation is sufficient
-- Detail the generation process
+!!! tip
+    Declare all tokens explicitly in the `tokens` attribute. This avoids text-based matching and gives the lexer generator complete information about your language's token set.
 
-### Custom Lexer Adapter
+## Generating the Flex File
 
-TODO:
-- Explain how to integrate custom lexers
-- Show adapter pattern implementation
-- Describe interface requirements
-- Detail performance considerations
+Open your `.bnf` file and select "Generate JFlex Lexer" from the context menu. Grammar-Kit creates a `.flex` file named `_<GrammarName>Lexer.flex` (with a leading underscore) in the same directory as the grammar file by default. A save dialog lets you choose a different location.
 
-### Lexer Selection Criteria
+The generated file uses a Velocity template and produces a standard JFlex specification:
 
-TODO:
-- Provide decision matrix for lexer choice
-- Compare performance characteristics
-- Discuss complexity tradeoffs
-- Show real-world examples
+```flex
+package com.example.lang;
 
-## JFlex Development
+import com.intellij.lexer.FlexLexer;
+import com.intellij.psi.tree.IElementType;
 
-Creating professional lexers with JFlex for your Grammar-Kit parsers.
+import static com.intellij.psi.TokenType.BAD_CHARACTER;
+import static com.intellij.psi.TokenType.WHITE_SPACE;
+import static com.example.lang.MyTypes.*;
 
-### JFlex File Structure
+%%
 
-TODO:
-- Explain the three-section structure
-- Detail user code section
-- Describe options and declarations
-- Show lexical rules section
+%{
+  public _MyLangLexer() {
+    this((java.io.Reader)null);
+  }
+%}
 
-### Lexer States
+%public
+%class _MyLangLexer
+%implements FlexLexer
+%function advance
+%type IElementType
+%unicode
 
-TODO:
-- Explain exclusive and inclusive states
-- Show state transition patterns
-- Describe common state machines
-- Detail nested state handling
+EOL=\R
+WHITE_SPACE=\s+
 
-### Token Type Mapping
+NUMBER=[0-9]+
+ID=[:letter:][a-zA-Z_0-9]*
 
-TODO:
-- Show how to map JFlex tokens to IElementType
-- Explain token factory patterns
-- Describe token type constants usage
-- Detail integration with parser
+%%
+<YYINITIAL> {
+  {WHITE_SPACE}    { return WHITE_SPACE; }
 
-### Unicode Support
+  "+"              { return PLUS; }
+  "-"              { return MINUS; }
 
-TODO:
-- Explain Unicode handling in JFlex
-- Show character class definitions
-- Describe encoding considerations
-- Detail internationalization patterns
+  {NUMBER}         { return NUMBER; }
+  {ID}             { return ID; }
+}
 
-### Performance Tuning
+[^] { return BAD_CHARACTER; }
+```
 
-TODO:
-- Explain buffer size optimization
-- Show lookahead minimization
-- Describe state reduction techniques
-- Detail profiling and measurement
+The generated lexer implements the `FlexLexer` interface, enables full Unicode support with `%unicode`, and imports token constants from the `elementTypeHolderClass`. Literal tokens become quoted string matches; regexp tokens become JFlex macro definitions and references. Unrecognized input returns `BAD_CHARACTER`.
 
-## Grammar-Kit Lexer
+Grammar-Kit converts Java regex syntax to JFlex syntax automatically. The most common conversions:
 
-Using Grammar-Kit's automatic lexer generation for simpler use cases.
+| Java pattern | JFlex equivalent |
+|---|---|
+| `\d` | `[0-9]` |
+| `\w` | `[a-zA-Z_0-9]` |
+| `\s` | `[ \t\n\x0B\f\r]` |
+| `\p{Alpha}` | `[:letter:]` |
+| `\p{Digit}` | `[:digit:]` |
+| `\p{Lower}` | `[:lowercase:]` |
+| `\p{Upper}` | `[:uppercase:]` |
+| `\p{Alnum}` | `([:letter:]\|[:digit:])` |
+| `\p{ASCII}` | `[\x00-\x7F]` |
 
-### Automatic Generation
+!!! warning
+    The generated flex file is a starting point. Complex lexing logic -- multi-line comments, string interpolation, lexer states -- must be added manually. Once you edit the flex file, re-generating it from the grammar overwrites your changes.
 
-TODO:
-- Explain how automatic generation works
-- Show the analysis of grammar tokens
-- Describe the generated lexer structure
-- Detail customization options
+## Compiling the Lexer
 
-### Token Precedence
+Open the `.flex` file and select "Run JFlex Generator" from the context menu. Grammar-Kit downloads JFlex (version 1.9.2 from the JetBrains cache) if it is not already available, creates a global library named "JFlex & idea-flex.skeleton", and runs JFlex with the `idea-flex.skeleton` file. Output appears in the Messages tool window.
 
-TODO:
-- Explain token matching order
-- Show how to resolve conflicts
-- Describe precedence rules
-- Detail debugging precedence issues
+JFlex reads the `%class` directive and `package` statement from the flex file to determine the output class name and location. The generated Java file goes into the source directory matching the package.
 
-### Keyword Handling
+You can customize how token type instances are created. By default, Grammar-Kit generates constructor calls using the class specified by `tokenTypeClass`:
 
-TODO:
-- Explain automatic keyword detection
-- Show keyword vs identifier disambiguation
-- Describe case sensitivity options
-- Detail performance implications
+```bnf
+{
+  tokenTypeClass="com.example.lang.MyTokenType"
+}
+// Generates: new MyTokenType("PLUS")
+```
 
-### Limitations and Capabilities
+To use a factory method instead, set `tokenTypeFactory`:
 
-TODO:
-- List what automatic lexer can handle
-- Explain scenarios requiring JFlex
-- Show workarounds for limitations
-- Detail migration paths to JFlex
+```bnf
+{
+  tokenTypeFactory="com.example.lang.MyTypeFactory.getTokenType"
+}
+// Generates: MyTypeFactory.getTokenType("PLUS")
+```
 
-## Token Type Mapping
+## JFlex IDE Support
 
-Connecting your lexer to the Grammar-Kit parser through proper token mapping.
+Grammar-Kit provides full IDE support for `.flex` files, including syntax highlighting with customizable colors, code completion for `%directives`, find usages and rename refactoring for state and macro definitions, structure view, brace matching, and Java code injection in action blocks.
 
-### IElementType Creation
+The JFlex file format is itself parsed by a Grammar-Kit grammar (`JFlex.bnf`), so editing flex files benefits from the same infrastructure that Grammar-Kit provides for BNF grammars.
 
-TODO:
-- Explain IElementType instantiation
-- Show token type factory patterns
-- Describe singleton management
-- Detail memory efficiency
+!!! tip
+    The flex file typically requires manual editing for features like multi-line comments, nested strings, or lexer states. Grammar-Kit's JFlex support makes this editing experience comparable to editing any other structured language file.
 
-### Token Type Constants
-
-TODO:
-- Show token constant generation
-- Explain naming conventions
-- Describe organization strategies
-- Detail usage in parser and lexer
-
-### Token Sets
-
-TODO:
-- Explain TokenSet creation and usage
-- Show common token set patterns
-- Describe performance benefits
-- Detail token set operations
-
-### Token Precedence
-
-TODO:
-- Explain precedence in token matching
-- Show how to handle ambiguities
-- Describe longest match rules
-- Detail precedence debugging
-
-## Advanced Lexing
-
-Sophisticated lexing techniques for complex language features.
-
-### Context-Sensitive Tokens
-
-TODO:
-- Explain context-sensitive tokenization
-- Show state-based token recognition
-- Describe lookahead patterns
-- Detail implementation strategies
-
-### Nested Structures
-
-TODO:
-- Explain handling of nested comments
-- Show string interpolation patterns
-- Describe balanced delimiter handling
-- Detail state stack management
-
-### Template Languages
-
-TODO:
-- Explain mixed language tokenization
-- Show language injection points
-- Describe state transition patterns
-- Detail performance optimization
-
-### Error Tokens
-
-TODO:
-- Explain error token strategies
-- Show recovery token patterns
-- Describe error reporting
-- Detail IDE integration
-
-### Incremental Lexing
-
-TODO:
-- Explain incremental relexing
-- Show state restoration
-- Describe performance benefits
-- Detail implementation requirements
-
-## Testing Lexers
-
-Ensuring your lexer works correctly through comprehensive testing.
-
-### Lexer Test Framework
-
-TODO:
-- Explain Grammar-Kit lexer testing
-- Show test case structure
-- Describe assertion methods
-- Detail test organization
-
-### Token Stream Validation
-
-TODO:
-- Show how to validate token sequences
-- Explain token attribute testing
-- Describe position verification
-- Detail whitespace handling
-
-### Performance Testing
-
-TODO:
-- Explain lexer benchmarking
-- Show profiling techniques
-- Describe optimization validation
-- Detail regression testing
-
-### Edge Cases
-
-TODO:
-- List common edge cases to test
-- Show Unicode boundary testing
-- Describe error condition testing
-- Detail stress testing approaches
-
-## Examples
-
-TODO:
-- Add complete JFlex lexer example
-- Include token type mapping implementation
-- Show state machine patterns
-- Provide test suite examples
+For Gradle-based lexer generation in CI/CD pipelines, see [Gradle Plugin Setup](../integration/gradle-setup.md). For details on token definition syntax in BNF grammars, see [BNF Grammar Syntax](../grammar-development/grammar-syntax.md).

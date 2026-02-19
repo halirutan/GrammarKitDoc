@@ -1,175 +1,229 @@
 # Installation and Setup
 
-This guide walks you through installing Grammar-Kit and setting up your development environment for creating language plugins with IntelliJ IDEA. You'll learn how to install the plugin, create a project structure, and prepare your first grammar file.
+This page covers installing the Grammar-Kit plugin, setting up a project with the right directory structure, and creating your first grammar file. After following these steps, you will have a working `.bnf` file with syntax highlighting and Live Preview.
 
 ## Prerequisites
 
-Before installing Grammar-Kit, ensure you have:
+Grammar-Kit runs inside IntelliJ IDEA. You need:
 
-TODO: Document the following prerequisites:
-- IntelliJ IDEA basics and required version
-- Java development knowledge requirements (Java 17+ for recent versions)
-- Understanding of parsing concepts (explain why it's optional but helpful)
-- Links to prerequisite learning resources
+| Requirement | Minimum version |
+|---|---|
+| IntelliJ IDEA (Community or Ultimate) | 2023.3 or later |
+| Java Development Kit | 17 or later |
 
-## Installing the Grammar-Kit Plugin
+You should be comfortable creating projects and navigating settings in IntelliJ IDEA. Java development experience is needed because Grammar-Kit generates Java source files. Familiarity with parsing concepts helps but is not required at this stage.
 
-Grammar-Kit is available through the JetBrains plugin marketplace and can be installed directly from your IDE.
+!!! note
+    IntelliJ IDEA 2024.2 and later requires Java 21. Check the [Build Number Ranges](https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html) page for your specific version.
 
-### Via IDE Plugin Marketplace
+## Installing the plugin
 
-TODO: Provide step-by-step installation instructions:
-- How to open plugin settings
-- Searching for Grammar-Kit
-- Installation process
-- Restart requirements
+### From the marketplace
 
-### Version Compatibility Matrix
+1. Open **Settings** (Ctrl+Alt+S / Cmd+,) and select **Plugins**.
+2. Switch to the **Marketplace** tab and search for "Grammar-Kit".
+3. Click **Install**, then restart the IDE when prompted.
 
-TODO: Create a compatibility table showing:
-- Grammar-Kit versions vs IntelliJ IDEA versions
-- Java version requirements
-- Breaking changes between versions
+The plugin is also available at [plugins.jetbrains.com/plugin/6606-grammar-kit](https://plugins.jetbrains.com/plugin/6606-grammar-kit).
 
-### Offline Installation Options
+For development builds, JetBrains publishes artifacts on [TeamCity](https://teamcity.jetbrains.com/guestAuth/app/rest/builds/buildType:IntellijIdeaPlugins_GrammarKit_Build,status:SUCCESS/artifacts/content/GrammarKit*.zip). Download the zip and install it through **Settings > Plugins > gear icon > Install Plugin from Disk**.
 
-TODO: Document offline installation process:
-- Downloading plugin files
-- Manual installation steps
-- Troubleshooting offline installations
+### Version compatibility
 
-### Verifying Installation
+| Grammar-Kit | IntelliJ IDEA | Java |
+|---|---|---|
+| 2023.3 | 2023.3+ | 17 |
+| 2022.3 | 2022.3+ | 17 |
+| 2021.1 | 2021.1+ | 11 |
+| 2020.3 | 2020.3+ | 11 |
 
-TODO: Explain how to verify successful installation:
-- Where to find Grammar-Kit in menus
-- Test creating a .bnf file
-- Checking plugin status
+Grammar-Kit follows the IntelliJ IDEA version numbering scheme. Each release targets the corresponding platform version and later.
 
-## Project Setup
+### Verifying the installation
 
-Setting up your project correctly is crucial for smooth Grammar-Kit development.
+Create a new file with the `.bnf` extension in any project. If Grammar-Kit is installed correctly, you will see:
 
-### Creating a New Language Plugin Project
+1. A BNF file icon on the editor tab.
+2. Syntax highlighting for keywords, rules, and tokens.
+3. Code completion when you start typing attributes or rule names.
 
-TODO: Step-by-step guide for:
-- Using IntelliJ IDEA's new project wizard
-- Selecting appropriate project type
-- Initial project configuration
+Open Live Preview with Ctrl+Alt+P (Cmd+Alt+P on macOS) to confirm the editor is fully functional. The preview pane displays a parse tree as you type grammar rules and sample input.
 
-### Directory Structure Recommendations
+## Project setup
 
-TODO: Document recommended project structure:
-- Where to place grammar files
-- Generated code organization
-- Test file locations
-- Resource management
+A language plugin project needs separate source roots for handwritten code and generated code. As the Grammar-Kit documentation states: "Handwritten classes and generated classes should always be in different source roots."
 
-### Essential Dependencies
+The recommended directory layout for a Gradle-based IntelliJ plugin project:
 
-TODO: List and explain required dependencies:
-- IntelliJ Platform SDK setup
-- Grammar-Kit runtime dependencies
-- Additional libraries for language support
+```
+my-language-plugin/
+├── build.gradle.kts
+├── settings.gradle.kts
+├── gradle.properties
+│
+├── src/main/java/                          ← Handwritten source code
+│   └── com/example/config/
+│       ├── ConfigLanguage.java             ← Language singleton
+│       ├── ConfigFileType.java             ← File type registration
+│       ├── ConfigParserDefinition.java     ← Connects parser + lexer
+│       ├── ConfigSyntaxHighlighter.java    ← Syntax coloring
+│       └── ConfigLexer.flex                ← JFlex lexer definition
+│
+├── src/main/gen/                           ← Generated code (separate root!)
+│   └── com/example/config/
+│       ├── parser/
+│       │   └── ConfigParser.java           ← Generated parser
+│       └── psi/
+│           ├── ConfigTypes.java            ← Generated element types
+│           ├── ConfigProperty.java         ← Generated PSI interface
+│           └── impl/
+│               └── ConfigPropertyImpl.java ← Generated PSI implementation
+│
+├── src/main/resources/
+│   ├── META-INF/
+│   │   └── plugin.xml                      ← Plugin registration
+│   └── com/example/config/
+│       └── config.bnf                      ← Grammar file
+│
+└── src/test/
+    ├── java/                               ← Test source code
+    └── testData/                            ← Test input files
+```
 
-### Recommended Project Templates
+!!! warning
+    Do not mix generated and handwritten code in the same source root. Regenerating the parser may overwrite handwritten files, and refactoring tools may modify generated code.
 
-TODO: Provide information about:
-- Available project templates
-- When to use each template
-- Customizing templates for specific needs
+Mark `src/main/gen` as a generated source root in your `build.gradle.kts`:
 
-## Development Environment
+```kotlin
+sourceSets {
+    main {
+        java.srcDirs("src/main/java", "src/main/gen")
+    }
+}
 
-Configure your development environment for optimal Grammar-Kit usage.
+idea {
+    module {
+        generatedSourceDirs.add(file("src/main/gen"))
+    }
+}
+```
 
-### Configuring SDK
+Some projects use a flat layout closer to Grammar-Kit's own structure, with top-level `src/`, `gen/`, and `resources/` directories. Either layout works as long as handwritten and generated code stay in separate roots.
 
-TODO: Detailed SDK configuration:
-- Setting up IntelliJ Platform SDK
-- Configuring Java SDK
-- Managing multiple SDK versions
+### Dependencies and templates
 
-### Setting Up Source Folders
+The generated parser relies on `GeneratedParserUtilBase`, which ships with the IntelliJ Platform since version 12.1. You do not need to bundle it.
 
-TODO: Explain source folder organization:
-- Grammar source folders
-- Generated code folders
-- Test source folders
-- Marking folders correctly in IDE
+For build automation, the [Gradle Grammar-Kit Plugin](https://github.com/JetBrains/gradle-grammar-kit-plugin) (`org.jetbrains.grammarkit`, version 2023.3.0.2) runs parser and lexer generation as part of your Gradle build. See the [IntelliJ SDK documentation](https://plugins.jetbrains.com/docs/intellij/tools-gradle-grammar-kit-plugin.html) for configuration details, and [Gradle Plugin Setup](integration/gradle-setup.md) for a full walkthrough. The Gradle plugin does not support method mixins, and generic signatures may not be correct in all cases.
 
-### Version Control Considerations
+To start a new project from scratch, the [IntelliJ Platform Plugin Template](https://github.com/JetBrains/intellij-platform-plugin-template) provides a ready-made Gradle project structure. The IntelliJ SDK also has a [Creating a Plugin Project](https://plugins.jetbrains.com/docs/intellij/creating-plugin-project.html) guide that walks through the new-project wizard.
 
-TODO: Best practices for version control:
-- What to commit (grammar files)
-- What to ignore (generated code)
-- Example .gitignore file
-- Team collaboration tips
+### Configuring the development environment
 
-### Team Development Setup
+The default output directory for generated code is `gen`. You can change it and other plugin behavior through Java system properties (`-D` flags passed to the IDE or Gradle):
 
-TODO: Guidelines for team development:
-- Sharing project settings
-- Consistent code generation
-- Build server configuration
-- Code review practices
+| Property | Default | Purpose |
+|---|---|---|
+| `grammar.kit.gen.dir` | `gen` | Output directory for generated code |
+| `grammar.kit.gen.jflex.args` | (empty) | Extra arguments for JFlex generation |
+| `grammar.kit.gpub.max.level` | `1000` | Parser recursion depth limit |
+| `grammar.kit.inject.java` | `true` | Inject Java language in JFlex files |
+| `grammar.kit.inject.regexp` | `true` | Inject RegExp language in BNF strings |
 
-## First Grammar File
+Whether to commit the `gen/` directory to version control is a team decision. Committing it makes the build reproducible without running generation but adds noise to diffs. Adding `gen/` to `.gitignore` keeps the repository clean but requires all contributors to generate before building.
 
-Create your first grammar file and explore Grammar-Kit's editor features.
+## Your first grammar file
 
-### Creating a .bnf File
+The smallest valid grammar is a single rule with no attributes:
 
-TODO: Step-by-step instructions:
-- File creation process
-- Naming conventions
-- File location best practices
+```bnf
+// minimal.bnf — Works in Live Preview without any attributes.
+root ::= 'hello' 'world'
+```
 
-### Basic Grammar Structure
+This grammar is enough to test Live Preview immediately. No attributes block is needed for prototyping, but without output paths configured, the grammar is not ready for code generation.
 
-TODO: Introduce grammar file structure:
-- Grammar header
-- Rules section
-- Tokens section
-- Basic syntax explanation
+To generate code, you need an attributes block that specifies where the generated classes go. The following grammar for a simple key-value configuration language shows the complete structure:
 
-### Editor Features Overview
+```bnf
+// config.bnf — A grammar for key-value configuration files.
+//
+// Example input this grammar parses:
+//   host = "localhost"
+//   port = 8080
+//   debug = true
 
-TODO: Highlight key editor features:
-- Syntax highlighting
-- Code completion
-- Error detection
-- Quick documentation
+{
+  // Where to put generated parser code
+  parserClass="com.example.config.parser.ConfigParser"
 
-### Initial Validation
+  // Where to put generated PSI interfaces and implementations
+  psiPackage="com.example.config.psi"
+  psiImplPackage="com.example.config.psi.impl"
 
-TODO: Explain validation process:
-- How Grammar-Kit validates grammar files
-- Common validation errors
-- Using Live Preview for testing
-- Troubleshooting validation issues
+  // Class that holds all IElementType constants
+  elementTypeHolderClass="com.example.config.psi.ConfigTypes"
 
-## Examples
+  // Factory methods for element types (use defaults for now)
+  elementTypeClass="com.example.config.psi.ConfigElementType"
+  tokenTypeClass="com.example.config.psi.ConfigTokenType"
 
-TODO: Add the following examples:
-- Minimal working grammar file with complete code
-- Basic project structure diagram and file layout
-- Sample plugin.xml configuration for a grammar-based plugin
+  // Token definitions — names on the left, patterns on the right
+  tokens=[
+    EQUALS  = '='
+    SEMI    = ';'
+    space   = 'regexp:\s+'
+    comment = 'regexp://.*'
+    number  = 'regexp:\d+'
+    string  = "regexp:\"[^\"]*\""
+    id      = 'regexp:\p{Alpha}\w*'
+  ]
+}
 
-## Visual Aids
+// The first rule is the root of the grammar.
+// The parser starts here.
+root ::= item *
 
-TODO: Include the following visual aids:
-- Screenshot of plugin installation process
-- Project structure diagram showing all key directories
-- IDE setup walkthrough with annotated screenshots
+// 'private' means this rule won't create its own PSI node.
+// Its children fold into the parent.
+private item ::= property ';'? {recoverWhile=item_recover}
 
-## Next Steps
+// A property is an identifier, '=', and a value.
+property ::= id '=' value {pin=2}
 
-Once you have Grammar-Kit installed and your project set up, you're ready to create your first grammar. Continue to the [Quick Start Tutorial](quick-start.md) to build a working parser and language plugin.
+// Values can be strings, numbers, or identifiers (references).
+value ::= string | number | id
 
-## Troubleshooting
+// Recovery rule: skip tokens until we find something
+// that looks like the start of the next property.
+private item_recover ::= !(id | ';')
+```
 
-TODO: Add common installation and setup issues:
-- Plugin not appearing after installation
-- Project creation errors
-- SDK configuration problems
-- Solutions and workarounds
+A grammar file has three parts. The attributes block (`{ ... }`) at the top configures code generation output locations. The `tokens` list inside it maps token names to string literals or regex patterns using the `'regexp:...'` syntax. The rules section defines the grammar structure, where each rule uses the `::=` operator. The first rule in the file becomes the parse root.
+
+You can reference tokens by their quoted value (`'='`) for readability or by their name (`EQUALS`). Both forms resolve to the same token.
+
+!!! tip
+    Set `parserClass`, `psiPackage`, and `elementTypeHolderClass` before generating code. Without these attributes, Grammar-Kit uses defaults like `generated.GeneratedParser` and `generated.GeneratedTypes`, which are unlikely to match your project's package structure.
+
+After saving the grammar file, test it:
+
+1. Confirm the file shows a BNF icon in the editor tab.
+2. Press Ctrl+Alt+P (Cmd+Alt+P) to open Live Preview.
+3. Type sample input in the preview pane and check that a parse tree appears.
+4. Press Ctrl+Shift+G (Cmd+Shift+G) to generate parser code into your `gen/` directory.
+
+Editor features available for `.bnf` files:
+
+| Feature | Shortcut | What it does |
+|---|---|---|
+| Live Preview | Ctrl+Alt+P / Cmd+Alt+P | Test grammar against sample input |
+| Generate Parser Code | Ctrl+Shift+G / Cmd+Shift+G | Generate parser, PSI, and element types |
+| Structure View | Ctrl+F12 / Cmd+F12 | Browse rules in the current file |
+| Quick Documentation | Ctrl+Q / Cmd+J | Show FIRST and FOLLOW sets for a rule |
+| Go to Related File | Ctrl+Alt+Home / Cmd+Alt+Home | Jump to the generated file for a rule |
+
+Eight inspections run by default, catching problems like unresolved references, unused rules, left recursion, and duplicate rules. Warnings appear directly in the editor as you type.
+
+Next: the [Quick Start Tutorial](quick-start.md) walks through building a complete language plugin from grammar to working IDE support.

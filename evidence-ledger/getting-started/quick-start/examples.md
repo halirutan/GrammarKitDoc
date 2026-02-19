@@ -1,0 +1,730 @@
+# Examples: Quick Start Tutorial
+
+## Scope Information
+This provides examples for section 1.4: Quick Start Tutorial
+- Complete arithmetic expression grammar
+- Sample test files
+- Generated code walkthrough
+- Working language plugin skeleton
+
+---
+
+## 1. Complete Arithmetic Expression Grammar
+
+### Calc.bnf — Full Grammar File
+```bnf
+// Calc.bnf — A simple calculator language.
+// Supports: numbers, +, -, *, /, parentheses, semicolons.
+{
+  // --- Package and class names for code generation ---
+  parserClass="com.example.calc.parser.CalcParser"
+  elementTypeHolderClass="com.example.calc.psi.CalcTypes"
+  psiPackage="com.example.calc.psi"
+  psiImplPackage="com.example.calc.psi.impl"
+  psiVisitorName="CalcVisitor"
+
+  // --- Token definitions ---
+  tokens=[
+    SEMI=';'
+    PLUS='+'
+    MINUS='-'
+    MULT='*'
+    DIV='/'
+    LP='('
+    RP=')'
+
+    space='regexp:\s+'
+    comment='regexp://.*'
+    number='regexp:\d+(\.\d*)?'
+  ]
+}
+
+// --- Rules ---
+root ::= statement *
+private statement ::= expr ';' {pin=1 recoverWhile=statement_recover}
+private statement_recover ::= !(number | '(' | ';')
+
+expr ::= add_expr
+add_expr ::= mul_expr (('+'|'-') mul_expr) *
+mul_expr ::= primary_expr (('*'|'/') primary_expr) *
+primary_expr ::= number | paren_expr
+paren_expr ::= '(' expr ')' {pin=1}
+```
+- Beginner-friendly: no `left` rules, no `extends` patterns
+- `pin=1` on `statement`: recovery continues after errors
+- `pin=1` on `paren_expr`: reports missing `)` instead of failing silently
+- `recoverWhile`: skips garbage until next valid statement start
+- `space` and `comment` regexp tokens: auto-detected as whitespace/comments in Live Preview
+- All generation attributes in header: parser, types, PSI packages
+
+### What Each Header Attribute Does
+| Attribute | Value | Purpose |
+|---|---|---|
+| `parserClass` | `com.example.calc.parser.CalcParser` | Generated parser class |
+| `elementTypeHolderClass` | `com.example.calc.psi.CalcTypes` | Token/element constants |
+| `psiPackage` | `com.example.calc.psi` | PSI interface package |
+| `psiImplPackage` | `com.example.calc.psi.impl` | PSI implementation package |
+| `psiVisitorName` | `CalcVisitor` | Generated visitor class name |
+
+### What Each Token Definition Does
+| Token | Definition | Purpose |
+|---|---|---|
+| `SEMI=';'` | Simple token | Exact character match |
+| `number='regexp:\d+(\.\d*)?'` | Regexp token | Matches `42`, `3.14`, `100.` |
+| `space='regexp:\s+'` | Regexp token | Auto-whitespace in Live Preview |
+| `comment='regexp://.*'` | Regexp token | Auto-comment in Live Preview |
+
+---
+
+## 2. Sample Test Files
+
+### valid_basic.calc — Simple Expressions
+```
+1 + 2;
+3 * 4 + 5;
+(10 - 3) * 2;
+```
+- Three valid statements
+- Tests operator precedence
+- Tests parenthesized expressions
+
+### valid_complex.calc — Nested and Decimal
+```
+// Compute a result
+(1 + 2) * (3 + 4);
+100 / (5 - 3);
+3.14 * 2;
+```
+- Line comment (skipped by parser)
+- Nested parentheses
+- Decimal numbers
+
+### error_recovery.calc — Input with Errors
+```
+1 + 2;
++ ;
+3 * 4;
+```
+- Line 1: valid statement
+- Line 2: `+ ;` — error (no left operand), parser recovers at `;`
+- Line 3: valid statement, parsed successfully after recovery
+
+### Expected PSI Tree for `1 + 2;`
+```
+CalcFile
+  Expr(ADD_EXPR)
+    Expr(PRIMARY_EXPR)
+      PsiElement(number)('1')
+    PsiElement(PLUS)('+')
+    Expr(PRIMARY_EXPR)
+      PsiElement(number)('2')
+  PsiElement(SEMI)(';')
+```
+- Each public rule becomes a PSI node
+- Private rules (`statement`, `primary_expr`) are transparent
+- Tokens appear as `PsiElement(TYPE)` leaves
+
+---
+
+## 3. Generated Code Walkthrough
+
+### Running the Generator
+- Open `Calc.bnf` in IntelliJ IDEA
+- Press **Ctrl+Shift+G** (Windows/Linux) or **Cmd+Shift+G** (macOS)
+- Or: right-click → **Generate Parser Code**
+- Output appears in `gen/` directory (configurable via `grammar.kit.gen.dir` system property)
+
+### Generated File List
+```
+gen/
+  com/example/calc/
+    parser/
+      CalcParser.java            ← Parser (static parse methods)
+    psi/
+      CalcTypes.java             ← IElementType constants
+      CalcVisitor.java           ← PSI visitor
+      CalcExpr.java              ← PSI interface (from expr rule)
+      CalcAddExpr.java           ← PSI interface (from add_expr rule)
+      CalcMulExpr.java           ← PSI interface (from mul_expr rule)
+      CalcPrimaryExpr.java       ← PSI interface (from primary_expr — if public)
+      CalcParenExpr.java         ← PSI interface (from paren_expr rule)
+      impl/
+        CalcExprImpl.java        ← PSI implementation
+        CalcAddExprImpl.java     ← PSI implementation
+        CalcMulExprImpl.java     ← PSI implementation
+        CalcPrimaryExprImpl.java ← PSI implementation
+        CalcParenExprImpl.java   ← PSI implementation
+```
+- One PSI interface + impl per **public** rule
+- Private rules (`statement`, `statement_recover`) generate no PSI classes
+- `CalcTypes.java` contains both element types and token types
+
+### CalcTypes.java — What It Contains
+```java
+// Generated by Grammar-Kit — do not edit.
+package com.example.calc.psi;
+
+import com.intellij.psi.tree.IElementType;
+import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
+import com.example.calc.psi.impl.*;
+
+public interface CalcTypes {
+  // Element types (one per public rule)
+  IElementType ADD_EXPR = new CalcElementType("ADD_EXPR");
+  IElementType EXPR = new CalcElementType("EXPR");
+  IElementType MUL_EXPR = new CalcElementType("MUL_EXPR");
+  IElementType PAREN_EXPR = new CalcElementType("PAREN_EXPR");
+  IElementType PRIMARY_EXPR = new CalcElementType("PRIMARY_EXPR");
+
+  // Token types (one per named token)
+  IElementType DIV = new CalcTokenType("DIV");
+  IElementType LP = new CalcTokenType("LP");
+  IElementType MINUS = new CalcTokenType("MINUS");
+  IElementType MULT = new CalcTokenType("MULT");
+  IElementType NUMBER = new CalcTokenType("NUMBER");
+  IElementType PLUS = new CalcTokenType("PLUS");
+  IElementType RP = new CalcTokenType("RP");
+  IElementType SEMI = new CalcTokenType("SEMI");
+
+  // Factory method (creates PSI elements from AST nodes)
+  // ...
+}
+```
+- Element types: named after rules, UPPER_SNAKE_CASE
+- Token types: named after token definitions, UPPER_SNAKE_CASE
+- Used by parser, lexer, and ParserDefinition
+
+### CalcParser.java — What It Contains (Simplified)
+```java
+// Generated by Grammar-Kit — do not edit.
+package com.example.calc.parser;
+
+import com.intellij.lang.PsiBuilder;
+import com.intellij.lang.PsiParser;
+// ...
+
+public class CalcParser implements PsiParser {
+  // One static method per rule:
+  // static boolean root(PsiBuilder b, int l) { ... }
+  // static boolean expr(PsiBuilder b, int l) { ... }
+  // static boolean add_expr(PsiBuilder b, int l) { ... }
+  // static boolean mul_expr(PsiBuilder b, int l) { ... }
+  // static boolean primary_expr(PsiBuilder b, int l) { ... }
+  // static boolean paren_expr(PsiBuilder b, int l) { ... }
+  //
+  // Sub-expressions get suffixed names:
+  // static boolean add_expr_0(PsiBuilder b, int l) { ... }
+}
+```
+- `PsiBuilder b`: token stream interface
+- `int l`: recursion level (for infinite recursion guard)
+- Sub-expressions: `rule_name_0`, `rule_name_1`, etc.
+- Avoid naming rules like `add_expr_0` (conflicts with generated names)
+
+---
+
+## 4. Generating the Lexer
+
+### Step 1: Generate JFlex File
+- Right-click `Calc.bnf` → **Generate JFlex Lexer**
+- Creates `_CalcLexer.flex` (underscore prefix is convention)
+
+### _CalcLexer.flex — Generated Template
+```flex
+package com.example.calc.parser;
+
+import com.intellij.lexer.FlexLexer;
+import com.intellij.psi.tree.IElementType;
+
+import static com.intellij.psi.TokenType.BAD_CHARACTER;
+import static com.intellij.psi.TokenType.WHITE_SPACE;
+import static com.example.calc.psi.CalcTypes.*;
+
+%%
+
+%{
+  public _CalcLexer() {
+    this((java.io.Reader)null);
+  }
+%}
+
+%public
+%class _CalcLexer
+%implements FlexLexer
+%function advance
+%type IElementType
+%unicode
+
+EOL=\R
+WHITE_SPACE=\s+
+
+NUMBER=[0-9]+(\.[0-9]*)?
+COMMENT=//.*
+
+%%
+<YYINITIAL> {
+  {WHITE_SPACE}    { return WHITE_SPACE; }
+
+  ";"              { return SEMI; }
+  "+"              { return PLUS; }
+  "-"              { return MINUS; }
+  "*"              { return MULT; }
+  "/"              { return DIV; }
+  "("              { return LP; }
+  ")"              { return RP; }
+
+  {NUMBER}         { return NUMBER; }
+  {COMMENT}        { return COMMENT; }
+
+}
+
+[^] { return BAD_CHARACTER; }
+```
+- Returns `IElementType` constants from `CalcTypes`
+- Simple tokens: matched as literal strings
+- Regexp tokens: converted to JFlex patterns (`\d` → `[0-9]`, `\s` → `[ \t\n\x0B\f\r]`)
+- `BAD_CHARACTER`: fallback for unrecognized input
+- Edit this file manually for complex lexing logic
+
+### Step 2: Generate Java Lexer
+- Right-click `_CalcLexer.flex` → **Run JFlex Generator**
+- Creates `_CalcLexer.java` (downloads JFlex 1.9.2 if needed)
+
+---
+
+## 5. Working Language Plugin Skeleton
+
+### CalcLanguage.java
+```java
+package com.example.calc;
+
+import com.intellij.lang.Language;
+
+public class CalcLanguage extends Language {
+
+    public static final CalcLanguage INSTANCE = new CalcLanguage();
+
+    private CalcLanguage() {
+        super("Calc");
+    }
+}
+```
+- Singleton pattern required
+- `"Calc"` string: language ID, used in plugin.xml registrations
+- Referenced by FileType and ParserDefinition
+
+### CalcFileType.java
+```java
+package com.example.calc;
+
+import com.intellij.openapi.fileTypes.LanguageFileType;
+import org.jetbrains.annotations.NotNull;
+
+import javax.swing.*;
+
+public class CalcFileType extends LanguageFileType {
+
+    public static final CalcFileType INSTANCE = new CalcFileType();
+
+    private CalcFileType() {
+        super(CalcLanguage.INSTANCE);
+    }
+
+    @Override
+    public @NotNull String getName() {
+        return "Calc";
+    }
+
+    @Override
+    public @NotNull String getDescription() {
+        return "Calc language file";
+    }
+
+    @Override
+    public @NotNull String getDefaultExtension() {
+        return "calc";
+    }
+
+    @Override
+    public Icon getIcon() {
+        return null; // Add a 16x16 icon later
+    }
+}
+```
+- Singleton pattern required
+- `getName()`: unique file type name
+- `getDefaultExtension()`: maps `.calc` files to this type
+- `getIcon()`: return `null` for now, add icon later
+
+### CalcParserDefinition.java
+```java
+package com.example.calc;
+
+import com.intellij.lang.ASTNode;
+import com.intellij.lang.ParserDefinition;
+import com.intellij.lang.PsiParser;
+import com.intellij.lexer.Lexer;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.FileViewProvider;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.tree.IFileElementType;
+import com.intellij.psi.tree.TokenSet;
+import com.example.calc.parser.CalcParser;
+import com.example.calc.parser._CalcLexer;
+import com.example.calc.psi.CalcTypes;
+import com.intellij.lexer.FlexAdapter;
+import org.jetbrains.annotations.NotNull;
+
+public class CalcParserDefinition implements ParserDefinition {
+
+    public static final IFileElementType FILE =
+        new IFileElementType("CALC_FILE", CalcLanguage.INSTANCE);
+
+    @Override
+    public @NotNull Lexer createLexer(Project project) {
+        return new FlexAdapter(new _CalcLexer());
+    }
+
+    @Override
+    public @NotNull PsiParser createParser(Project project) {
+        return new CalcParser();
+    }
+
+    @Override
+    public @NotNull IFileElementType getFileNodeType() {
+        return FILE;
+    }
+
+    @Override
+    public @NotNull TokenSet getWhitespaceTokens() {
+        return TokenSet.WHITE_SPACE;
+    }
+
+    @Override
+    public @NotNull TokenSet getCommentTokens() {
+        return TokenSet.create(CalcTypes.COMMENT);
+    }
+
+    @Override
+    public @NotNull TokenSet getStringLiteralElements() {
+        return TokenSet.EMPTY;
+    }
+
+    @Override
+    public @NotNull PsiElement createElement(ASTNode node) {
+        return CalcTypes.Factory.createElement(node);
+    }
+
+    @Override
+    public @NotNull PsiFile createFile(@NotNull FileViewProvider viewProvider) {
+        return new CalcFile(viewProvider);
+    }
+}
+```
+- `createLexer()`: wraps JFlex lexer in `FlexAdapter`
+- `createParser()`: returns generated parser instance
+- `getFileNodeType()`: singleton `IFileElementType` with language reference
+- `getWhitespaceTokens()`: tells PsiBuilder which tokens to skip
+- `getCommentTokens()`: tells PsiBuilder which tokens are comments
+- `createElement()`: delegates to generated factory in `CalcTypes`
+- `createFile()`: returns custom PsiFile subclass
+
+### CalcFile.java
+```java
+package com.example.calc;
+
+import com.intellij.extapi.psi.PsiFileBase;
+import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.psi.FileViewProvider;
+import org.jetbrains.annotations.NotNull;
+
+public class CalcFile extends PsiFileBase {
+
+    public CalcFile(@NotNull FileViewProvider viewProvider) {
+        super(viewProvider, CalcLanguage.INSTANCE);
+    }
+
+    @Override
+    public @NotNull FileType getFileType() {
+        return CalcFileType.INSTANCE;
+    }
+}
+```
+- Extends `PsiFileBase` (standard base class)
+- Connects language and file type
+
+### CalcSyntaxHighlighter.java
+```java
+package com.example.calc;
+
+import com.intellij.lexer.FlexAdapter;
+import com.intellij.lexer.Lexer;
+import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
+import com.intellij.openapi.editor.colors.TextAttributesKey;
+import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
+import com.intellij.psi.TokenType;
+import com.intellij.psi.tree.IElementType;
+import com.example.calc.parser._CalcLexer;
+import com.example.calc.psi.CalcTypes;
+import org.jetbrains.annotations.NotNull;
+
+import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
+
+public class CalcSyntaxHighlighter extends SyntaxHighlighterBase {
+
+    public static final TextAttributesKey NUMBER =
+        createTextAttributesKey("CALC_NUMBER",
+            DefaultLanguageHighlighterColors.NUMBER);
+
+    public static final TextAttributesKey COMMENT =
+        createTextAttributesKey("CALC_COMMENT",
+            DefaultLanguageHighlighterColors.LINE_COMMENT);
+
+    public static final TextAttributesKey OPERATION =
+        createTextAttributesKey("CALC_OPERATION",
+            DefaultLanguageHighlighterColors.OPERATION_SIGN);
+
+    public static final TextAttributesKey PARENTHESES =
+        createTextAttributesKey("CALC_PARENTHESES",
+            DefaultLanguageHighlighterColors.PARENTHESES);
+
+    public static final TextAttributesKey BAD_CHAR =
+        createTextAttributesKey("CALC_BAD_CHARACTER",
+            DefaultLanguageHighlighterColors.INVALID_STRING_ESCAPE);
+
+    @Override
+    public @NotNull Lexer getHighlightingLexer() {
+        return new FlexAdapter(new _CalcLexer());
+    }
+
+    @Override
+    public TextAttributesKey @NotNull [] getTokenHighlights(IElementType type) {
+        if (type.equals(CalcTypes.NUMBER)) {
+            return pack(NUMBER);
+        }
+        if (type.equals(CalcTypes.COMMENT)) {
+            return pack(COMMENT);
+        }
+        if (type.equals(CalcTypes.PLUS) || type.equals(CalcTypes.MINUS) ||
+            type.equals(CalcTypes.MULT) || type.equals(CalcTypes.DIV)) {
+            return pack(OPERATION);
+        }
+        if (type.equals(CalcTypes.LP) || type.equals(CalcTypes.RP)) {
+            return pack(PARENTHESES);
+        }
+        if (type.equals(TokenType.BAD_CHARACTER)) {
+            return pack(BAD_CHAR);
+        }
+        return TextAttributesKey.EMPTY_ARRAY;
+    }
+}
+```
+- `createTextAttributesKey()`: first arg is unique key ID, second is fallback style
+- `getHighlightingLexer()`: uses same lexer as parser
+- `getTokenHighlights()`: maps each token type to a color
+- `pack()`: helper from `SyntaxHighlighterBase` (wraps single key in array)
+
+### CalcSyntaxHighlighterFactory.java
+```java
+package com.example.calc;
+
+import com.intellij.openapi.fileTypes.SyntaxHighlighter;
+import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
+import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
+import org.jetbrains.annotations.NotNull;
+
+public class CalcSyntaxHighlighterFactory extends SyntaxHighlighterFactory {
+
+    @Override
+    public @NotNull SyntaxHighlighter getSyntaxHighlighter(
+            Project project, VirtualFile virtualFile) {
+        return new CalcSyntaxHighlighter();
+    }
+}
+```
+- Factory pattern required by extension point
+- Returns new highlighter instance
+
+### plugin.xml — Registrations
+```xml
+<idea-plugin>
+    <id>com.example.calc</id>
+    <name>Calc Language</name>
+    <vendor>Example</vendor>
+    <description>Support for the Calc expression language.</description>
+
+    <depends>com.intellij.modules.lang</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- File type: maps .calc files to the Calc language -->
+        <fileType name="Calc"
+                  implementationClass="com.example.calc.CalcFileType"
+                  fieldName="INSTANCE"
+                  extensions="calc"
+                  language="Calc"/>
+
+        <!-- Parser: connects grammar to the IDE -->
+        <lang.parserDefinition
+                  language="Calc"
+                  implementationClass="com.example.calc.CalcParserDefinition"/>
+
+        <!-- Syntax highlighting -->
+        <lang.syntaxHighlighterFactory
+                  language="Calc"
+                  implementationClass="com.example.calc.CalcSyntaxHighlighterFactory"/>
+    </extensions>
+</idea-plugin>
+```
+- `language="Calc"`: must match `CalcLanguage` constructor string
+- `fieldName="INSTANCE"`: tells platform to use singleton field
+- `extensions="calc"`: file extension without dot
+- `com.intellij.modules.lang`: required dependency for language support
+- Three registrations minimum: fileType, parserDefinition, syntaxHighlighterFactory
+
+---
+
+## 6. Complete Project File Layout
+
+```
+my-calc-plugin/
+  src/
+    com/example/calc/
+      CalcLanguage.java              ← You write this
+      CalcFileType.java              ← You write this
+      CalcFile.java                  ← You write this
+      CalcParserDefinition.java      ← You write this
+      CalcSyntaxHighlighter.java     ← You write this
+      CalcSyntaxHighlighterFactory.java ← You write this
+      parser/
+        _CalcLexer.flex              ← Generated, then hand-edited
+        _CalcLexer.java              ← Generated from .flex by JFlex
+  gen/
+    com/example/calc/
+      parser/
+        CalcParser.java              ← Generated from .bnf
+      psi/
+        CalcTypes.java               ← Generated from .bnf
+        CalcVisitor.java             ← Generated from .bnf
+        CalcExpr.java                ← Generated from .bnf
+        CalcAddExpr.java             ← Generated from .bnf
+        CalcMulExpr.java             ← Generated from .bnf
+        CalcParenExpr.java           ← Generated from .bnf
+        impl/
+          CalcExprImpl.java          ← Generated from .bnf
+          CalcAddExprImpl.java       ← Generated from .bnf
+          CalcMulExprImpl.java       ← Generated from .bnf
+          CalcParenExprImpl.java     ← Generated from .bnf
+  resources/
+    META-INF/
+      plugin.xml                     ← You write this
+  grammars/
+    Calc.bnf                         ← You write this
+```
+- `src/`: hand-written code
+- `gen/`: generated code (mark as Generated Sources Root in IDE)
+- `grammars/`: BNF grammar files
+- Both `src/` and `gen/` must be on the classpath
+
+---
+
+## 7. Workflow Summary
+
+### Step-by-Step Order
+1. Create `Calc.bnf` with tokens and rules
+2. Open Live Preview (**Ctrl+Alt+P**) to test grammar interactively
+3. Generate parser code (**Ctrl+Shift+G**)
+4. Generate JFlex lexer (right-click `.bnf` → **Generate JFlex Lexer**)
+5. Generate Java lexer (right-click `.flex` → **Run JFlex Generator**)
+6. Write `CalcLanguage`, `CalcFileType`, `CalcFile`, `CalcParserDefinition`
+7. Write `CalcSyntaxHighlighter` and factory
+8. Register everything in `plugin.xml`
+9. Run plugin and open a `.calc` file
+
+---
+
+## Common Patterns
+
+### Root Rule with Recovery
+```bnf
+root ::= statement *
+private statement ::= expr ';' {pin=1 recoverWhile=statement_recover}
+private statement_recover ::= !(number | '(' | ';')
+```
+- Root repeats items
+- Private wrapper adds pin and recovery
+- Recovery stops at next valid start token
+
+### Parenthesized Expression with Pin
+```bnf
+paren_expr ::= '(' expr ')' {pin=1}
+```
+- Pin on `(`: once matched, reports missing `)` as error
+- Without pin: `(` without `)` silently fails
+
+---
+
+## Anti-patterns
+
+### Missing Generation Attributes
+```bnf
+// BAD: No header attributes
+root ::= expr *
+expr ::= number
+```
+- Generates into `generated` package with default names
+- Hard to find or organize generated code
+- Always set `parserClass`, `elementTypeHolderClass`, `psiPackage`, `psiImplPackage`
+
+### Recovery Rule That Matches Everything
+```bnf
+// BAD: Recovery never stops
+private recover ::= !(number)
+// If input has no numbers, parser skips entire file
+```
+- Recovery predicate must include all possible statement starters
+- Include delimiters like `;`, `)`, `}`
+
+### Naming Conflict with Generated Sub-expressions
+```bnf
+// BAD: Rule name looks like generated sub-expression
+expr_0 ::= number
+expr ::= expr_0 '+' expr_0
+```
+- Generator creates `expr_0` for sub-expressions of `expr`
+- Naming your rule `expr_0` causes conflicts
+- Use descriptive names: `primary_expr`, `atom`, `literal`
+
+### Forgetting FlexAdapter
+```java
+// BAD: Returning JFlex lexer directly
+@Override
+public Lexer createLexer(Project project) {
+    return new _CalcLexer(); // Won't compile — wrong type
+}
+```
+- JFlex generates `FlexLexer`, not `Lexer`
+- Wrap with `FlexAdapter`: `new FlexAdapter(new _CalcLexer())`
+
+### Mismatched Language ID
+```java
+// In CalcLanguage.java:
+super("Calc");
+
+// In plugin.xml — BAD: wrong language ID
+<lang.parserDefinition language="calc" ... />
+```
+- Language ID is case-sensitive
+- Must match exactly: `"Calc"` in Java = `language="Calc"` in XML
+
+---
+
+## Related Examples
+- For expression parsing with `left` rules and `extends` → See Section 2.3
+- For detailed `pin` and `recoverWhile` mechanics → See Section 2.4
+- For PSI customization (`mixin`, `methods`, `implements`) → See Section 3.4
+- For Gradle-based generation → See Section 4.2
+- For advanced `generate` options → See Section 3.1
